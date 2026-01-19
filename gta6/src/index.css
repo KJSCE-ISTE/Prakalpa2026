@@ -1,0 +1,44 @@
+/* Prakalpa default: white text */
+.prakalpa-hover {
+  color: #fff;
+  transition: color 0.2s, background-image 0.2s;
+}
+/* Prakalpa hover: gradient text */
+.prakalpa-hover:hover {
+  background-image: linear-gradient(180deg, #1a237e 0%, #ff2fd6 70%, #ffe066 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  transition: color 0.2s, background-image 0.2s;
+}
+/* XXVI default: gradient text */
+.xxvi-hoverable {
+  background-image: linear-gradient(180deg, #1a237e 0%, #ff2fd6 70%, #ffe066 100%); 
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  transition: color 0.2s, background-image 0.2s;
+  cursor: pointer;
+  display: inline-block;
+  pointer-events: auto;
+}
+/* XXVI hover: make text white, remove gradient/image, and add drop shadow */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'PriceDown';
+  src: url('./assets/fonts/Pricedown.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Rage Italic";
+  src: url("./assets/fonts/RAGE_1.TTF") format("truetype");
+  font-weight: normal;
+  font-style: italic;
+}
+
