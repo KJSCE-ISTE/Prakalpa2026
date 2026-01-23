@@ -68,6 +68,29 @@ const Title: React.FC = () => {
           Prakalpa
         </span>
       </h1>
+
+      {/* Subheading */}
+      <h2
+        className="
+          text-2xl
+          font-pricedown
+          -mt-2
+          absolute
+          right-0
+          transform
+          translate-x-[200%]
+          translate-y-[120px]
+        "
+      >
+        National 
+        <br/>Level <br/>
+        Competition
+      </h2>
+
+      {/* ISTE KJSCE presents */}
+      <h2 className="text-center text-2xl font-pricedown -mt-2">
+        ISTE KJSCE presents
+      </h2>
     </div>
   );
 };

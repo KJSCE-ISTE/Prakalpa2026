@@ -46,7 +46,6 @@ function App() {
             logoAlt="Company Logo"
             items={[
               { label: "Home", href: "/" },
-              { label: "About", href: "/about" },
               { label: "Timeline", href: "/timeline" },
               { label: "Memories", href: "/memories" },
               { label: "FAQs", href: "/faqs" },

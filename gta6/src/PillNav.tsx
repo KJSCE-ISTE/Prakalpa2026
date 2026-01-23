@@ -248,7 +248,6 @@ const PillNav: React.FC<PillNavProps> = ({
   } as React.CSSProperties;
 
   return (
-    
     <div className="absolute top-[1em] z-[1000] w-full left-0 md:w-auto md:left-auto">
       <nav
         className={`w-full md:w-max flex items-center justify-between md:justify-start box-border px-4 md:px-0 ${className}`}
@@ -351,6 +350,15 @@ const PillNav: React.FC<PillNavProps> = ({
             style={{ background: 'var(--pill-bg, #fff)' }}
           />
         </button>
+
+        {/* Adding the Somaiya logo to the right of the navigation */}
+        <div className="hidden md:block ml-auto">
+          <img
+            src="/src/assets/Somaiya_logo.png" // Path to Somaiya logo
+            alt="Somaiya Logo"
+            className="w-100 h-33 object-contain" // Adjust size as needed"
+          />
+        </div>
       </nav>
 
       <div
