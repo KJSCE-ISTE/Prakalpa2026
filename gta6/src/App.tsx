@@ -7,6 +7,7 @@ import GTAStats from "./Stats"
 import GTAMinimapEmbed from "./Gta_map"
 import LoadingScreen from "./Loading_Screen"
 import BackgroundMusic from "./BackgroundMusic"
+import Gallery from "./Gallery"
 import logo from "./assets/ISTE_logo.png"
 
 function App() {
@@ -47,14 +48,14 @@ function App() {
             items={[
               { label: "Home", href: "/" },
               { label: "Timeline", href: "/timeline" },
-              { label: "Memories", href: "/memories" },
+              { label: "Memories", href: "#gallery" },
               { label: "FAQs", href: "/faqs" },
             ]}
           />
         </div>
 
         <GTAMinimapEmbed />
-        <Background/>
+        <Background />
       </div>
 
       {/* LOADING SCREEN */}
@@ -66,6 +67,7 @@ function App() {
           setMuted={setMuted}
         />
       )}
+      <Gallery />
     </div>
   )
 }
