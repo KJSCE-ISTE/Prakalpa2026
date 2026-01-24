@@ -13,7 +13,7 @@ const BackgroundMusic = forwardRef<
     ref.current.muted = muted
   }, [muted, ref])
 
-  return <audio ref={ref} src="/audio/theme.mp3" />
+  return <audio ref={ref} src="/src/assets/audio/theme.mp3" />
 })
 
 export default BackgroundMusic

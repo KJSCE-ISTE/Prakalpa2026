@@ -354,9 +354,9 @@ const PillNav: React.FC<PillNavProps> = ({
         {/* Adding the Somaiya logo to the right of the navigation */}
         <div className="hidden md:block ml-auto">
           <img
-            src="/src/assets/Somaiya_logo.png" // Path to Somaiya logo
+            src="/src/assets/Logo_somaiya.png" // Path to Somaiya logo
             alt="Somaiya Logo"
-            className="w-100 h-33 object-contain" // Adjust size as needed"
+            className="w-338 h-600 " // Adjust size as needed"
           />
         </div>
       </nav>
