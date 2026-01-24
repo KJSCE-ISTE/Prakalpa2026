@@ -9,6 +9,7 @@
   import BackgroundMusic from "./BackgroundMusic"
   import Gallery from "./Gallery"
   import logo from "./assets/ISTE_logo.png"
+   import Themes from "./Themes"
 
   function App() {
     const [loading, setLoading] = useState(true)
@@ -76,6 +77,8 @@
 
         {/* ================= SCROLL CONTENT ================= */}
         {!loading && <Gallery />}
+        {/* ================= SCROLL CONTENT ================= */}
+        {!loading && <Themes />}
       </div>
     )
   }
