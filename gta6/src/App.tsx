@@ -10,6 +10,7 @@
   import Gallery from "./Gallery"
   import logo from "./assets/ISTE_logo.png"
    import Themes from "./Themes"
+import Timeline from "./Timeline"
 
   function App() {
     const [loading, setLoading] = useState(true)
@@ -79,6 +80,8 @@
         {!loading && <Gallery />}
         {/* ================= SCROLL CONTENT ================= */}
         {!loading && <Themes />}
+        {/* ================= SCROLL CONTENT ================= */}
+        {!loading && <Timeline />}
       </div>
     )
   }
