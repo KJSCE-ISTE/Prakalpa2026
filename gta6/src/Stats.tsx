@@ -72,13 +72,13 @@ const GTAStats: React.FC = () => {
   const pad = (n: number) => n.toString().padStart(2, "0")
 
   return (
-    <div className="fixed top-8 right-4 z-[9999] pointer-events-none flex flex-col gap-2">
+    <div className="absolute top-8 right-4 z-[9999] pointer-events-none flex flex-col gap-2">
 
       {/* TIME DISPLAY */}
       <div className="flex items-center gap-3 mb-2">
-        <div className="w-32 h-32 border-8 border-black rounded-lg flex items-center justify-center">
+        <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 border-8 border-black rounded-lg flex items-center justify-center">
           <div
-            className="text-3xl text-center"
+            className="text-xl sm:text-2xl md:text-3xl text-center"
             style={{
               fontFamily: "pricedown",
               color: "#fff",
@@ -91,7 +91,7 @@ const GTAStats: React.FC = () => {
         </div>
 
         <div
-          className="text-4xl tracking-wider"
+          className="text-2xl sm:text-3xl md:text-4xl tracking-wider"
           style={{
             fontFamily: "pricedown",
             color: "#fff",
@@ -109,7 +109,7 @@ const GTAStats: React.FC = () => {
       {/* WANTED STARS */}
       <div className="flex justify-center gap-1 mb-2">
         {[...Array(5)].map((_, i) => (
-          <div key={i} className="relative w-6 h-6">
+          <div key={i} className="relative w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6">
             <div
               className={`absolute inset-0 ${
                 i < starCount ? "opacity-100" : "opacity-30"
@@ -128,7 +128,7 @@ const GTAStats: React.FC = () => {
       {/* HEALTH + MONEY (CENTERED) */}
       <div className="flex flex-col items-center gap-2 mt-2">
         {/* HEALTH BAR */}
-        <div className="w-48 h-5 bg-black border-2 border-black">
+        <div className="w-40 sm:w-44 md:w-48 h-4 sm:h-5 bg-black border-2 border-black">
           <div
             className="h-full"
             style={{
@@ -141,7 +141,7 @@ const GTAStats: React.FC = () => {
 
         {/* MONEY */}
         <div
-          className="text-4xl"
+          className="text-2xl sm:text-3xl md:text-4xl"
           style={{
             fontFamily: "pricedown",
             color: "#4ade80",
