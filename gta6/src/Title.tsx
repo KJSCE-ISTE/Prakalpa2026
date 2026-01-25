@@ -1,9 +1,5 @@
 import React, { useEffect } from 'react';
 
-/**
- * Title component for displaying the main title (Prakalpa) and background (XXVI).
- * Handles only the text/visuals, not background images or layout.
- */
 const Title: React.FC = () => {
   useEffect(() => {
     console.log('Title mounted');
@@ -15,7 +11,7 @@ const Title: React.FC = () => {
       className="
         absolute
         left-1/2
-        top-[32%]
+        top-[34   %] sm:top-[36%]
         -translate-x-1/2
         -translate-y-1/2
         z-[1000]
@@ -27,10 +23,10 @@ const Title: React.FC = () => {
         id="xxvi-bg"
         className="
           absolute
-          -top-10             /* 👈 XXVI moved up */
+          -top-6 sm:-top-10
           left-1/2
           -translate-x-1/2
-          text-[28rem]
+          text-[9rem] sm:text-[16rem] md:text-[20rem] lg:text-[28rem]
           font-pricedown
           uppercase
           tracking-wide
@@ -55,7 +51,7 @@ const Title: React.FC = () => {
           left-1/2
           -translate-x-1/2
           m-0
-          text-9xl
+          text-4xl sm:text-7xl md:text-8xl lg:text-9xl
           font-pricedown
           uppercase
           z-[1001]
@@ -72,23 +68,29 @@ const Title: React.FC = () => {
       {/* Subheading */}
       <h2
         className="
-          text-2xl
-          font-pricedown
-          -mt-2
           absolute
+          text-base sm:text-xl md:text-2xl
+          font-pricedown
           right-0
-          transform
-          translate-x-[200%]
-          translate-y-[120px]
+          translate-x-[120%] sm:translate-x-[180%] md:translate-x-[200%]
+          translate-y-[70px] sm:translate-y-[100px] md:translate-y-[120px]
+          whitespace-nowrap
         "
       >
-        National 
-        <br/>Level <br/>
-        Competition
+        National
+        <br />Level
+        <br />Competition
       </h2>
 
       {/* ISTE KJSCE presents */}
-      <h2 className="text-center text-2xl font-pricedown -mt-2">
+      <h2
+        className="
+          text-center
+          text-base sm:text-xl md:text-2xl
+          font-pricedown
+          -mt-1 sm:-mt-2
+        "
+      >
         ISTE KJSCE presents
       </h2>
     </div>

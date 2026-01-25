@@ -3,12 +3,10 @@ import React, { useEffect, useRef, useState } from "react"
 const MAPS_URL =
   "https://www.google.com/maps/search/?api=1&query=K+J+Somaiya+College+of+Engineering+19.072847,72.899926"
 
-
 const GTAMinimapEmbed: React.FC = () => {
   const minimapRef = useRef<HTMLDivElement>(null)
   const [angle, setAngle] = useState(0)
 
-  /* Rotate pointer with mouse */
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (!minimapRef.current) return
@@ -33,19 +31,27 @@ const GTAMinimapEmbed: React.FC = () => {
   }
 
   return (
-    <div className="fixed bottom-8 left-8 z-[9999]">
+    <div className="fixed z-[9999]
+                    bottom-4 left-4
+                    sm:bottom-6 sm:left-6
+                    md:bottom-8 md:left-8">
       <button
         onClick={openMaps}
         aria-label="Open K J Somaiya College of Engineering in Google Maps"
-        className="relative w-48 h-48 rounded-full p-[6px] bg-pink-500 cursor-pointer
-                   hover:scale-105 hover:brightness-110 transition"
+        className="
+          relative rounded-full p-[6px] bg-pink-500 cursor-pointer
+          transition hover:scale-105 hover:brightness-110
+
+          w-28 h-28
+          sm:w-36 sm:h-36
+          md:w-44 md:h-44
+          lg:w-48 lg:h-48
+        "
       >
-        {/* Inner minimap */}
         <div
           ref={minimapRef}
           className="relative w-full h-full rounded-full overflow-hidden bg-black"
         >
-          {/* ✅ PLACE-BASED EMBED (Shows name) */}
           <iframe
             title="K J Somaiya College of Engineering"
             src="https://www.google.com/maps?q=K+J+Somaiya+College+of+Engineering&z=16&output=embed"
@@ -54,7 +60,6 @@ const GTAMinimapEmbed: React.FC = () => {
             referrerPolicy="no-referrer-when-downgrade"
           />
 
-          {/* Gradient tint */}
           <div
             className="absolute inset-0 z-10 pointer-events-none"
             style={{
@@ -65,10 +70,8 @@ const GTAMinimapEmbed: React.FC = () => {
             }}
           />
 
-          {/* Vignette */}
           <div className="absolute inset-0 bg-black/20 z-10 pointer-events-none" />
 
-          {/* Player pointer */}
           <div
             className="absolute top-1/2 left-1/2 z-20 pointer-events-none"
             style={{
@@ -76,16 +79,22 @@ const GTAMinimapEmbed: React.FC = () => {
               transition: "transform 0.08s linear",
             }}
           >
-            <svg width="24" height="24" viewBox="0 0 100 100">
+            <svg
+              viewBox="0 0 100 100"
+              className="
+                w-4 h-4
+                sm:w-5 sm:h-5
+                md:w-6 md:h-6
+              "
+            >
               <circle cx="50" cy="55" r="28" fill="white" />
               <polygon points="50,5 65,35 35,35" fill="white" />
             </svg>
           </div>
 
-          {/* North indicator */}
-          <div className="absolute top-2 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
+          <div className="absolute top-1.5 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
             <span
-              className="font-pricedown text-white text-sm"
+              className="font-pricedown text-white text-xs sm:text-sm"
               style={{ textShadow: "1px 1px 2px black" }}
             >
               N
@@ -98,3 +107,4 @@ const GTAMinimapEmbed: React.FC = () => {
 }
 
 export default GTAMinimapEmbed
+  

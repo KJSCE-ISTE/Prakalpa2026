@@ -10,6 +10,10 @@ function Background() {
           inset-0
           bg-cover
           bg-center
+          sm:bg-contain
+          md:bg-cover
+          lg:bg-cover
+          xl:bg-cover
           -z-10
         "
         style={{ backgroundImage: `url(${New_bg})` }}
