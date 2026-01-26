@@ -57,7 +57,9 @@ function App() {
             logoAlt="Company Logo"
             items={[
               { label: "Home", href: "/" },
-              { label: "Timeline", href: "/timeline" },
+              { label: "Themes", href: "#themes" },
+              { label: "Timeline", href: "#timeline" },
+              { label: "Prizes", href: "#prizes" },
               { label: "Memories", href: "#gallery" },
               { label: "FAQs", href: "/faqs" },
             ]}
@@ -79,13 +81,13 @@ function App() {
 
 
       {/* ================= SCROLL CONTENT ================= */}
-      {!loading && <Themes />}
+      {!loading && <div id="themes"><Themes /></div>}
       {/* ================= SCROLL CONTENT ================= */}
-      {!loading && <Timeline />}
+      {!loading && <div id="timeline"><Timeline /></div>}
       {/* ================= SCROLL CONTENT ================= */}
-      {!loading && <Prizes />}
+      {!loading && <div id="prizes"><Prizes /></div>}
       {/* ================= SCROLL CONTENT ================= */}
-      {!loading && <Gallery />}
+      {!loading && <div id="gallery"><Gallery /></div>}
     </div>
   )
 }
