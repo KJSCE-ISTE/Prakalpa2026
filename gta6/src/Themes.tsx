@@ -463,7 +463,7 @@ function ThemesSection() {
 
   return (
     <>
-      <div className="max-w-7xl mx-auto relative">
+      <div className="w-full relative">
         {/* Title Overlay - Angled like GTA */}
         <div className="absolute top-[-80px] left-1/2 transform -translate-x-1/2 z-20 pointer-events-none">
           <div className="relative">
