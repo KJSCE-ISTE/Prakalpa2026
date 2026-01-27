@@ -58,7 +58,7 @@ const MoreVerticalIcon = () => (
 );
 
 // Background image placeholder - you can replace this URL with your actual image
-import bgImage from './assets/Themes_Images/Background_prakalpa.png';
+import bgImage from './assets/Themes_Images/image.png';
 
 const themes = [
   {
@@ -75,7 +75,7 @@ const themes = [
     ],
     color: 'from-purple-600 to-purple-800',
     image: 'https://images.unsplash.com/photo-1697577418970-95d99b5a55cf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhcnRpZmljaWFsJTIwaW50ZWxsaWdlbmNlJTIwdGVjaG5vbG9neXxlbnwxfHx8fDE3Njg2Mzc3MzV8MA&ixlib=rb-4.1.0&q=80&w=1080',
-    position: { top: '5%', left: '3%', width: '22%', height: '38%', rotate: -2 },
+    position: { top: '13%', left: '3%', width: '20%', height: '35%', rotate: -2 },
     galleryImages: [
       'https://images.unsplash.com/photo-1697577418970-95d99b5a55cf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080',
       'https://images.unsplash.com/photo-1719550371336-7bb64b5cacfa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080',
@@ -96,7 +96,7 @@ const themes = [
     ],
     color: 'from-purple-700 to-purple-900',
     image: 'https://images.unsplash.com/photo-1590286162167-70fb467846ae?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080',
-    position: { top: '8%', left: '27%', width: '20%', height: '35%', rotate: 1 },
+    position: { top: '11%', left: '25%', width: '18%', height: '32%', rotate: 1 },
     galleryImages: [
       'https://images.unsplash.com/photo-1590286162167-70fb467846ae?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080',
       'https://images.unsplash.com/photo-1659010878130-ae8b703bd3ee?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080'
@@ -116,7 +116,7 @@ const themes = [
     ],
     color: 'from-purple-600 to-purple-800',
     image: 'https://images.unsplash.com/photo-1688677825986-4ffb926bafc9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080',
-    position: { top: '57%', left: '2%', width: '24%', height: '40%', rotate: -1 },
+    position: { top: '59%', left: '2%', width: '22%', height: '32%', rotate: -1 },
     galleryImages: [
       'https://images.unsplash.com/photo-1688677825986-4ffb926bafc9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080',
       'https://images.unsplash.com/photo-1677126577258-1a82fdf1a976?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080'
@@ -136,7 +136,7 @@ const themes = [
     ],
     color: 'from-purple-600 to-purple-800',
     image: 'https://images.unsplash.com/photo-1556438064-2d7646166914?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080',
-    position: { top: '3%', left: '76%', width: '21%', height: '32%', rotate: 2 },
+    position: { top: '13%', left: '75%', width: '20%', height: '29%', rotate: 2 },
     galleryImages: [
       'https://images.unsplash.com/photo-1556438064-2d7646166914?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080',
       'https://images.unsplash.com/photo-1695028644151-1ec92bae9fb0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080'
@@ -155,7 +155,7 @@ const themes = [
       'Zero Trust Architecture'
     ],
     color: 'from-purple-700 to-purple-900',
-image: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080',    position: { top: '46%', left: '28%', width: '23%', height: '36%', rotate: -2 },
+image: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080',    position: { top: '45%', left: '26%', width: '21%', height: '33%', rotate: -2 },
     galleryImages: [
       'https://images.unsplash.com/photo-1660644807804-ffacfd7a4137?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080',
       'https://images.unsplash.com/photo-1477039181047-efb4357d01bd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080'
@@ -175,7 +175,7 @@ image: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?crop=entropy&c
     ],
     color: 'from-purple-700 to-purple-900',
     image: 'https://images.unsplash.com/photo-1650699060603-5636741760d6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080',
-    position: { top: '85%', left: '28%', width: '22%', height: '12%', rotate: 1 },
+    position: { top: '81%', left: '26%', width: '22%', height: '15%', rotate: 1 },
     galleryImages: [
       'https://images.unsplash.com/photo-1650699060603-5636741760d6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080',
       'https://images.unsplash.com/photo-1491921125492-f0b9c835b699?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080'
@@ -194,7 +194,7 @@ image: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?crop=entropy&c
       'Collaborative Robots'
     ],
     color: 'from-purple-600 to-purple-800',
-image: 'https://images.unsplash.com/photo-1563207153-f403bf289096?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080',    position: { top: '6%', left: '49%', width: '25%', height: '38%', rotate: -1 },
+image: 'https://images.unsplash.com/photo-1563207153-f403bf289096?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080',    position: { top: '11%', left: '48%', width: '23%', height: '35%', rotate: -1 },
     galleryImages: [
       'https://images.unsplash.com/photo-1761195696590-3490ea770aa1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080',
       'https://images.unsplash.com/photo-1716191299980-a6e8827ba10b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080'
@@ -214,7 +214,7 @@ image: 'https://images.unsplash.com/photo-1563207153-f403bf289096?crop=entropy&c
     ],
     color: 'from-purple-700 to-purple-900',
     image: 'https://images.unsplash.com/photo-1553341640-9397992456f3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080',
-    position: { top: '46%', left: '53%', width: '22%', height: '35%', rotate: 2 },
+    position: { top: '49%', left: '50%', width: '20%', height: '32%', rotate: 2 },
     galleryImages: [
       'https://images.unsplash.com/photo-1553341640-9397992456f3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080',
       'https://images.unsplash.com/photo-1519558260268-cde7e03a0152?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080'
@@ -234,7 +234,7 @@ image: 'https://images.unsplash.com/photo-1563207153-f403bf289096?crop=entropy&c
     ],
     color: 'from-purple-600 to-purple-800',
     image: 'https://images.unsplash.com/photo-1506399558188-acca6f8cbf41?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080',
-    position: { top: '84%', left: '52%', width: '23%', height: '13%', rotate: -1 },
+    position: { top: '84%', left: '49%', width: '22%', height: '14%', rotate: -1 },
     galleryImages: [
       'https://images.unsplash.com/photo-1506399558188-acca6f8cbf41?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080',
       'https://images.unsplash.com/photo-1506399309177-3b43e99fead2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080'
@@ -253,7 +253,7 @@ image: 'https://images.unsplash.com/photo-1563207153-f403bf289096?crop=entropy&c
       'Biomedical Imaging'
     ],
     color: 'from-purple-700 to-purple-900',
-image: 'https://images.unsplash.com/photo-1576086213369-97a306d36557?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080',    position: { top: '37%', left: '76%', width: '21%', height: '28%', rotate: 1 },
+image: 'https://images.unsplash.com/photo-1576086213369-97a306d36557?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080',    position: { top: '44%', left: '73%', width: '20%', height: '25%', rotate: 1 },
     galleryImages: [
       'https://images.unsplash.com/photo-1668511237388-404cc7e56e9d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080',
       'https://images.unsplash.com/photo-1580795479025-93d13fd9aa6c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080'
@@ -272,7 +272,7 @@ image: 'https://images.unsplash.com/photo-1576086213369-97a306d36557?crop=entrop
       'Future Tech Concepts'
     ],
     color: 'from-purple-600 to-purple-800',
-image: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080',    position: { top: '67%', left: '77%', width: '20%', height: '30%', rotate: -2 },
+image: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080',    position: { top: '72%', left: '74%', width: '19%', height: '24%', rotate: -2 },
     galleryImages: [
       'https://images.unsplash.com/photo-1760629863094-5b1e8d1aae74?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080',
       'https://images.unsplash.com/photo-1756908992154-c8a89f5e517f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080'
@@ -463,9 +463,9 @@ function ThemesSection() {
 
   return (
     <>
-      <div className="max-w-7xl mx-auto relative">
+      <div className="w-full relative">
         {/* Title Overlay - Angled like GTA */}
-        <div className="absolute top-[-80px] left-1/2 transform -translate-x-1/2 z-20 pointer-events-none">
+        <div className="absolute top-[-5px] left-1/2 transform -translate-x-1/2 z-20 pointer-events-none">
           <div className="relative">
             <h1 className="text-pink-500 text-8xl font-black tracking-wider transform -skew-x-12"
                 style={{ 
@@ -488,7 +488,7 @@ function ThemesSection() {
         </div>
 
         {/* Chaotic Collage Layout - Like GTA Cover */}
-        <div className="relative h-[900px] border-2 border-pink-500/40 overflow-hidden">
+        <div className="relative h-[1050px] border-2 border-pink-500/40 overflow-hidden">
           {/* Vice City Background */}
           <img 
             src={bgImage} 
