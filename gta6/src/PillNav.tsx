@@ -100,134 +100,27 @@ const PillNav: React.FC<PillNavProps> = ({
     };
 
     layout();
-
-    const onResize = () => layout();
-    window.addEventListener('resize', onResize);
-
-    if (document.fonts) {
-      document.fonts.ready.then(layout).catch(() => {});
-    }
-
-    const menu = mobileMenuRef.current;
-    if (menu) {
-      gsap.set(menu, { visibility: 'hidden', opacity: 0, scaleY: 1, y: 0 });
-    }
-
-    if (initialLoadAnimation) {
-      const logo = logoRef.current;
-      const navItems = navItemsRef.current;
-
-      if (logo) {
-        gsap.set(logo, { scale: 0 });
-        gsap.to(logo, {
-          scale: 1,
-          duration: 0.6,
-          ease
-        });
-      }
-
-      if (navItems) {
-        gsap.set(navItems, { width: 0, overflow: 'hidden' });
-        gsap.to(navItems, {
-          width: 'auto',
-          duration: 0.6,
-          ease
-        });
-      }
-    }
-
-    return () => window.removeEventListener('resize', onResize);
+    window.addEventListener('resize', layout);
+    return () => window.removeEventListener('resize', layout);
   }, [items, ease, initialLoadAnimation]);
 
-  const handleEnter = (i: number) => {
-    const tl = tlRefs.current[i];
-    if (!tl) return;
-    activeTweenRefs.current[i]?.kill();
-    activeTweenRefs.current[i] = tl.tweenTo(tl.duration(), {
-      duration: 0.3,
-      ease,
-      overwrite: 'auto'
-    });
-  };
-
-  const handleLeave = (i: number) => {
-    const tl = tlRefs.current[i];
-    if (!tl) return;
-    activeTweenRefs.current[i]?.kill();
-    activeTweenRefs.current[i] = tl.tweenTo(0, {
-      duration: 0.2,
-      ease,
-      overwrite: 'auto'
-    });
-  };
-
   const handleLogoEnter = () => {
-    const img = logoImgRef.current;
-    if (!img) return;
+    if (!logoImgRef.current) return;
     logoTweenRef.current?.kill();
-    gsap.set(img, { rotate: 0 });
-    logoTweenRef.current = gsap.to(img, {
+    logoTweenRef.current = gsap.to(logoImgRef.current, {
       rotate: 360,
       duration: 0.2,
-      ease,
-      overwrite: 'auto'
+      ease
     });
   };
 
   const toggleMobileMenu = () => {
-    const newState = !isMobileMenuOpen;
-    setIsMobileMenuOpen(newState);
-
-    const hamburger = hamburgerRef.current;
-    const menu = mobileMenuRef.current;
-
-    if (hamburger) {
-      const lines = hamburger.querySelectorAll('.hamburger-line');
-      if (newState) {
-        gsap.to(lines[0], { rotation: 45, y: 3, duration: 0.3, ease });
-        gsap.to(lines[1], { rotation: -45, y: -3, duration: 0.3, ease });
-      } else {
-        gsap.to(lines[0], { rotation: 0, y: 0, duration: 0.3, ease });
-        gsap.to(lines[1], { rotation: 0, y: 0, duration: 0.3, ease });
-      }
-    }
-
-    if (menu) {
-      if (newState) {
-        gsap.set(menu, { visibility: 'visible' });
-        gsap.fromTo(
-          menu,
-          { opacity: 0, y: 10, scaleY: 1 },
-          {
-            opacity: 1,
-            y: 0,
-            scaleY: 1,
-            duration: 0.3,
-            ease,
-            transformOrigin: 'top center'
-          }
-        );
-      } else {
-        gsap.to(menu, {
-          opacity: 0,
-          y: 10,
-          scaleY: 1,
-          duration: 0.2,
-          ease,
-          transformOrigin: 'top center',
-          onComplete: () => {
-            gsap.set(menu, { visibility: 'hidden' });
-          }
-        });
-      }
-    }
-
+    setIsMobileMenuOpen(v => !v);
     onMobileMenuClick?.();
   };
 
   const isExternalLink = (href: string) =>
-    href.startsWith('http://') ||
-    href.startsWith('https://') ||
+    href.startsWith('http') ||
     href.startsWith('//') ||
     href.startsWith('mailto:') ||
     href.startsWith('tel:') ||
@@ -235,91 +128,39 @@ const PillNav: React.FC<PillNavProps> = ({
 
   const isRouterLink = (href?: string) => href && !isExternalLink(href);
 
-  const cssVars = {
-    ['--base']: baseColor,
-    // Glassmorphism pill background: semi-transparent white
-    ['--pill-bg']: 'rgba(255,255,255,0.18)',
-    ['--hover-text']: hoveredPillTextColor,
-    ['--pill-text']: resolvedPillTextColor,
-    ['--nav-h']: '48px',
-    ['--logo']: '36px',
-    ['--pill-pad-x']: '18px',
-    ['--pill-gap']: '3px'
-  } as React.CSSProperties;
-
   return (
     <div className="absolute top-[1em] z-[1000] w-full left-0 md:w-auto md:left-auto">
       <nav
         className={`w-full md:w-max flex items-center justify-between md:justify-start box-border px-4 md:px-0 ${className}`}
         aria-label="Primary"
-        style={{ ...cssVars, background: 'transparent' }}
+        style={{ background: 'transparent' }}
       >
-        {isRouterLink(items?.[0]?.href) ? (
-          <Link
-            to={items[0].href}
-            aria-label="Home"
-            onMouseEnter={handleLogoEnter}
-            role="menuitem"
-            ref={(el: HTMLAnchorElement | HTMLElement | null) => {
-              logoRef.current = el;
-            }}
-            className="rounded-full p-2 inline-flex items-center justify-center overflow-hidden"
-            style={{
-              width: '72px', // Bigger logo
-              height: '72px',
-              background: 'transparent'
-            }}
-          >
-            <img src={logo} alt={logoAlt} ref={logoImgRef} className="w-full h-full object-cover block" />
-          </Link>
-        ) : (
-          <a
-            href={items?.[0]?.href || '#'}
-            aria-label="Home"
-            onMouseEnter={handleLogoEnter}
-            ref={(el: HTMLAnchorElement | HTMLElement | null) => {
-              logoRef.current = el;
-            }}
-            className="rounded-full p-2 inline-flex items-center justify-center overflow-hidden"
-            style={{
-              width: '72px', // Bigger logo
-              height: '72px',
-              background: 'var(--base, #000)'
-            }}
-          >
-            <img src={logo} alt={logoAlt} ref={logoImgRef} className="w-full h-full object-cover block" />
-          </a>
-        )}
-
-        <div
-          ref={navItemsRef}
-          className="hidden md:flex ml-2"
-          style={{ height: 'var(--nav-h)' }}
+        <Link
+          to={items[0].href}
+          onMouseEnter={handleLogoEnter}
+          ref={logoRef as any}
+          className="rounded-full p-2 inline-flex items-center justify-center overflow-hidden"
+          style={{ width: '72px', height: '72px' }}
         >
-          <ul
-            role="menubar"
-            className="flex items-center gap-6 m-0 p-0 h-full list-none"
-          >
+          <img src={logo} alt={logoAlt} ref={logoImgRef} className="w-full h-full object-cover" />
+        </Link>
+
+        <div ref={navItemsRef} className="hidden md:flex ml-2">
+          <ul className="flex items-center gap-4 m-0 p-0 h-full list-none">
             {items.map((item, i) => {
               const isActive = activeHref === item.href;
+              const cls = `nav-link px-4 py-2 text-xl font-semibold uppercase tracking-wide hover:text-pink-500 transition-colors duration-200 font-pricedown ${
+                isActive && i !== 0 ? 'text-pink-500' : 'text-black'
+              }`;
+
               return (
-                <li key={item.href} role="none" className="flex h-full">
+                <li key={item.href} className="flex h-full">
                   {isRouterLink(item.href) ? (
-                    <Link
-                      role="menuitem"
-                      to={item.href}
-                      className={`nav-link px-4 py-2 text-2xl font-semibold uppercase tracking-wide hover:text-pink-500 transition-colors duration-200 font-pricedown ${isActive && i !== 0 ? 'text-pink-500' : 'text-black'}`}
-                      aria-label={item.ariaLabel || item.label}
-                    >
+                    <Link to={item.href} className={cls}>
                       {item.label}
                     </Link>
                   ) : (
-                    <a
-                      role="menuitem"
-                      href={item.href}
-                      className={`nav-link px-4 py-2 text-2xl font-semibold uppercase tracking-wide hover:text-pink-500 transition-colors duration-200 font-pricedown ${isActive && i !== 0 ? 'text-pink-500' : 'text-black'}`}
-                      aria-label={item.ariaLabel || item.label}
-                    >
+                    <a href={item.href} className={cls}>
                       {item.label}
                     </a>
                   )}
@@ -329,126 +170,52 @@ const PillNav: React.FC<PillNavProps> = ({
           </ul>
         </div>
 
+        <div className="hidden md:block ml-auto">
+          <img
+            src="/src/assets/Logo_somaiya.png"
+            alt="Somaiya Logo"
+            className="h-12 w-auto object-contain"
+          />
+        </div>
+
         <button
           ref={hamburgerRef}
           onClick={toggleMobileMenu}
-          aria-label="Toggle menu"
-          aria-expanded={isMobileMenuOpen}
-          className="md:hidden rounded-full border-0 flex flex-col items-center justify-center gap-1 cursor-pointer p-0 relative"
-          style={{
-            width: 'var(--nav-h)',
-            height: 'var(--nav-h)',
-            background: 'transparent'
-          }}
+          className="md:hidden"
         >
-          <span
-            className="hamburger-line w-4 h-0.5 rounded origin-center transition-all duration-[10ms] ease-[cubic-bezier(0.25,0.1,0.25,1)]"
-            style={{ background: 'var(--pill-bg, #fff)' }}
-          />
-          <span
-            className="hamburger-line w-4 h-0.5 rounded origin-center transition-all duration-[10ms] ease-[cubic-bezier(0.25,0.1,0.25,1)]"
-            style={{ background: 'var(--pill-bg, #fff)' }}
-          />
+          ☰
         </button>
-
-        {/* Adding the Somaiya logo to the right of the navigation */}
-        <div className="hidden md:block ml-auto">
-          <img
-            src="/src/assets/Logo_somaiya.png" // Path to Somaiya logo
-            alt="Somaiya Logo"
-            className="w-338 h-600 " // Adjust size as needed"
-          />
-        </div>
       </nav>
-
-      <div
-        ref={mobileMenuRef}
-        className="md:hidden absolute top-[3em] left-4 right-4 rounded-[27px] shadow-[0_8px_32px_rgba(0,0,0,0.12)] z-[998] origin-top"
-        style={{
-          ...cssVars,
-          background: 'var(--base, #f0f0f0)'
-        }}
-      >
-        <ul className="list-none m-0 p-[3px] flex flex-col gap-[3px]">
-          {items.map(item => {
-            const defaultStyle: React.CSSProperties = {
-              background: 'var(--pill-bg, #fff)',
-              color: 'var(--pill-text, #fff)'
-            };
-            const hoverIn = (e: React.MouseEvent<HTMLAnchorElement>) => {
-              e.currentTarget.style.background = 'var(--base)';
-              e.currentTarget.style.color = 'var(--hover-text, #fff)';
-            };
-            const hoverOut = (e: React.MouseEvent<HTMLAnchorElement>) => {
-              e.currentTarget.style.background = 'var(--pill-bg, #fff)';
-              e.currentTarget.style.color = 'var(--pill-text, #fff)';
-            };
-
-            const linkClasses =
-              'block py-3 px-4 text-[16px] font-medium rounded-[50px] transition-all duration-200 ease-[cubic-bezier(0.25,0.1,0.25,1)]';
-
-            return (
-              <li key={item.href}>
-                {isRouterLink(item.href) ? (
-                  <Link
-                    to={item.href}
-                    className={linkClasses}
-                    style={defaultStyle}
-                    onMouseEnter={hoverIn}
-                    onMouseLeave={hoverOut}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    {item.label}
-                  </Link>
-                ) : (
-                  <a
-                    href={item.href}
-                    className={linkClasses}
-                    style={defaultStyle}
-                    onMouseEnter={hoverIn}
-                    onMouseLeave={hoverOut}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    {item.label}
-                  </a>
-                )}
-              </li>
-            );
-          })}
-        </ul>
-      </div>
     </div>
   );
 };
 
 export default PillNav;
 
-// Custom nav-link hover parallelogram style
+/* Hover parallelogram */
 const style = document.createElement('style');
 style.innerHTML = `
-  .nav-link {
-    position: relative;
-    z-index: 1;
-    overflow: visible;
-  }
-  .nav-link::before {
-    content: '';
-    position: absolute;
-    left: -5%;
-    top: 50%;
-    transform: translateY(-50%) skew(20deg) scaleX(0.85);
-    width: 120%;
-    height: 85%;
-    background: #02753E;
-    opacity: 0;
-    z-index: -1;
-    transition: opacity 0.2s;
-    border-radius: 0.6em;
-    pointer-events: none;
-  }
-  .nav-link:hover::before {
-    opacity: 1;
-  }
+.nav-link {
+  position: relative;
+  z-index: 1;
+}
+.nav-link::before {
+  content: '';
+  position: absolute;
+  left: -5%;
+  top: 50%;
+  transform: translateY(-50%) skew(20deg) scaleX(0.85);
+  width: 120%;
+  height: 85%;
+  background: #02753E;
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.2s;
+  border-radius: 0.6em;
+}
+.nav-link:hover::before {
+  opacity: 1;
+}
 `;
 if (typeof window !== 'undefined' && !document.getElementById('nav-link-parallelogram-style')) {
   style.id = 'nav-link-parallelogram-style';

@@ -72,18 +72,19 @@ const GTAStats: React.FC = () => {
   const pad = (n: number) => n.toString().padStart(2, "0")
 
   return (
-    <div className="absolute top-8 right-4 z-[9999] pointer-events-none flex flex-col gap-2">
+    <div className="absolute top-4 right-2 z-[9999] pointer-events-none flex flex-col gap-2 scale-[1.1] origin-top-right">
+
 
       {/* TIME DISPLAY */}
-      <div className="flex items-center gap-3 mb-2">
-        <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 border-8 border-black rounded-lg flex items-center justify-center">
+      <div className="flex items-center gap-2 mb-1">
+        <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 border-4 border-black rounded-lg flex items-center justify-center">
           <div
-            className="text-xl sm:text-2xl md:text-3xl text-center"
+            className="text-sm sm:text-lg md:text-xl text-center"
             style={{
               fontFamily: "pricedown",
               color: "#fff",
               textShadow:
-                "3px 3px 0px #000, -1px -1px 0px #000, 1px -1px 0px #000, -1px 1px 0px #000",
+                "2px 2px 0px #000, -1px -1px 0px #000, 1px -1px 0px #000, -1px 1px 0px #000",
             }}
           >
             DAYS LEFT
@@ -91,12 +92,12 @@ const GTAStats: React.FC = () => {
         </div>
 
         <div
-          className="text-2xl sm:text-3xl md:text-4xl tracking-wider"
+          className="text-lg sm:text-xl md:text-2xl tracking-wider"
           style={{
             fontFamily: "pricedown",
             color: "#fff",
             textShadow:
-              "3px 3px 0px #000, -1px -1px 0px #000, 1px -1px 0px #000, -1px 1px 0px #000",
+              "2px 2px 0px #000, -1px -1px 0px #000, 1px -1px 0px #000, -1px 1px 0px #000",
           }}
         >
           {pad(timeLeft.days)}:
@@ -107,9 +108,9 @@ const GTAStats: React.FC = () => {
       </div>
 
       {/* WANTED STARS */}
-      <div className="flex justify-center gap-1 mb-2">
+      <div className="flex justify-center gap-0.5 mb-1">
         {[...Array(5)].map((_, i) => (
-          <div key={i} className="relative w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6">
+          <div key={i} className="relative w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5">
             <div
               className={`absolute inset-0 ${
                 i < starCount ? "opacity-100" : "opacity-30"
@@ -118,7 +119,7 @@ const GTAStats: React.FC = () => {
                 clipPath:
                   "polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)",
                 backgroundColor: i < starCount ? "#fbbf24" : "#666",
-                border: "2px solid #000",
+                border: "1px solid #000",
               }}
             />
           </div>
@@ -126,9 +127,9 @@ const GTAStats: React.FC = () => {
       </div>
 
       {/* HEALTH + MONEY (CENTERED) */}
-      <div className="flex flex-col items-center gap-2 mt-2">
+      <div className="flex flex-col items-center gap-1 mt-1">
         {/* HEALTH BAR */}
-        <div className="w-40 sm:w-44 md:w-48 h-4 sm:h-5 bg-black border-2 border-black">
+        <div className="w-32 sm:w-36 md:w-40 h-3 sm:h-4 bg-black border border-black">
           <div
             className="h-full"
             style={{
@@ -141,12 +142,12 @@ const GTAStats: React.FC = () => {
 
         {/* MONEY */}
         <div
-          className="text-2xl sm:text-3xl md:text-4xl"
+          className="text-lg sm:text-xl md:text-2xl"
           style={{
             fontFamily: "pricedown",
             color: "#4ade80",
             textShadow:
-              "3px 3px 0px #000, -1px -1px 0px #000, 1px -1px 0px #000, -1px 1px 0px #000",
+              "2px 2px 0px #000, -1px -1px 0px #000, 1px -1px 0px #000, -1px 1px 0px #000",
           }}
         >
           ₹{money.toLocaleString("en-IN")}

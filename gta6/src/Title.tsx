@@ -11,7 +11,7 @@ const Title: React.FC = () => {
       className="
         absolute
         left-1/2
-        top-[34   %] sm:top-[36%]
+        top-[24.5%] sm:top-[26.5%]
         -translate-x-1/2
         -translate-y-1/2
         z-[1000]
@@ -50,8 +50,9 @@ const Title: React.FC = () => {
           top-0
           left-1/2
           -translate-x-1/2
+          translate-y-[64px] sm:translate-y-[78px] md:translate-y-[92px] lg:translate-y-[108px]
           m-0
-          text-4xl sm:text-7xl md:text-8xl lg:text-9xl
+          text-4xl sm:text-7xl md:text-[8.5rem] lg:text-[10rem]
           font-pricedown
           uppercase
           z-[1001]
@@ -72,26 +73,29 @@ const Title: React.FC = () => {
           text-base sm:text-xl md:text-2xl
           font-pricedown
           right-0
-          translate-x-[120%] sm:translate-x-[180%] md:translate-x-[200%]
-          translate-y-[70px] sm:translate-y-[100px] md:translate-y-[120px]
+          + translate-x-[130%] sm:translate-x-[190%] md:translate-x-[210%]
+          translate-y-[140px] sm:translate-y-[185px] md:translate-y-[220px]
           whitespace-nowrap
+          z-[1002]
         "
       >
         National
-        <br />Level
-        <br />Competition
+        <br />
+        Level
+        <br />
+        Competition
       </h2>
 
       {/* ISTE KJSCE presents */}
       <h2
         className="
           text-center
-          text-base sm:text-xl md:text-2xl
+        + text-lg sm:text-2xl md:text-3xl
           font-pricedown
-          -mt-1 sm:-mt-2
+      + mt-4 sm:mt-6
         "
       >
-        ISTE KJSCE presents
+        ISTE KJSSE presents
       </h2>
     </div>
   );
