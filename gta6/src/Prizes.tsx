@@ -116,7 +116,7 @@ const Prizes: React.FC = () => {
                 <button
                   key={key}
                   onClick={() => handleNavigation(key)}
-                  className={`text-left text-3xl italic transition-all duration-300 transform hover:translate-x-3 ${activeTab === key ? 'text-white' : 'text-zinc-600 hover:text-zinc-300'}`}
+                  className={`text-left text-3xl italic transition-all duration-300 transform hover:translate-x-3 ${activeTab === key ? 'text-white' : 'text-zinc-500 hover:text-zinc-300'}`}
                 >
                   {PRIZE_DATA[key].id.replace('-', ' ')}
                 </button>

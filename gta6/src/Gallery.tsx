@@ -11,7 +11,7 @@ import img10 from './assets/gallery_images/img10.png';
 
 const galleryStyles = `
   .gallery-parent {
-    padding: 2rem;
+    padding: 1rem;
     background: transparent;
     height: 80vh;
     min-height: 800px;
@@ -211,7 +211,7 @@ export default function Gallery() {
       <style>{galleryStyles}</style>
       <section
         id="gallery"
-        className="bg-[black] py-8 px-4 min-h-screen flex items-center justify-center relative"
+        className="bg-zinc-950 py-0 px-0 min-h-screen flex items-center justify-center relative"
       >
         <div className="gallery-parent">
           {galleryImages.map((img, i) => (
