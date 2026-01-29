@@ -489,16 +489,18 @@ function ThemesSection() {
 
         {/* Chaotic Collage Layout - Like GTA Cover */}
         <div className="relative h-[1050px] border-2 border-pink-500/40 overflow-hidden">
-          {/* Vice City Background */}
-          <img 
-            src={bgImage} 
-            alt="Vice City Background"
-            className="absolute inset-0 w-full h-full object-cover"
-          />
-          
-          {/* Lighter overlay to show more background */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-purple-950/30 to-black/40" />
-          
+         {/* Vice City Background with Vignette Effect */}
+<div 
+  className="absolute inset-0 w-full h-full"
+  style={{
+    backgroundImage: `linear-gradient(to right, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.85) 100%), url(${bgImage})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+  }}
+/>
+
+{/* Additional gradient overlay for purple tint */}
+<div className="absolute inset-0 bg-gradient-to-b from-purple-950/20 via-transparent to-black/30" />
           {/* Theme Cards */}
           {themes.map((theme: any) => (
             <button
@@ -544,7 +546,7 @@ function ThemesSection() {
                      fontFamily: 'Orbitron, sans-serif',
                      textShadow: '1px 1px 3px rgba(0,0,0,0.9)'
                    }}>
-                  &gt; EXPLORE
+                  &gt; CLICK TO EXPLORE
                 </p>
               </div>
 
