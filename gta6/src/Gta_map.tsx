@@ -42,10 +42,10 @@ const GTAMinimapEmbed: React.FC = () => {
           relative rounded-full p-[6px] bg-pink-500 cursor-pointer
           transition hover:scale-105 hover:brightness-110
 
-          w-28 h-28
-          sm:w-36 sm:h-36
-          md:w-44 md:h-44
-          lg:w-48 lg:h-48
+          w-20 h-20
+          sm:w-30 sm:h-30
+          md:w-40 md:h-40
+          lg:w-40 lg:h-40
         "
       >
         <div
