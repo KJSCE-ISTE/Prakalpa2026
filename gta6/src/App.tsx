@@ -13,6 +13,7 @@ import Themes from "./Themes"
 import Timeline from "./Timeline"
 import Prizes from "./Prizes"
 
+
 function App() {
   const [loading, setLoading] = useState(true)
   const [exiting, setExiting] = useState(false)

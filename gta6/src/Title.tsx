@@ -23,7 +23,7 @@ const Title: React.FC = () => {
         id="xxvi-bg"
         className="
           absolute
-          -top-6 sm:-top-10
+          -top-4 sm:-top-8
           left-1/2
           -translate-x-1/2
           text-[9rem] sm:text-[16rem] md:text-[20rem] lg:text-[28rem]

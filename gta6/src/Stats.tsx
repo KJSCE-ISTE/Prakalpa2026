@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react"
  */
 const GTAStats: React.FC = () => {
   const [timeLeft, setTimeLeft] = useState(getTimeLeft())
-  const [starCount, setStarCount] = useState(1)
+  const [starCount, setStarCount] = useState(5)
   const [money, setMoney] = useState(0)
 
   // ================= TIME LOGIC =================
@@ -46,8 +46,7 @@ const GTAStats: React.FC = () => {
   // ================= WANTED LEVEL =================
   useEffect(() => {
     const handleScroll = () => {
-      const newStarCount = Math.min(5, Math.floor(window.scrollY / 100) + 1)
-      setStarCount(newStarCount)
+      setStarCount(5) // Always display five stars
     }
 
     window.addEventListener("scroll", handleScroll)
@@ -87,7 +86,7 @@ const GTAStats: React.FC = () => {
                 "2px 2px 0px #000, -1px -1px 0px #000, 1px -1px 0px #000, -1px 1px 0px #000",
             }}
           >
-            DAYS LEFT
+           {timeLeft.days} DAYS LEFT
           </div>
         </div>
 
@@ -100,7 +99,7 @@ const GTAStats: React.FC = () => {
               "2px 2px 0px #000, -1px -1px 0px #000, 1px -1px 0px #000, -1px 1px 0px #000",
           }}
         >
-          {pad(timeLeft.days)}:
+         
           {pad(timeLeft.hours)}:
           {pad(timeLeft.minutes)}:
           {pad(timeLeft.seconds)}
