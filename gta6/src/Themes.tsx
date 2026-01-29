@@ -514,7 +514,7 @@ function ThemesSection() {
                 height: theme.position.height,
                 transform: `rotate(${theme.position.rotate}deg)`,
               }}
-              className="group cursor-pointer transition-all duration-300 hover:scale-105 hover:z-30 hover:rotate-0 border-2 border-purple-400/50 hover:border-pink-500 shadow-[0_4px_15px_rgba(0,0,0,0.8)]"
+              className="group cursor-pointer transition-all duration-300 hover:scale-105 hover:z-30 hover:rotate-0 border-2 border-black hover:border-pink-500 shadow-[0_4px_15px_rgba(0,0,0,0.8)]"
             >
               {/* Background Image */}
               <img
