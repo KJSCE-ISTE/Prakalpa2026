@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import NewT from './assets/gallery_images/NewT.png';
+import MT from './assets/gallery_images/MT.png';
 
 interface TimelineItem {
   id: number;
@@ -155,7 +156,7 @@ const Timeline: React.FC = () => {
         <div className="max-w-5xl mx-auto relative z-10">
   <div className="flex justify-center mb-2">
     <img 
-      src="https://fontmeme.com/permalink/260119/3eab940d.png" 
+      src={MT} 
       alt="MISSION TIMELINE" 
       className="h-20 object-contain"
     />
