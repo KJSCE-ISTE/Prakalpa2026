@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import SunsetG from './assets/SunsetG.jpg';
+import NewT from './assets/gallery_images/NewT.png';
 
 interface TimelineItem {
   id: number;
@@ -140,7 +140,7 @@ const Timeline: React.FC = () => {
       <div
   className="min-h-screen py-16 px-4 relative overflow-hidden"
   style={{
-    backgroundImage: `url(${SunsetG})`,
+    backgroundImage: `url(${NewT})`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundAttachment: 'fixed',
