@@ -284,6 +284,7 @@ image: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?crop=entrop
 function ThemeDetailsModal({ theme, onClose }: { theme: any; onClose: () => void }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
+  // Always call all useEffects, but control their behavior with conditions inside
   useEffect(() => {
     if (theme) {
       setCurrentImageIndex(0);
@@ -292,10 +293,12 @@ function ThemeDetailsModal({ theme, onClose }: { theme: any; onClose: () => void
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onClose();
-      }
-    };
+  if (e.key === 'Escape') {
+    // Replace current history state to remove hash, then close
+    window.history.replaceState(null, '', window.location.pathname);
+    onClose();
+  }
+};
 
     if (theme) {
       document.addEventListener('keydown', handleEscape);
@@ -305,6 +308,32 @@ function ThemeDetailsModal({ theme, onClose }: { theme: any; onClose: () => void
     return () => {
       document.removeEventListener('keydown', handleEscape);
       document.body.style.overflow = 'unset';
+    };
+  }, [theme, onClose]);
+
+  // Add hash to URL when modal opens
+  // Add hash to URL when modal opens
+useEffect(() => {
+  if (theme) {
+    // Only push state if the hash doesn't already match
+    if (window.location.hash !== `#${theme.id}`) {
+      window.history.pushState(null, '', `#${theme.id}`);
+    }
+  }
+}, [theme]);
+
+  // Listen for back button (popstate event)
+  useEffect(() => {
+    const handlePopState = () => {
+      if (theme && window.location.hash === '') {
+        onClose();
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
     };
   }, [theme, onClose]);
 
@@ -321,6 +350,7 @@ function ThemeDetailsModal({ theme, onClose }: { theme: any; onClose: () => void
   };
 
   return (
+    // ... rest of the component
     <div className="fixed inset-0 z-50 bg-black flex flex-col" style={{ fontFamily: 'Orbitron, sans-serif' }}>
       {/* Background Image */}
       <img 
@@ -342,11 +372,15 @@ function ThemeDetailsModal({ theme, onClose }: { theme: any; onClose: () => void
       <div className="relative flex-1 flex items-start justify-center overflow-y-auto pt-16 pb-8">
         {/* Close Button */}
         <button
-          onClick={onClose}
-          className="fixed top-6 right-6 z-20 text-purple-400 hover:text-pink-400 transition-all duration-300 bg-black/60 backdrop-blur-sm rounded-sm p-2 border-2 border-purple-500/30 hover:border-pink-500"
-        >
-          <XIcon />
-        </button>
+  onClick={() => {
+    // Replace current history state to remove hash, then close
+    window.history.replaceState(null, '', window.location.pathname);
+    onClose();
+  }}
+  className="fixed top-6 right-6 z-20 text-purple-400 hover:text-pink-400 transition-all duration-300 bg-black/60 backdrop-blur-sm rounded-sm p-2 border-2 border-purple-500/30 hover:border-pink-500"
+>
+  <XIcon />
+</button>
 
         {/* Content Area */}
         <div className="relative w-full flex items-center justify-center px-12 py-4">
@@ -428,6 +462,8 @@ function ThemeDetailsModal({ theme, onClose }: { theme: any; onClose: () => void
     </div>
   );
 }
+
+
     //   {/* Bottom Thumbnails */}
     //   <div className="relative border-t border-purple-500/30 px-6 py-4 bg-black/40 backdrop-blur-sm">
     //     <div className="flex gap-4 overflow-x-auto">
@@ -461,7 +497,37 @@ function ThemeDetailsModal({ theme, onClose }: { theme: any; onClose: () => void
 function ThemesSection() {
   const [selectedTheme, setSelectedTheme] = useState(null);
 
+  // Handle browser navigation (back/forward buttons and initial hash)
+  useEffect(() => {
+    const handleHashChange = () => {
+  // Prevent scroll jump
+  const currentScroll = window.scrollY;
+  
+  const hash = window.location.hash.slice(1);
+  if (hash && !selectedTheme) {
+    // If there's a hash but no modal is open, it's forward navigation - block it
+    window.history.replaceState(null, '', window.location.pathname);
+    window.scrollTo(0, currentScroll); // Maintain scroll position
+  } else if (!hash && selectedTheme) {
+    // If there's no hash and modal is open, it's back navigation - close it
+    setSelectedTheme(null);
+    window.scrollTo(0, currentScroll); // Maintain scroll position
+  }
+};
+
+    // Check hash on mount
+    handleHashChange();
+
+    // Listen for hash changes (back/forward buttons)
+    window.addEventListener('hashchange', handleHashChange);
+
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange);
+    };
+  }, []);
+
   return (
+    // ... rest of component
     <>
       <div className="w-full relative">
         {/* Title Overlay - Angled like GTA */}
@@ -550,8 +616,7 @@ function ThemesSection() {
                 </p>
               </div>
 
-              {/* Diagonal Stripe - GTA Style */}
-              <div className="absolute inset-0 bg-gradient-to-br from-transparent via-purple-400/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 transform rotate-45" />
+              
             </button>
           ))}
         </div>
