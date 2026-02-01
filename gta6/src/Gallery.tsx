@@ -18,7 +18,6 @@ const galleryStyles = `
     width: 100%;
     max-width: 2000px;
     margin: auto;
-    margin-top: 2.5vh;
     border: none;
     overflow: hidden;
     display: grid;
