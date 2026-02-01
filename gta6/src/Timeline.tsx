@@ -176,7 +176,7 @@ boxShadow: `
             {items.map((item, index) => (
               <div
                 key={item.id}
-                ref={(el) => (itemRefs.current[item.id] = el)}
+                ref={(el) => { itemRefs.current[item.id] = el; }}
                 data-id={item.id}
                 className={`relative flex items-center mb-20 ${
                   index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'
