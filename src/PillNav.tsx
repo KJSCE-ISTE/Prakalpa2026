@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
+import somaiyaLogo from "./assets/Logo_somaiya.png";
 
 export type PillNavItem = {
   label: string;
@@ -108,9 +109,10 @@ const PillNav: React.FC<PillNavProps> = ({
     if (!logoImgRef.current) return;
     logoTweenRef.current?.kill();
     logoTweenRef.current = gsap.to(logoImgRef.current, {
-      rotate: 360,
-      duration: 0.2,
-      ease
+      rotate: "+=360",
+    duration: 0.3,
+    ease,
+    overwrite: "auto"
     });
   };
 
@@ -172,7 +174,7 @@ const PillNav: React.FC<PillNavProps> = ({
 
         <div className="hidden md:block ml-auto">
           <img
-            src="/src/assets/Logo_somaiya.png"
+            src={somaiyaLogo}
             alt="Somaiya Logo"
             className="h-12 w-auto object-contain"
           />

@@ -1,4 +1,5 @@
 import { forwardRef, useEffect } from "react"
+import themeAudio from "./assets/audio/theme.mp3";
 
 const BackgroundMusic = forwardRef<
   HTMLAudioElement,
@@ -13,7 +14,7 @@ const BackgroundMusic = forwardRef<
     ref.current.muted = muted
   }, [muted, ref])
 
-  return <audio ref={ref} src="/src/assets/audio/theme.mp3" />
+  return <audio ref={ref} src={themeAudio} />;
 })
 
 export default BackgroundMusic
