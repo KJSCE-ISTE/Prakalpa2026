@@ -92,14 +92,7 @@ const GTAMinimapEmbed: React.FC = () => {
             </svg>
           </div>
 
-          <div className="absolute top-1.5 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
-            <span
-              className="font-pricedown text-white text-xs sm:text-sm"
-              style={{ textShadow: "1px 1px 2px black" }}
-            >
-              N
-            </span>
-          </div>
+         
         </div>
       </button>
     </div>
