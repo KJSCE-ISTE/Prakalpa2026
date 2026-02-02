@@ -31,8 +31,42 @@ function App() {
     return () => clearTimeout(timer)
   }, [])
 
+  // Smooth scroll for in-page anchors (e.g., #themes)
+  const handleNavClick: React.MouseEventHandler<HTMLDivElement> = (e) => {
+    const target = e.target as HTMLElement
+    const anchor = target.closest('a[href^="#"]') as HTMLAnchorElement | null
+    if (!anchor) return
+    const id = anchor.getAttribute('href')?.slice(1)
+    if (!id) return
+    e.preventDefault()
+    const el = document.getElementById(id)
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      // Nudge up a bit to account for fixed nav height
+      window.scrollBy({ top: -24, behavior: 'instant' as ScrollBehavior })
+    }
+  }
+
+  // Support deep links (e.g., /#timeline) once content is mounted
+  useEffect(() => {
+    if (!loading) {
+      const hash = window.location.hash
+      if (hash && hash.startsWith('#')) {
+        const id = hash.slice(1)
+        const el = document.getElementById(id)
+        if (el) {
+          // Delay slightly to ensure layout is ready
+          setTimeout(() => {
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+            window.scrollBy({ top: -24, behavior: 'instant' as ScrollBehavior })
+          }, 100)
+        }
+      }
+    }
+  }, [loading])
+
   return (
-    <div className="relative w-full min-h-screen bg-black overflow-hidden">
+    <div className="relative w-full min-h-screen bg-black overflow-x-hidden">
       {/* 🎵 MUSIC — NEVER UNMOUNTS */}
       <BackgroundMusic ref={audioRef} muted={muted} />
 
@@ -53,17 +87,17 @@ function App() {
       >
         <Title />
 
-        <div className="min-h-screen flex items-center justify-center relative z-40">
+        <div className="min-h-screen flex items-center justify-center relative z-40" onClick={handleNavClick}>
           <PillNav
             logo={logo}
             logoAlt="Company Logo"
             items={[
               { label: "Home", href: "/" },
               { label: "Themes", href: "#themes" },
-              { label: "Timeline", href: "#timeline" },
               { label: "Prizes", href: "#prizes" },
+              { label: "Timeline", href: "#timeline" },
               { label: "Memories", href: "#gallery" },
-              { label: "FAQs", href: "/faqs" },
+              { label: "FAQs", href: "#faqs" },
             ]}
           />
         </div>
@@ -83,14 +117,14 @@ function App() {
 
 
       {/* ================= SCROLL CONTENT ================= */}
-      {!loading && <div id="themes"><Themes /></div>}
+      {!loading && <div id="themes" className="scroll-mt-24 sm:scroll-mt-28"><Themes /></div>}
       {/* ================= SCROLL CONTENT ================= */}
-      {!loading && <div id="timeline"><Timeline /></div>}
+      {!loading && <div id="prizes" className="scroll-mt-24 sm:scroll-mt-28"><Prizes /></div>}
+      {!loading && <div id="timeline" className="scroll-mt-24 sm:scroll-mt-28"><Timeline /></div>}
       {/* ================= SCROLL CONTENT ================= */}
-      {!loading && <div id="prizes"><Prizes /></div>}
       {/* ================= SCROLL CONTENT ================= */}
-      {!loading && <div id="gallery"><Gallery /></div>}
-      <FAQ/>
+      {!loading && <div id="gallery" className="scroll-mt-24 sm:scroll-mt-28"><Gallery /></div>}
+      {!loading && <div id="faqs" className="scroll-mt-24 sm:scroll-mt-28"><FAQ /></div>}
     </div>
   )
 }
