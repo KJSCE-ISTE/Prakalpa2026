@@ -12,6 +12,7 @@ import logo from "./assets/ISTE_logo.png"
 import Themes from "./Themes"
 import Timeline from "./Timeline"
 import Prizes from "./Prizes"
+import FAQ from "./FAQ"
 
 
 function App() {
@@ -89,6 +90,7 @@ function App() {
       {!loading && <div id="prizes"><Prizes /></div>}
       {/* ================= SCROLL CONTENT ================= */}
       {!loading && <div id="gallery"><Gallery /></div>}
+      <FAQ/>
     </div>
   )
 }
