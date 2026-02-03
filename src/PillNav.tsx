@@ -110,9 +110,9 @@ const PillNav: React.FC<PillNavProps> = ({
     logoTweenRef.current?.kill();
     logoTweenRef.current = gsap.to(logoImgRef.current, {
       rotate: "+=360",
-    duration: 0.3,
-    ease,
-    overwrite: "auto"
+      duration: 0.3,
+      ease,
+      overwrite: "auto"
     });
   };
 
@@ -129,6 +129,32 @@ const PillNav: React.FC<PillNavProps> = ({
     href.startsWith('#');
 
   const isRouterLink = (href?: string) => href && !isExternalLink(href);
+
+  const handleAnchorClick: React.MouseEventHandler<HTMLAnchorElement> = (e) => {
+    const anchor = e.currentTarget as HTMLAnchorElement;
+    const href = anchor.getAttribute('href') || '';
+    if (!href.startsWith('#')) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const id = href.slice(1);
+    const el = document.getElementById(id);
+    if (el) {
+      // Compute absolute Y position and nudge slightly lower to avoid leftover gap
+      const NAV_OFFSET = 24; // height of fixed nav
+      const EXTRA_NUDGE = 35; // scroll a bit further down
+      const y = el.getBoundingClientRect().top + window.pageYOffset - NAV_OFFSET + EXTRA_NUDGE;
+      try {
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      } catch {
+        // Fallback
+        window.scrollTo(0, y);
+      }
+
+      // Update hash without losing current base path
+      const path = window.location.pathname.replace(/#.*$/, '');
+      window.history.replaceState(null, '', `${path}#${id}`);
+    }
+  };
 
   return (
     <div className="absolute top-[1em] z-[1000] w-full left-0 md:w-auto md:left-auto">
@@ -151,9 +177,8 @@ const PillNav: React.FC<PillNavProps> = ({
           <ul className="flex items-center gap-4 m-0 p-0 h-full list-none">
             {items.map((item, i) => {
               const isActive = activeHref === item.href;
-              const cls = `nav-link px-4 py-2 text-xl font-semibold uppercase tracking-wide hover:text-pink-500 transition-colors duration-200 font-pricedown ${
-                isActive && i !== 0 ? 'text-pink-500' : 'text-black'
-              }`;
+              const cls = `nav-link px-4 py-2 text-xl font-semibold uppercase tracking-wide hover:text-pink-500 transition-colors duration-200 font-pricedown ${isActive && i !== 0 ? 'text-pink-500' : 'text-black'
+                }`;
 
               return (
                 <li key={item.href} className="flex h-full">
@@ -162,7 +187,7 @@ const PillNav: React.FC<PillNavProps> = ({
                       {item.label}
                     </Link>
                   ) : (
-                    <a href={item.href} className={cls}>
+                    <a href={item.href} className={cls} onClick={handleAnchorClick}>
                       {item.label}
                     </a>
                   )}
