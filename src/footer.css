@@ -1,0 +1,193 @@
+/* Base Footer */
+.footer {
+  background-color: #0b1a2d;
+  color: #eee;
+  padding: 60px 20px;
+  font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+  transition: all 0.3s ease;
+  position: relative; /* REQUIRED for divider */
+}
+
+.footer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  opacity: 0.8;
+
+  background: linear-gradient(
+    90deg,
+    #ffb6d9,
+    #7f9cff,
+    #ffb6d9
+  );
+}
+
+.footer-nav {
+  margin-left: 140px; /* adjust: 60px–100px if needed */
+}
+
+.footer-social {
+  transform: scale(0.9);   /* makes whole section slightly smaller */
+  transform-origin: top right;
+}
+
+
+/* Container */
+.footer-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between; /* spreads sections evenly */
+  align-items: flex-start;
+  gap: 60px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 40px; /* equal space left & right */
+}
+
+
+/* Section Titles */
+.footer h3 {
+  margin-bottom: 18px;
+  font-size: 17px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: #ffffff;
+  position: relative;
+}
+
+.footer h3::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 40px;
+  height: 2px;
+  background: #ffb6d9;
+  border-radius: 2px;
+}
+
+/* Links */
+.footer a {
+  color: #ccc;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+/* STEP 4 – Quick Links hover effect */
+.footer-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.footer-nav a::before {
+  content: "›";
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: 0.3s ease;
+  color: #ffb6d9;
+}
+
+.footer-nav a:hover::before {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.footer-nav a:hover {
+  transform: translateX(6px);
+}
+
+
+.footer a::after {
+  content: "";
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  left: 0;
+  bottom: -2px;
+  background: #ffb6d9; /* light pink */
+  transition: 0.3s ease;
+}
+
+.footer a:hover {
+  color: #ffb6d9; /* light pink text */
+}
+
+.footer a:hover::after {
+  width: 100%;
+}
+
+/* Navigation */
+.footer-nav ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-nav li {
+  margin-bottom: 8px;
+}
+
+/* Contact Info */
+.footer-contact p,
+.footer-social .social-links a {
+  margin-bottom: 8px;
+}
+
+.footer-social .social-links {
+  display: flex;
+  flex-direction: column;   /* makes it vertical */
+  gap: 10px;                /* space between buttons */
+  align-items: flex-start;
+}
+
+
+/* Social Links as Modern Buttons */
+.footer-social .social-links a {
+  display: block;          /* 👈 CHANGE */
+  margin-right: 0;         /* 👈 REMOVE horizontal spacing */
+  padding: 6px 12px;       /* slightly smaller */
+  border-radius: 8px;
+  color: #fff;
+  background: #1a2438;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+  transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.footer-social .social-links a:hover {
+  background: linear-gradient(45deg, #ffb6d9, #ffd1ea);
+  color: #1a1a1a;
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 6px 12px rgba(255, 182, 217, 0.4);
+}
+
+/* Footer Bottom */
+.footer-bottom {
+  text-align: center;
+  margin-top: 40px;
+  color: #aaa;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .footer-container {
+    flex-direction: column;
+    align-items: flex-start;
+    padding-left: 0;
+  }
+
+  .footer-social .social-links a {
+    display: block;
+    margin-bottom: 8px;
+  }
+}

@@ -13,6 +13,7 @@ import Themes from "./Themes"
 import Timeline from "./Timeline"
 import Prizes from "./Prizes"
 import FAQ from "./FAQ"
+import Footer from "./footer"
 
 
 function App() {
@@ -125,6 +126,8 @@ function App() {
       {/* ================= SCROLL CONTENT ================= */}
       {!loading && <div id="gallery" className="scroll-mt-24 sm:scroll-mt-28"><Gallery /></div>}
       {!loading && <div id="faqs" className="scroll-mt-24 sm:scroll-mt-28"><FAQ /></div>}
+      {/* ================= FOOTER ================= */}
+      <Footer />
     </div>
   )
 }
