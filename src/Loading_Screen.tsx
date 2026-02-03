@@ -31,9 +31,16 @@ export default function LoadingScreen({
 
   const startMusic = () => {
     if (!audioRef.current) return
-    audioRef.current.muted = false
-    audioRef.current.play().catch(() => {})
-    setMuted(false)
+
+    if (muted) {
+      audioRef.current.muted = false
+      audioRef.current.play().catch(() => {})
+      setMuted(false)
+    } else {
+      audioRef.current.muted = true
+      audioRef.current.pause()
+      setMuted(true)
+    }
   }
 
   return (
@@ -85,6 +92,14 @@ export default function LoadingScreen({
           onClick={(e) => {
             e.stopPropagation()
             setMuted(!muted)
+            if (!audioRef.current) return
+            if (muted) {
+              audioRef.current.muted = false
+              audioRef.current.play().catch(() => {})
+            } else {
+              audioRef.current.muted = true
+              audioRef.current.pause()
+            }
           }}
           className="ml-auto bg-black/70 text-white px-4 py-2 rounded-md"
         >
