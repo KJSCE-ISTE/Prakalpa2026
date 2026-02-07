@@ -202,7 +202,7 @@ export default function RegistrationForm() {
         setErrors({});
       }, 3000);
     } else {
-      setMessage({ type: 'error', text: 'Please fill all required fields correctly! ⚠️' });
+      setMessage({ type: 'error', text: 'Please fill all required fields!' });
       setShowMessage(true);
       setTimeout(() => setShowMessage(false), 3000);
     }
