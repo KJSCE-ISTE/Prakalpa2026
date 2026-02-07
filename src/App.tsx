@@ -10,6 +10,7 @@ import BackgroundMusic from "./BackgroundMusic"
 import Gallery from "./Gallery"
 import logo from "./assets/ISTE_logo.png"
 import Themes from "./Themes"
+import RegistrationForm from "./RegistrationForm" 
 import Timeline from "./Timeline"
 import Prizes from "./Prizes"
 import FAQ from "./FAQ"
@@ -86,6 +87,7 @@ function App() {
             ${loading ? "opacity-0 translate-y-6" : "opacity-100 translate-y-0"}
           `}
       >
+        {/* Title without onRegisterClick prop */}
         <Title />
 
         <div className="min-h-screen flex items-center justify-center relative z-40" onClick={handleNavClick}>
@@ -116,16 +118,16 @@ function App() {
         />
       )}
 
+      {/* ================= REGISTRATION BUTTON & MODAL (SELF-CONTAINED) ================= */}
+      {!loading && <RegistrationForm />}
 
       {/* ================= SCROLL CONTENT ================= */}
       {!loading && <div id="themes" className="scroll-mt-24 sm:scroll-mt-28"><Themes /></div>}
-      {/* ================= SCROLL CONTENT ================= */}
       {!loading && <div id="prizes" className="scroll-mt-24 sm:scroll-mt-28"><Prizes /></div>}
       {!loading && <div id="timeline" className="scroll-mt-24 sm:scroll-mt-28"><Timeline /></div>}
-      {/* ================= SCROLL CONTENT ================= */}
-      {/* ================= SCROLL CONTENT ================= */}
       {!loading && <div id="gallery" className="scroll-mt-24 sm:scroll-mt-28"><Gallery /></div>}
       {!loading && <div id="faqs" className="scroll-mt-24 sm:scroll-mt-28"><FAQ /></div>}
+      
       {/* ================= FOOTER ================= */}
       <Footer />
     </div>
