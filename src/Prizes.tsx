@@ -5,21 +5,21 @@ import start from './assets/prizes.png';
 
 const PRIZE_DATA = {
   WORKING_MODEL: {
-    id: 'Working-Model',
-    title: 'WORKING MODEL',
+    id: 'Hardware-Project',
+    title: 'HARDWARE PROJECT',
     prizes: [
-      { rank: '1st', amount: 'Rs.10,000/-' },
-      { rank: '2nd', amount: 'Rs.5,000/-' }
+      { rank: '1st', amount: 'Rs.14,000/-' },
+      { rank: '2nd', amount: 'Rs.7,000/-' }
     ],
     bgImage: 'https://images.unsplash.com/photo-1581092334651-ddf26d9a1930?auto=format&fit=crop&q=80',
     desc: "The premier category for hardware enthusiasts. Showcase physical prototypes that solve real-world engineering challenges through mechanics and electronics."
   },
   SOFTWARE: {
-    id: 'Software-Competition',
-    title: 'SOFTWARE COMPETITION',
+    id: 'Software-Project',
+    title: 'SOFTWARE PROJECT',
     prizes: [
-      { rank: '1st', amount: 'Rs.8,000/-' },
-      { rank: '2nd', amount: 'Rs.4,000/-' }
+      { rank: '1st', amount: 'Rs.11,000/-' },
+      { rank: '2nd', amount: 'Rs.5,000/-' }
     ],
     bgImage: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80',
     desc: "A battle of algorithms and architecture. This category focuses on clean code, UI/UX, and the deployment of scalable digital solutions."
@@ -28,8 +28,8 @@ const PRIZE_DATA = {
     id: 'Paper-Presentation',
     title: 'PAPER PRESENTATION',
     prizes: [
-      { rank: '1st', amount: 'Rs.7,000/-' },
-      { rank: '2nd', amount: 'Rs.3,500/-' }
+      { rank: '1st', amount: 'Rs.8,500/-' },
+      { rank: '2nd', amount: 'Rs.4,500/-' }
     ],
     bgImage: 'https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&q=80',
     desc: "The intellectual core of the event. Present your research findings, theoretical breakthroughs, and academic papers to a panel of experts."
