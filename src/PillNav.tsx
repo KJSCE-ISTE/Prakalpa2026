@@ -113,7 +113,8 @@ const PillNav: React.FC<PillNavProps> = ({
       duration: 0.3,
       ease,
       overwrite: "auto",
-      transformOrigin: "center center" // Ensure spin happens around the center
+      transformOrigin: "center center", // Ensure spin happens around the center
+      clearProps: "transform" // Reset transform properties after animation
     });
   };
 
