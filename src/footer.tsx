@@ -10,7 +10,6 @@ const Footer: React.FC = () => {
         <div className="footer-nav">
           <h3>Quick Links</h3>
           <ul>
-            
             <li><a href="#home">Home</a></li>
             <li><a href="#themes">Themes</a></li>
             <li><a href="#prizes">Prizes</a></li>
@@ -79,7 +78,7 @@ const Footer: React.FC = () => {
       </div>
 
       <div className="footer-bottom">
-        &copy; {new Date().getFullYear()} Designed by ISTE KJSSE Council. All rights reserved.
+        &copy; {new Date().getFullYear()} Designed by ISTE KJSCE Council. All rights reserved.
       </div>
     </footer>
   );
