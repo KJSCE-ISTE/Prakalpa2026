@@ -210,9 +210,12 @@ export default function Gallery() {
       <style>{galleryStyles}</style>
       <section
         id="gallery"
-        className="bg-zinc-950 py-0 px-0 min-h-screen flex items-center justify-center relative"
+        className="relative w-full bg-gradient-to-b from-zinc-950 to-black text-white py-2 px-0 flex items-center justify-center overflow-hidden"
       >
-        <div className="gallery-parent">
+        {/* Abstract Background Glows (Same as FAQ/Footer) */}
+        <div className="absolute top-[-20%] left-[-10%] w-[40%] h-[40%] rounded-full bg-pink-500/20 blur-[120px] pointer-events-none" />
+
+        <div className="gallery-parent relative z-10">
           {galleryImages.map((img, i) => (
             <div key={i} className="gallery-child" style={getCellStyle(i)}>
               <img src={img} alt={`Gallery ${i + 1}`} />
