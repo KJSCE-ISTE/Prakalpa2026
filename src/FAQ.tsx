@@ -8,12 +8,12 @@ export default function FAQ() {
     {
       question: "What is Prakalpa’26?",
       answer:
-        "Prakalpa’26 is the 17th edition of ISTE KJSCE’s flagship event, focused on innovation through paper and working model presentations."
+        "Prakalpa’26 is the 17th edition of ISTE KJSSE’s flagship event, focused on innovation through paper and working model presentations."
     },
     {
       question: "Who is organizing Prakalpa’26?",
       answer:
-        "Prakalpa’26 is organized by ISTE KJSCE to encourage research, creativity, and technical excellence."
+        "Prakalpa’26 is organized by ISTE KJSSE to encourage research, creativity, and technical excellence."
     },
     {
       question: "Who can participate in Prakalpa’26?",
@@ -33,7 +33,7 @@ export default function FAQ() {
     {
       question: "How can participants register for Prakalpa’26?",
       answer:
-        "Registration details will be shared through official ISTE KJSCE communication channels."
+        "Registration details will be shared through official ISTE KJSSE communication channels."
     }
   ];
 

@@ -86,7 +86,7 @@ const Title: React.FC = () => {
         Competition
       </h2>
 
-      {/* ISTE KJSCE presents */}
+      {/* ISTE KJSSE presents */}
       <h2
         className="
           text-center

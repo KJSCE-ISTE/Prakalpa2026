@@ -3,6 +3,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const bgImage = 'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1920';
 
+// ─── UPDATE THESE WHEN READY ───────────────────────────────────────
+const REGISTRATION_FEE = 500; // in ₹
+const UPI_ID = 'prakalpa26@upi';
+// ───────────────────────────────────────────────────────────────────
+
 interface InputProps {
   label: string;
   required?: boolean;
@@ -56,6 +61,7 @@ interface Participant {
   email?: string;
   contact?: string;
   institute?: string;
+  degree?: string;
   branch?: string;
   branchOther?: string;
   year?: string;
@@ -66,8 +72,6 @@ export default function RegistrationForm() {
   const [showButton, setShowButton] = useState(true);
   const [currentTab, setCurrentTab] = useState(1);
   const [formData, setFormData] = useState({
-    contactName: '',
-    email: '',
     numberOfParticipants: '',
     projectCategory: '',
     domain: '',
@@ -78,19 +82,17 @@ export default function RegistrationForm() {
   
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [projectFile, setProjectFile] = useState<File | null>(null);
+  const [paymentScreenshot, setPaymentScreenshot] = useState<File | null>(null);
+  const [utrNumber, setUtrNumber] = useState('');
   const [showMessage, setShowMessage] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
 
-  // Hide button when scrolling away from main page
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY < 50) {
-        setShowButton(true);
-      } else {
-        setShowButton(false);
-      }
+      setShowButton(window.scrollY < 25);
     };
 
+    handleScroll();
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -143,17 +145,6 @@ export default function RegistrationForm() {
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
     const phoneRegex = /^[0-9]{10}$/;
 
-    // Tab 1: Contact Information
-    if (!formData.contactName) {
-      newErrors.contactName = 'This is a required question';
-    }
-    if (!formData.email) {
-      newErrors.email = 'This is a required question';
-    } else if (!emailRegex.test(formData.email)) {
-      newErrors.email = 'Enter a valid email address';
-    }
-
-    // Tab 2: Participants
     if (!formData.numberOfParticipants) {
       newErrors.numberOfParticipants = 'This is a required question';
     }
@@ -161,19 +152,22 @@ export default function RegistrationForm() {
     const p1 = formData.participants[0];
     if (!p1.name) newErrors.name1 = 'This is a required question';
     if (!p1.email) newErrors.email1 = 'This is a required question';
+    else if (!emailRegex.test(p1.email)) {
+      newErrors.email1 = 'Enter a valid email address';
+    }
     if (!p1.contact) {
       newErrors.contact1 = 'This is a required question';
     } else if (!phoneRegex.test(p1.contact)) {
       newErrors.contact1 = 'Enter a valid 10-digit number';
     }
     if (!p1.institute) newErrors.institute1 = 'This is a required question';
+    if (!p1.degree) newErrors.degree1 = 'This is a required question';
     if (!p1.branch) newErrors.branch1 = 'This is a required question';
     if (p1.branch === 'Other' && !p1.branchOther) {
       newErrors.branchOther1 = 'This is a required question';
     }
     if (!p1.year) newErrors.year1 = 'This is a required question';
 
-    // Tab 3: Project Details
     if (!formData.projectCategory) newErrors.projectCategory = 'This is a required question';
     if (!formData.domain) newErrors.domain = 'This is a required question';
     if (formData.domain === 'other' && !formData.domainOther) {
@@ -182,24 +176,26 @@ export default function RegistrationForm() {
     if (!formData.title) newErrors.title = 'This is a required question';
     if (!projectFile) newErrors.projectFile = 'This is a required question';
 
+    // Tab 3 validation
+    if (!utrNumber.trim()) newErrors.utrNumber = 'This is a required question';
+    else if (utrNumber.trim().length < 12) newErrors.utrNumber = 'Enter a valid UTR/Transaction ID';
+    if (!paymentScreenshot) newErrors.paymentScreenshot = 'This is a required question';
+
     setErrors(newErrors);
     
-    // Navigate to tab with first error and scroll to it
     if (Object.keys(newErrors).length > 0) {
       const firstErrorKey = Object.keys(newErrors)[0];
       
-      // Determine which tab the error is in
       let errorTab = 1;
-      if (['numberOfParticipants', 'name1', 'email1', 'contact1', 'institute1', 'branch1', 'branchOther1', 'year1'].includes(firstErrorKey)) {
+      if (['projectCategory', 'domain', 'domainOther', 'title', 'projectFile'].includes(firstErrorKey)) {
         errorTab = 2;
-      } else if (['projectCategory', 'domain', 'domainOther', 'title', 'projectFile'].includes(firstErrorKey)) {
+      }
+      if (['utrNumber', 'paymentScreenshot'].includes(firstErrorKey)) {
         errorTab = 3;
       }
       
-      // Navigate to the tab with error
       setCurrentTab(errorTab);
       
-      // Scroll to first error after tab change
       setTimeout(() => {
         const errorElement = document.querySelector(`[data-error="${firstErrorKey}"]`);
         if (errorElement) {
@@ -213,35 +209,28 @@ export default function RegistrationForm() {
 
   const handleNext = () => {
     setCurrentTab(currentTab + 1);
-    // Scroll to top of form
     const container = document.getElementById('registration-scroll-container');
-    if (container) {
-      container.scrollTop = 0;
-    }
+    if (container) container.scrollTop = 0;
   };
 
   const handlePrevious = () => {
     setCurrentTab(currentTab - 1);
-    // Scroll to top of form
     const container = document.getElementById('registration-scroll-container');
-    if (container) {
-      container.scrollTop = 0;
-    }
+    if (container) container.scrollTop = 0;
   };
 
   const handleSubmit = () => {
     if (validateAllTabs()) {
       console.log('Form Data:', formData);
       console.log('Project File:', projectFile);
+      console.log('UTR:', utrNumber);
+      console.log('Payment Screenshot:', paymentScreenshot);
       setMessage({ type: 'success', text: '🎉 Registration Confirmed! See you at PRAKALPA\'26!' });
       setShowMessage(true);
       setTimeout(() => {
         setShowMessage(false);
         setIsOpen(false);
-        // Reset form data
         setFormData({
-          contactName: '',
-          email: '',
           numberOfParticipants: '',
           projectCategory: '',
           domain: '',
@@ -250,6 +239,8 @@ export default function RegistrationForm() {
           participants: [{}, {}, {}, {}]
         });
         setProjectFile(null);
+        setPaymentScreenshot(null);
+        setUtrNumber('');
         setErrors({});
         setCurrentTab(1);
       }, 2000);
@@ -257,9 +248,35 @@ export default function RegistrationForm() {
   };
 
   const renderParticipant = (index: number) => {
-    const labels = ['1st', '2nd', '3rd', '4th'];
+    const labels = ['Participant 1', 'Participant 2', 'Participant 3', 'Participant 4'];
     const isRequired = index === 0;
     const participant = formData.participants[index];
+
+    const getYearOptions = () => {
+      if (!participant.degree) return [];
+      switch (participant.degree) {
+        case 'B.Tech':
+          return [
+            { value: '1st Year', label: '1st Year' },
+            { value: '2nd Year', label: '2nd Year' },
+            { value: '3rd Year', label: '3rd Year' },
+            { value: '4th Year', label: '4th Year' }
+          ];
+        case 'Postgraduate':
+          return [
+            { value: '1st Year', label: '1st Year' },
+            { value: '2nd Year', label: '2nd Year' }
+          ];
+        case 'Diploma':
+          return [
+            { value: '1st Year', label: '1st Year' },
+            { value: '2nd Year', label: '2nd Year' },
+            { value: '3rd Year', label: '3rd Year' }
+          ];
+        default:
+          return [];
+      }
+    };
 
     return (
       <motion.div
@@ -269,12 +286,16 @@ export default function RegistrationForm() {
         transition={{ delay: index * 0.1 }}
         className="bg-black/40 backdrop-blur-sm border-2 border-purple-500/30 rounded-lg p-6 hover:border-pink-500/50 transition-all"
       >
-        <h3 className="text-xl font-bold text-pink-500 mb-4 flex items-center gap-2" style={{ fontFamily: 'Rajdhani, sans-serif' }}>
-          <span className="bg-gradient-to-r from-pink-500 to-purple-500 px-3 py-1 rounded">
+        <div className="flex items-center gap-3 mb-4">
+          <h3 className="text-2xl font-bold text-white" style={{ fontFamily: 'Rajdhani, sans-serif' }}>
             {labels[index]}
-          </span>
-          Participant Details
-        </h3>
+          </h3>
+          {index === 0 && (
+            <span className="bg-pink-500 text-white px-4 py-1 rounded-full text-sm font-bold">
+              Primary Contact
+            </span>
+          )}
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Input
@@ -286,7 +307,6 @@ export default function RegistrationForm() {
             placeholder="Enter full name"
             error={errors[`name${index + 1}`]}
           />
-          
           <Input
             label="Email Address"
             required={isRequired}
@@ -297,7 +317,6 @@ export default function RegistrationForm() {
             placeholder="participant@email.com"
             error={errors[`email${index + 1}`]}
           />
-          
           <Input
             label="Contact Number"
             required={isRequired}
@@ -307,7 +326,6 @@ export default function RegistrationForm() {
             placeholder="1234567890"
             error={errors[`contact${index + 1}`]}
           />
-          
           <Input
             label="Institute/Organization"
             required={isRequired}
@@ -317,7 +335,27 @@ export default function RegistrationForm() {
             placeholder="Enter institute name"
             error={errors[`institute${index + 1}`]}
           />
-          
+          <Select
+            label="Degree"
+            required={isRequired}
+            name={`degree${index + 1}`}
+            value={participant.degree || ''}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+              const newParticipants = [...formData.participants];
+              newParticipants[index] = { 
+                ...newParticipants[index], 
+                degree: e.target.value,
+                year: ''
+              };
+              setFormData(prev => ({ ...prev, participants: newParticipants }));
+            }}
+            options={[
+              { value: 'B.Tech', label: 'B.Tech' },
+              { value: 'Postgraduate', label: 'Postgraduate' },
+              { value: 'Diploma', label: 'Diploma' }
+            ]}
+            error={errors[`degree${index + 1}`]}
+          />
           <Select
             label="Branch/Specialization"
             required={isRequired}
@@ -342,7 +380,6 @@ export default function RegistrationForm() {
             ]}
             error={errors[`branch${index + 1}`]}
           />
-          
           {participant.branch === 'Other' && (
             <Input
               label="Specify Branch/Specialization"
@@ -354,21 +391,33 @@ export default function RegistrationForm() {
               error={errors[`branchOther${index + 1}`]}
             />
           )}
-          
-          <Select
-            label="Year of Study"
-            required={isRequired}
-            name={`year${index + 1}`}
-            value={participant.year || ''}
-            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleParticipantChange(index, 'year', e.target.value)}
-            options={[
-              { value: '1st Year', label: '1st Year' },
-              { value: '2nd Year', label: '2nd Year' },
-              { value: '3rd Year', label: '3rd Year' },
-              { value: '4th Year', label: '4th Year' }
-            ]}
-            error={errors[`year${index + 1}`]}
-          />
+          <div className="space-y-2" data-error={errors[`year${index + 1}`] ? `year${index + 1}` : undefined}>
+            <label className="text-purple-300 font-semibold block" style={{ fontFamily: 'Rajdhani, sans-serif' }}>
+              Year of Study {isRequired && <span className="text-pink-500">*</span>}
+            </label>
+            <select
+              name={`year${index + 1}`}
+              value={participant.year || ''}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleParticipantChange(index, 'year', e.target.value)}
+              className="w-full px-4 py-3 bg-black/60 border-2 border-purple-500/40 rounded text-white focus:border-pink-500 focus:outline-none transition-all"
+              disabled={!participant.degree}
+            >
+              <option value="">
+                {participant.degree ? 'Select...' : 'Select degree first'}
+              </option>
+              {getYearOptions().map((opt) => (
+                <option key={opt.value} value={opt.value} className="bg-black">
+                  {opt.label}
+                </option>
+              ))}
+            </select>
+            {!participant.degree && (
+              <p className="text-sm text-gray-400">Please select a degree first</p>
+            )}
+            {errors[`year${index + 1}`] && (
+              <span className="text-red-400 text-sm">{errors[`year${index + 1}`]}</span>
+            )}
+          </div>
         </div>
       </motion.div>
     );
@@ -376,27 +425,31 @@ export default function RegistrationForm() {
 
   return (
     <>
-      {/* ANIMATED BUTTON */}
+      {/* REGISTER BUTTON — centered, home page only */}
       <AnimatePresence>
         {showButton && (
           <motion.div
-            initial={{ opacity: 0, x: -100 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -100 }}
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8 }}
             transition={{ type: "spring", stiffness: 100, damping: 15 }}
-            className="fixed left-16 top-1/2 z-50"
+            className="fixed top-[80vh] left-0 right-0 flex justify-center z-50"
           >
             <motion.button
               onClick={() => setIsOpen(true)}
-              whileHover={{ scale: 1.05 }}
+              whileHover={{ scale: 1.1, boxShadow: "0 0 30px rgba(236, 72, 153, 0.8)" }}
               whileTap={{ scale: 0.95 }}
-              className="px-10 py-4 bg-gradient-to-r from-pink-500 to-purple-500 text-white text-xl font-black rounded-lg border-3 border-purple-400 shadow-lg"
-              style={{ 
-                fontFamily: 'Pricedown, sans-serif',
-                textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
-              }}
+              animate={{ boxShadow: ["0 0 20px rgba(168, 85, 247, 0.5)", "0 0 40px rgba(236, 72, 153, 0.7)", "0 0 20px rgba(168, 85, 247, 0.5)"] }}
+              transition={{ boxShadow: { duration: 2, repeat: Infinity, ease: "easeInOut" } }}
+              className="px-12 py-5 bg-gradient-to-r from-pink-500 to-purple-500 text-white text-2xl font-black rounded-xl shadow-2xl backdrop-blur-sm"
+              style={{ fontFamily: 'Pricedown, sans-serif', textShadow: '3px 3px 6px rgba(0,0,0,0.9)' }}
             >
-              REGISTER NOW
+              <motion.span
+                animate={{ scale: [1, 1.05, 1] }}
+                transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+              >
+                REGISTER NOW
+              </motion.span>
             </motion.button>
           </motion.div>
         )}
@@ -410,11 +463,7 @@ export default function RegistrationForm() {
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
-            transition={{ 
-              type: "spring",
-              stiffness: 300,
-              damping: 30
-            }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
             className="fixed inset-0 z-[9999] overflow-y-auto"
             style={{ 
               fontFamily: 'Rajdhani, sans-serif',
@@ -426,25 +475,17 @@ export default function RegistrationForm() {
           >
             {/* Scanlines */}
             <div className="fixed inset-0 pointer-events-none opacity-5"
-                 style={{
-                   backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, purple 2px, purple 4px)',
-                 }} />
+                 style={{ backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, purple 2px, purple 4px)' }} />
 
-            {/* Close Button - Fixed Position on Right */}
+            {/* Close Button */}
             <div className="fixed top-8 right-8 z-[10000]">
               <motion.button
                 initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ 
-                  opacity: 1, 
-                  scale: 1,
-                }}
+                animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.3 }}
                 whileHover={{ scale: 1.1, rotate: 90 }}
                 whileTap={{ scale: 0.9 }}
-                onClick={() => {
-                  setIsOpen(false);
-                  setCurrentTab(1);
-                }}
+                onClick={() => { setIsOpen(false); setCurrentTab(1); }}
                 className="bg-pink-500 hover:bg-purple-500 text-white w-12 h-12 rounded-lg flex items-center justify-center font-bold transition-all duration-300 border-2 border-purple-400 shadow-lg"
               >
                 <span className="text-3xl leading-none">×</span>
@@ -498,7 +539,7 @@ export default function RegistrationForm() {
                         : 'text-purple-300 hover:text-white hover:bg-purple-500/20'
                     }`}
                   >
-                    1. Contact
+                    1. Participants
                   </button>
                   <button
                     onClick={() => setCurrentTab(2)}
@@ -508,7 +549,7 @@ export default function RegistrationForm() {
                         : 'text-purple-300 hover:text-white hover:bg-purple-500/20'
                     }`}
                   >
-                    2. Participants
+                    2. Project
                   </button>
                   <button
                     onClick={() => setCurrentTab(3)}
@@ -518,7 +559,7 @@ export default function RegistrationForm() {
                         : 'text-purple-300 hover:text-white hover:bg-purple-500/20'
                     }`}
                   >
-                    3. Project
+                    3. Payment
                   </button>
                 </div>
               </motion.div>
@@ -550,46 +591,12 @@ export default function RegistrationForm() {
                   transition={{ duration: 0.3 }}
                   className="space-y-6"
                 >
-                  {/* TAB 1: Contact Email */}
+                  {/* TAB 1: Participants */}
                   {currentTab === 1 && (
                     <div className="space-y-6">
-                      <h2 className="text-3xl md:text-4xl font-black text-purple-400 text-center mb-6" style={{ fontFamily: 'Pricedown, sans-serif' }}>
-                        CONTACT INFORMATION
-                      </h2>
-                      
-                      <div className="bg-black/40 backdrop-blur-sm border-2 border-purple-500/30 rounded-lg p-6 space-y-6">
-                        <Input
-                          label="Contact Person Name"
-                          required
-                          type="text"
-                          name="contactName"
-                          value={formData.contactName}
-                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('contactName', e.target.value)}
-                          placeholder="Enter your full name"
-                          error={errors.contactName}
-                        />
-                        
-                        <Input
-                          label="Contact Email Address"
-                          required
-                          type="email"
-                          name="email"
-                          value={formData.email}
-                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('email', e.target.value)}
-                          placeholder="your@email.com"
-                          error={errors.email}
-                        />
-                      </div>
-                    </div>
-                  )}
-
-                  {/* TAB 2: Participants */}
-                  {currentTab === 2 && (
-                    <div className="space-y-6">
-                      <h2 className="text-3xl md:text-4xl font-black text-purple-400 text-center mb-6" style={{ fontFamily: 'Pricedown, sans-serif' }}>
+                      <h2 className="text-3xl md:text-4xl font-black text-pink-500 text-center mb-6" style={{ fontFamily: 'Pricedown, sans-serif' }}>
                         PARTICIPANT INFORMATION
                       </h2>
-                      
                       <div className="bg-black/40 backdrop-blur-sm border-2 border-purple-500/30 rounded-lg p-6">
                         <Select
                           label="Number of Participants"
@@ -606,7 +613,6 @@ export default function RegistrationForm() {
                           error={errors.numberOfParticipants}
                         />
                       </div>
-
                       {formData.numberOfParticipants && (
                         <div className="space-y-6">
                           {Array.from({ length: parseInt(formData.numberOfParticipants) }, (_, i) => i).map(renderParticipant)}
@@ -615,13 +621,12 @@ export default function RegistrationForm() {
                     </div>
                   )}
 
-                  {/* TAB 3: Project Details */}
-                  {currentTab === 3 && (
+                  {/* TAB 2: Project Details */}
+                  {currentTab === 2 && (
                     <div className="space-y-6">
                       <h2 className="text-3xl md:text-4xl font-black text-pink-500 text-center mb-6" style={{ fontFamily: 'Pricedown, sans-serif' }}>
                         PROJECT DETAILS
                       </h2>
-                      
                       <div className="bg-black/40 backdrop-blur-sm border-2 border-pink-500/30 rounded-lg p-6 space-y-6">
                         <Select
                           label="Project Category"
@@ -636,7 +641,6 @@ export default function RegistrationForm() {
                           ]}
                           error={errors.projectCategory}
                         />
-
                         <Select
                           label="Domain"
                           required
@@ -646,7 +650,6 @@ export default function RegistrationForm() {
                           options={domains}
                           error={errors.domain}
                         />
-
                         {formData.domain === 'other' && (
                           <Input
                             label="Specify Domain"
@@ -658,7 +661,6 @@ export default function RegistrationForm() {
                             error={errors.domainOther}
                           />
                         )}
-
                         <Input
                           label="Project Title"
                           required
@@ -674,7 +676,6 @@ export default function RegistrationForm() {
                         <h3 className="text-2xl font-black text-purple-400 mb-4" style={{ fontFamily: 'Pricedown, sans-serif' }}>
                           DOCUMENT UPLOAD
                         </h3>
-                        
                         <div className="space-y-2" data-error={errors.projectFile ? 'projectFile' : undefined}>
                           <label className="text-purple-300 font-semibold block">
                             Project Presentation/Paper <span className="text-pink-500">*</span>
@@ -692,6 +693,108 @@ export default function RegistrationForm() {
                           {errors.projectFile && (
                             <span className="text-red-400 text-sm">{errors.projectFile}</span>
                           )}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* TAB 3: Payment */}
+                  {currentTab === 3 && (
+                    <div className="space-y-6">
+                      <h2 className="text-3xl md:text-4xl font-black text-pink-500 text-center mb-6" style={{ fontFamily: 'Pricedown, sans-serif' }}>
+                        PAYMENT
+                      </h2>
+
+                      {/* Fee Summary */}
+                      <div className="bg-black/40 backdrop-blur-sm border-2 border-pink-500/40 rounded-lg p-6">
+                        <h3 className="text-xl font-black text-purple-300 mb-4 tracking-widest" style={{ fontFamily: 'Rajdhani, sans-serif' }}>REGISTRATION FEE</h3>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="text-gray-400 text-sm">
+                              {formData.numberOfParticipants
+                                ? `${formData.numberOfParticipants} Participant${parseInt(formData.numberOfParticipants) > 1 ? 's' : ''} × ₹${REGISTRATION_FEE}`
+                                : 'Per team'}
+                            </p>
+                            <p className="text-white text-sm mt-1">PRAKALPA'26 — {formData.projectCategory || 'Registration'}</p>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-5xl font-black text-pink-500" style={{ fontFamily: 'Pricedown, sans-serif' }}>₹{REGISTRATION_FEE}</p>
+                            <p className="text-gray-400 text-xs tracking-widest">TOTAL AMOUNT</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* QR + Instructions */}
+                      <div className="bg-black/40 backdrop-blur-sm border-2 border-purple-500/30 rounded-lg p-6">
+                        <h3 className="text-xl font-black text-purple-300 mb-6 tracking-widest" style={{ fontFamily: 'Rajdhani, sans-serif' }}>SCAN & PAY</h3>
+                        <div className="flex flex-col md:flex-row items-center gap-8">
+                          {/* QR Placeholder */}
+                          <div className="flex-shrink-0 w-48 h-48 bg-white rounded-lg flex items-center justify-center relative p-3">
+                            <div className="w-full h-full border-4 border-black rounded flex items-center justify-center">
+                              <p className="text-black font-black text-xs text-center leading-relaxed" style={{ fontFamily: 'Rajdhani, sans-serif' }}>
+                                REPLACE<br/>WITH YOUR<br/>QR CODE
+                              </p>
+                            </div>
+                          </div>
+
+                          {/* Steps */}
+                          <div className="flex-1 space-y-4">
+                            {[
+                              'Open any UPI app (GPay, PhonePe, Paytm, BHIM)',
+                              `Scan the QR or pay to UPI ID: ${UPI_ID}`,
+                              `Pay ₹${REGISTRATION_FEE} and note your UTR/Transaction ID`,
+                              'Enter the UTR ID and upload your payment screenshot below'
+                            ].map((step, i) => (
+                              <div key={i} className="flex items-start gap-3">
+                                <span className="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-black w-7 h-7 rounded-full flex items-center justify-center text-sm flex-shrink-0">{i + 1}</span>
+                                <p className="text-gray-300" style={{ fontFamily: 'Rajdhani, sans-serif' }}>{step}</p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* UTR + Screenshot */}
+                      <div className="bg-black/40 backdrop-blur-sm border-2 border-purple-500/30 rounded-lg p-6 space-y-6">
+                        <h3 className="text-2xl font-black text-purple-400 mb-2" style={{ fontFamily: 'Pricedown, sans-serif' }}>PAYMENT CONFIRMATION</h3>
+
+                        <div className="space-y-2" data-error={errors.utrNumber ? 'utrNumber' : undefined}>
+                          <label className="text-purple-300 font-semibold block" style={{ fontFamily: 'Rajdhani, sans-serif' }}>
+                            UTR / Transaction ID <span className="text-pink-500">*</span>
+                          </label>
+                          <input
+                            type="text"
+                            name="utrNumber"
+                            value={utrNumber}
+                            onChange={(e) => {
+                              setUtrNumber(e.target.value);
+                              if (errors.utrNumber) setErrors(prev => { const n = { ...prev }; delete n.utrNumber; return n; });
+                            }}
+                            placeholder="e.g. 123456789012"
+                            className="w-full px-4 py-3 bg-black/60 border-2 border-purple-500/40 rounded text-white placeholder:text-gray-500 focus:border-pink-500 focus:outline-none transition-all font-mono tracking-widest"
+                          />
+                          <p className="text-xs text-gray-400">12-digit UTR number from your UPI app payment receipt</p>
+                          {errors.utrNumber && <span className="text-red-400 text-sm">{errors.utrNumber}</span>}
+                        </div>
+
+                        <div className="space-y-2" data-error={errors.paymentScreenshot ? 'paymentScreenshot' : undefined}>
+                          <label className="text-purple-300 font-semibold block" style={{ fontFamily: 'Rajdhani, sans-serif' }}>
+                            Payment Screenshot <span className="text-pink-500">*</span>
+                          </label>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => {
+                              setPaymentScreenshot(e.target.files?.[0] || null);
+                              if (errors.paymentScreenshot) setErrors(prev => { const n = { ...prev }; delete n.paymentScreenshot; return n; });
+                            }}
+                            className="w-full px-4 py-3 bg-black/60 border-2 border-purple-500/40 rounded text-white file:bg-gradient-to-r file:from-pink-500 file:to-purple-500 file:text-white file:border-0 file:px-4 file:py-2 file:mr-4 file:rounded cursor-pointer"
+                          />
+                          <p className="text-xs text-gray-400">Upload screenshot from your UPI app (JPG, PNG)</p>
+                          {paymentScreenshot && (
+                            <p className="text-sm text-purple-300">✓ Selected: {paymentScreenshot.name}</p>
+                          )}
+                          {errors.paymentScreenshot && <span className="text-red-400 text-sm">{errors.paymentScreenshot}</span>}
                         </div>
                       </div>
                     </div>
@@ -717,7 +820,6 @@ export default function RegistrationForm() {
                 >
                   ← Previous
                 </button>
-
                 {currentTab < 3 ? (
                   <button
                     onClick={handleNext}
@@ -746,14 +848,12 @@ export default function RegistrationForm() {
                   exit={{ opacity: 0 }}
                   className="fixed inset-0 z-[10001] flex items-center justify-center bg-black/80 backdrop-blur-sm"
                 >
-                  {/* Success Card */}
                   <motion.div
                     initial={{ scale: 0.8, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ type: 'spring', stiffness: 200, damping: 20 }}
                     className="bg-gradient-to-br from-purple-600 to-pink-600 rounded-2xl p-12 max-w-2xl text-center shadow-2xl"
                   >
-                    {/* Checkmark */}
                     <motion.div
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
@@ -774,8 +874,6 @@ export default function RegistrationForm() {
                         </svg>
                       </div>
                     </motion.div>
-
-                    {/* Text */}
                     <motion.h2
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -785,7 +883,6 @@ export default function RegistrationForm() {
                     >
                       ALL SET!
                     </motion.h2>
-                    
                     <motion.p
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}

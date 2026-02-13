@@ -30,7 +30,7 @@ const Footer: React.FC = () => {
               target="_blank"
               rel="noopener noreferrer"
             >
-              K.J Somaiya College of Engineering
+              K.J Somaiya School of Engineering
             </a>
           </p>
 
@@ -47,8 +47,16 @@ const Footer: React.FC = () => {
 
         {/* Social Links */}
         <div className="footer-social">
-          <h3>MORE FUN FROM US</h3>
+          <h3>MORE FROM US</h3>
           <div className="social-links">
+            <a
+              href="https://istekjsce.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              ISTE Website
+            </a>
+
             <a
               href="https://www.instagram.com/istekjsse/"
               target="_blank"
@@ -63,22 +71,14 @@ const Footer: React.FC = () => {
               rel="noopener noreferrer"
             >
               Whatsapp
-            </a>
-
-            <a
-              href="https://istekjsce.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              ISTE Website
-            </a>
+            </a>          
           </div>
         </div>
 
       </div>
 
       <div className="footer-bottom">
-        &copy; {new Date().getFullYear()} Designed by ISTE KJSCE Council. All rights reserved.
+        &copy; {new Date().getFullYear()} Designed by ISTE KJSSE Council. All rights reserved.
       </div>
     </footer>
   );
