@@ -10,7 +10,7 @@ import BackgroundMusic from "./BackgroundMusic"
 import Gallery from "./Gallery"
 import logo from "./assets/ISTE_logo.png"
 import Themes from "./Themes"
-import RegistrationForm from "./RegistrationForm" 
+import RegistrationForm from "./RegistrationForm"
 import Timeline from "./Timeline"
 import Prizes from "./Prizes"
 import FAQ from "./FAQ"
@@ -36,16 +36,21 @@ function App() {
   // Smooth scroll for in-page anchors (e.g., #themes)
   const handleNavClick: React.MouseEventHandler<HTMLDivElement> = (e) => {
     const target = e.target as HTMLElement
-    const anchor = target.closest('a[href^="#"]') as HTMLAnchorElement | null
+    const anchor = target.closest('a') as HTMLAnchorElement | null
     if (!anchor) return
-    const id = anchor.getAttribute('href')?.slice(1)
+
+    // Only handle links that point to hashes on the current page
+    const url = new URL(anchor.href)
+    if (url.origin !== window.location.origin || url.pathname !== window.location.pathname) return
+    if (!url.hash) return
+
+    const id = url.hash.slice(1)
     if (!id) return
+
     e.preventDefault()
     const el = document.getElementById(id)
     if (el) {
       el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      // Nudge up a bit to account for fixed nav height
-      window.scrollBy({ top: -24, behavior: 'instant' as ScrollBehavior })
     }
   }
 
@@ -68,9 +73,22 @@ function App() {
   }, [loading])
 
   return (
-    <div className="relative w-full min-h-screen bg-black overflow-x-hidden">
+    <div className="relative w-full min-h-screen bg-black overflow-x-hidden" onClick={handleNavClick}>
       {/* 🎵 MUSIC — NEVER UNMOUNTS */}
       <BackgroundMusic ref={audioRef} muted={muted} />
+
+      {/* Music Toggle Button */}
+      <button
+        onClick={() => {
+          if (!audioRef.current) return;
+          const isMuted = !muted;
+          audioRef.current.muted = isMuted;
+          setMuted(isMuted);
+        }}
+        className="fixed bottom-4 right-4 bg-purple-500/50 text-white px-4 py-2 rounded-md shadow-lg z-50 hover:bg-purple-500/70"
+      >
+        {muted ? "🔇" : "🔊"}
+      </button>
 
       {/* ================= HUD LAYER (FIXED, NO TRANSFORMS) ================= */}
       {!loading && (
@@ -82,6 +100,7 @@ function App() {
 
       {/* ================= SCENE / CONTENT (TRANSFORMED) ================= */}
       <div
+        id="home"
         className={`
             transition-all duration-1000 ease-out
             ${loading ? "opacity-0 translate-y-6" : "opacity-100 translate-y-0"}
@@ -90,10 +109,9 @@ function App() {
         {/* Title without onRegisterClick prop */}
         <Title />
 
-        <div className="min-h-screen flex items-center justify-center relative z-40" onClick={handleNavClick}>
+        <div className="min-h-screen flex items-center justify-center relative z-40">
           <PillNav
             logo={logo}
-            logoAlt="Company Logo"
             items={[
               { label: "Home", href: "/" },
               { label: "Themes", href: "#themes" },
@@ -122,12 +140,12 @@ function App() {
       {!loading && <RegistrationForm />}
 
       {/* ================= SCROLL CONTENT ================= */}
-      {!loading && <div id="themes" className="scroll-mt-24 sm:scroll-mt-28"><Themes /></div>}
-      {!loading && <div id="prizes" className="scroll-mt-24 sm:scroll-mt-28"><Prizes /></div>}
-      {!loading && <div id="timeline" className="scroll-mt-24 sm:scroll-mt-28"><Timeline /></div>}
-      {!loading && <div id="gallery" className="scroll-mt-24 sm:scroll-mt-28"><Gallery /></div>}
-      {!loading && <div id="faqs" className="scroll-mt-24 sm:scroll-mt-28"><FAQ /></div>}
-      
+      {!loading && <div id="themes"><Themes /></div>}
+      {!loading && <div id="prizes"><Prizes /></div>}
+      {!loading && <div id="timeline"><Timeline /></div>}
+      {!loading && <div id="gallery"><Gallery /></div>}
+      {!loading && <div id="faqs"><FAQ /></div>}
+
       {/* ================= FOOTER ================= */}
       <Footer />
     </div>

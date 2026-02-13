@@ -83,26 +83,6 @@ const Timeline: React.FC = () => {
           @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
           
 
-          @keyframes float {
-            0%, 100% {
-              transform: translateY(0px);
-            }
-            50% {
-              transform: translateY(-8px);
-            }
-          }
-
-          @keyframes ripple {
-            0% {
-              transform: scale(1);
-              opacity: 0.3;
-            }
-            100% {
-              transform: scale(2.5);
-              opacity: 0;
-            }
-          }
-
           .gta-title {
             font-family: 'Inter', sans-serif;
             letter-spacing: 3px;
@@ -112,30 +92,7 @@ const Timeline: React.FC = () => {
             font-family: 'Inter', sans-serif;
           }
 
-          .scanline {
-            position: relative;
-            overflow: hidden;
-          }
 
-          .scanline::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, rgba(255, 0, 255, 0.5), transparent);
-            animation: scan 3s linear infinite;
-          }
-
-          @keyframes scan {
-            0% {
-              transform: translateY(0);
-            }
-            100% {
-              transform: translateY(500px);
-            }
-          }
         `}
       </style>
       <div
@@ -161,18 +118,13 @@ const Timeline: React.FC = () => {
       className="h-20 object-contain"
     />
   </div>
-  <p className="text-center text-yellow-400/100 mb-16 text-lg gta-text tracking-widest">★ HEIST OPERATION LOG ★</p>
-          <div className="relative scanline">
+  <p className="text-center text-purple-800/100 mb-16 text-lg gta-text tracking-widest">★ HEIST OPERATION LOG ★</p>
+          <div className="relative">
             {/* Neon Center Line */}
             <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full" style={{
-              background: 'linear-gradient(to bottom, #ff2fff, #00ffff, #ff1493)',
-boxShadow: `
-  0 0 10px #ff00ff,
-  0 0 25px #ff00ff,
-  0 0 45px rgba(255, 0, 255, 0.9)
-`
+              background: 'black',
+              boxShadow: '0 0 8px yellow, 0 0 16px rgba(255, 255, 0, 0.6)'
             }}></div>
-
             {items.map((item, index) => (
               <div
                 key={item.id}
@@ -192,12 +144,9 @@ boxShadow: `
                         : 'opacity-0 translate-x-20 rotate-12'
                     }`}
                   >
-                    <div className="bg-black/80 backdrop-blur-sm rounded-lg shadow-2xl p-6 border-2 border-purple-500 hover:shadow-purple-500/50 hover:border-cyan-400 transition-all duration-500 hover:-translate-y-2 relative overflow-hidden">
-                      {/* Corner accents */}
-                      <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-cyan-400"></div>
-                      <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-cyan-400"></div>
-                      <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-cyan-400"></div>
-                      <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-cyan-400"></div>
+                    <div className="bg-black/80 backdrop-blur-sm rounded-lg shadow-2xl p-6 transition-all duration-500 hover:-translate-y-2 hover:shadow-lg relative overflow-hidden">
+                      
+
                       
                       <div className="text-xs font-bold text-cyan-400 mb-2 gta-text tracking-widest bg-purple-900/50 px-3 py-1 inline-block rounded">
                         {item.date}
@@ -217,26 +166,6 @@ boxShadow: `
                       </div>
                     </div>
                   </div>
-                </div>
-
-                <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center justify-center z-10">
-                  <div
-                    className={`w-6 h-6 bg-gradient-to-br from-pink-500 via-purple-500 to-cyan-400 rounded-full border-4 border-black shadow-lg transition-all duration-500 ${
-                      visibleItems.has(item.id) ? 'scale-100 opacity-100' : 'scale-0 opacity-0'
-                    }`}
-                    style={{
-                      animation: visibleItems.has(item.id) ? `float 3s ease-in-out ${index * 0.5}s infinite` : 'none',
-                      boxShadow: '0 0 15px #ff00ff, 0 0 30px #ff00ff'
-                    }}
-                  ></div>
-                  <div
-                    className={`absolute w-12 h-12 bg-purple-500 rounded-full transition-opacity duration-500 ${
-                      visibleItems.has(item.id) ? 'opacity-30' : 'opacity-0'
-                    }`}
-                    style={{
-                      animation: visibleItems.has(item.id) ? `ripple 2s ease-out ${index * 0.3}s infinite` : 'none',
-                    }}
-                  ></div>
                 </div>
 
                 <div className="w-1/2"></div>
