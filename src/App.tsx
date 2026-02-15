@@ -122,6 +122,7 @@ function App() {
 
         <div className="min-h-screen flex items-center justify-center relative z-40">
           <PillNav
+          showMobileNav={!loading}
             logo={logo}
             items={[
               { label: "Home", href: "#home" },

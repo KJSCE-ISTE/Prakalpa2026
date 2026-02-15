@@ -17,6 +17,7 @@ export interface PillNavProps {
   activeHref?: string;
   className?: string;
   ease?: string;
+  showMobileNav?: boolean;   // ✅ ADDED
 }
 
 const PillNav: React.FC<PillNavProps> = ({
@@ -26,6 +27,7 @@ const PillNav: React.FC<PillNavProps> = ({
   activeHref,
   className = '',
   ease = 'power3.easeOut',
+  showMobileNav = true,      // ✅ DEFAULT
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -111,11 +113,10 @@ const PillNav: React.FC<PillNavProps> = ({
     </div>
   );
 
-  /* ✅ Button moved lower */
   const mobileHamburger = (
     <button
       onClick={toggleMobileMenu}
-      className="fixed top-24 left-4 z-[1000] text-3xl text-white md:hidden"
+      className="fixed top-24 left-4 z-[9999999] text-3xl text-white md:hidden"
     >
       ☰
     </button>
@@ -123,10 +124,10 @@ const PillNav: React.FC<PillNavProps> = ({
 
   return (
     <>
-      {/* PHONE ONLY FIXED BUTTON */}
-      {ReactDOM.createPortal(mobileHamburger, document.body)}
+      {/* ✅ BUTTON ONLY SHOWN WHEN ALLOWED */}
+      {showMobileNav && ReactDOM.createPortal(mobileHamburger, document.body)}
 
-      {/* PHONE LOGO (NOT FIXED) */}
+      {/* PHONE LOGO */}
       <div className="absolute top-[1em] left-0 w-full md:hidden px-4">
         <Link
           to={items[0].href}
@@ -143,7 +144,7 @@ const PillNav: React.FC<PillNavProps> = ({
         </Link>
       </div>
 
-      {/* DESKTOP NAVBAR — EXACT ORIGINAL */}
+      {/* DESKTOP NAVBAR — UNCHANGED */}
       <div className="absolute top-[1em] z-[1000] w-full left-0 md:w-auto md:left-auto hidden md:block">
         <nav
           className={`md:flex w-full md:w-max items-center justify-between md:justify-start box-border px-4 md:px-0 ${className}`}
