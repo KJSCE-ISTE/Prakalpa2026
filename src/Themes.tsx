@@ -503,7 +503,7 @@ function ThemesSection() {
     <>
       <div className="w-full relative">
         {/* Title Overlay - Responsive */}
-        <div className="absolute top-[-5px] left-1/2 transform -translate-x-1/2 z-20 pointer-events-none px-4">
+        <div className="absolute top-[35px] sm:top-[10px] md:top-[-5px] left-1/2 transform -translate-x-1/2 z-20 pointer-events-none px-4">
           <div className="relative">
             <h1 className="text-pink-500 text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-wider transform -skew-x-12"
                 style={{ 
