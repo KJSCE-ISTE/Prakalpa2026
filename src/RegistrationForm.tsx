@@ -29,8 +29,9 @@ const Input = ({ label, required, error, ...props }: InputProps) => (
       {label} {required && <span className="text-pink-500">*</span>}
     </label>
     <input
+      autoComplete="new-password"
       {...props}
-      className="w-full px-4 py-3 bg-black/60 border-2 border-purple-500/40 rounded text-white placeholder:text-gray-500 focus:border-pink-500 focus:outline-none transition-all"
+      className={`w-full px-4 py-3 bg-black/60 border-2 border-purple-500/40 rounded placeholder:text-gray-500 focus:border-pink-500 focus:outline-none transition-all ${props.value ? 'text-white' : 'text-gray-400'}`}
     />
     {error && <span className="text-red-400 text-sm">{error}</span>}
   </div>
@@ -43,11 +44,11 @@ const Select = ({ label, required, error, options, ...props }: SelectProps) => (
     </label>
     <select
       {...props}
-      className="w-full px-4 py-3 bg-black/60 border-2 border-purple-500/40 rounded text-white focus:border-pink-500 focus:outline-none transition-all"
+      className={`w-full px-4 py-3 bg-black/60 border-2 border-purple-500/40 rounded focus:border-pink-500 focus:outline-none transition-all ${props.value ? 'text-white' : 'text-gray-400'}`}
     >
-      <option value="">Select...</option>
+      <option value="" className="text-gray-400 bg-black">Select...</option>
       {options.map((opt) => (
-        <option key={opt.value} value={opt.value} className="bg-black">
+        <option key={opt.value} value={opt.value} className="bg-black text-white">
           {opt.label}
         </option>
       ))}
@@ -62,10 +63,39 @@ interface Participant {
   contact?: string;
   institute?: string;
   degree?: string;
+  degreeOther?: string;
   branch?: string;
   branchOther?: string;
   year?: string;
 }
+
+// ─── CONVERT FILE TO BASE64 ────────────────────────────────────────
+const toBase64 = (file: File): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string); // includes data:image/...;base64, prefix
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+
+// ─── API SUBMISSION FUNCTION (fill in API_URL when ready) ─────────
+const submitRegistration = async (payload: Record<string, any>) => {
+  const API_URL = ''; // <-- put your API endpoint here
+
+  console.log('=== REGISTRATION PAYLOAD ===');
+  console.log(JSON.stringify(payload, null, 2));
+  console.log('============================');
+
+  // Uncomment below when API is ready:
+  // const response = await fetch(API_URL, {
+  //   method: 'POST',
+  //   headers: { 'Content-Type': 'application/json' },
+  //   body: JSON.stringify(payload),
+  // });
+  // if (!response.ok) throw new Error(`API error: ${response.status}`);
+  // return await response.json();
+};
+// ──────────────────────────────────────────────────────────────────
 
 export default function RegistrationForm() {
   const [isOpen, setIsOpen] = useState(false);
@@ -79,35 +109,67 @@ export default function RegistrationForm() {
     title: '',
     participants: [{}, {}, {}, {}] as Participant[]
   });
-  
+
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [projectFile, setProjectFile] = useState<File | null>(null);
   const [paymentScreenshot, setPaymentScreenshot] = useState<File | null>(null);
-  const [utrNumber, setUtrNumber] = useState('');
+  const [paymentScreenshotBase64, setPaymentScreenshotBase64] = useState<string>('');
   const [showMessage, setShowMessage] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setShowButton(window.scrollY < 25);
-    };
-
+    const handleScroll = () => { setShowButton(window.scrollY < 25); };
     handleScroll();
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
+    if (isOpen) { document.body.style.overflow = 'hidden'; }
+    else { document.body.style.overflow = 'unset'; }
+    return () => { document.body.style.overflow = 'unset'; };
   }, [isOpen]);
+
+  // ─── BROWSER BACK BUTTON ────────────────────────────────────────
+  useEffect(() => {
+    if (isOpen) {
+      window.history.pushState({ formOpen: true }, '');
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
+    const handlePopState = (e: PopStateEvent) => {
+      if (isOpen) {
+        setIsOpen(false);
+        setCurrentTab(1);
+        // prevent forward navigation by replacing the state
+        window.history.replaceState(null, '');
+      }
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [isOpen]);
+
+  // ─── AUTO BASE64 ENCODE ON FILE SELECT ──────────────────────────
+  const handleScreenshotChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    setPaymentScreenshot(file);
+    if (errors.paymentScreenshot) setErrors(prev => { const n = { ...prev }; delete n.paymentScreenshot; return n; });
+
+    if (file) {
+      try {
+        const b64 = await toBase64(file);
+        setPaymentScreenshotBase64(b64);
+        console.log('Screenshot base64 ready. Length:', b64.length);
+      } catch (err) {
+        console.error('Failed to encode screenshot:', err);
+        setPaymentScreenshotBase64('');
+      }
+    } else {
+      setPaymentScreenshotBase64('');
+    }
+  };
 
   const domains = [
     { value: 'ai-ml', label: 'AI/ML' },
@@ -126,11 +188,7 @@ export default function RegistrationForm() {
   const handleChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     if (errors[field]) {
-      setErrors((prev) => {
-        const newErrors = { ...prev };
-        delete newErrors[field];
-        return newErrors;
-      });
+      setErrors((prev) => { const n = { ...prev }; delete n[field]; return n; });
     }
   };
 
@@ -145,65 +203,46 @@ export default function RegistrationForm() {
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
     const phoneRegex = /^[0-9]{10}$/;
 
-    if (!formData.numberOfParticipants) {
-      newErrors.numberOfParticipants = 'This is a required question';
-    }
+    if (!formData.numberOfParticipants) newErrors.numberOfParticipants = 'This is a required question';
 
-    const p1 = formData.participants[0];
-    if (!p1.name) newErrors.name1 = 'This is a required question';
-    if (!p1.email) newErrors.email1 = 'This is a required question';
-    else if (!emailRegex.test(p1.email)) {
-      newErrors.email1 = 'Enter a valid email address';
+    const count = parseInt(formData.numberOfParticipants) || 1;
+    for (let i = 0; i < count; i++) {
+      const p = formData.participants[i];
+      if (!p.name) newErrors[`name${i + 1}`] = 'This is a required question';
+      if (!p.email) newErrors[`email${i + 1}`] = 'This is a required question';
+      else if (!emailRegex.test(p.email)) newErrors[`email${i + 1}`] = 'Enter a valid email address';
+      if (!p.contact) newErrors[`contact${i + 1}`] = 'This is a required question';
+      else if (!phoneRegex.test(p.contact)) newErrors[`contact${i + 1}`] = 'Enter a valid 10-digit number';
+      if (!p.institute) newErrors[`institute${i + 1}`] = 'This is a required question';
+      if (!p.degree) newErrors[`degree${i + 1}`] = 'This is a required question';
+      if (p.degree === 'Others' && !(p as any).degreeOther) newErrors[`degreeOther${i + 1}`] = 'This is a required question';
+      if (!p.branch) newErrors[`branch${i + 1}`] = 'This is a required question';
+      if (p.branch === 'Other' && !p.branchOther) newErrors[`branchOther${i + 1}`] = 'This is a required question';
+      if (!p.year) newErrors[`year${i + 1}`] = 'This is a required question';
     }
-    if (!p1.contact) {
-      newErrors.contact1 = 'This is a required question';
-    } else if (!phoneRegex.test(p1.contact)) {
-      newErrors.contact1 = 'Enter a valid 10-digit number';
-    }
-    if (!p1.institute) newErrors.institute1 = 'This is a required question';
-    if (!p1.degree) newErrors.degree1 = 'This is a required question';
-    if (!p1.branch) newErrors.branch1 = 'This is a required question';
-    if (p1.branch === 'Other' && !p1.branchOther) {
-      newErrors.branchOther1 = 'This is a required question';
-    }
-    if (!p1.year) newErrors.year1 = 'This is a required question';
 
     if (!formData.projectCategory) newErrors.projectCategory = 'This is a required question';
     if (!formData.domain) newErrors.domain = 'This is a required question';
-    if (formData.domain === 'other' && !formData.domainOther) {
-      newErrors.domainOther = 'This is a required question';
-    }
+    if (formData.domain === 'other' && !formData.domainOther) newErrors.domainOther = 'This is a required question';
     if (!formData.title) newErrors.title = 'This is a required question';
     if (!projectFile) newErrors.projectFile = 'This is a required question';
 
-    // Tab 3 validation
-    if (!utrNumber.trim()) newErrors.utrNumber = 'This is a required question';
-    else if (utrNumber.trim().length < 12) newErrors.utrNumber = 'Enter a valid UTR/Transaction ID';
     if (!paymentScreenshot) newErrors.paymentScreenshot = 'This is a required question';
 
     setErrors(newErrors);
-    
+
     if (Object.keys(newErrors).length > 0) {
       const firstErrorKey = Object.keys(newErrors)[0];
-      
       let errorTab = 1;
-      if (['projectCategory', 'domain', 'domainOther', 'title', 'projectFile'].includes(firstErrorKey)) {
-        errorTab = 2;
-      }
-      if (['utrNumber', 'paymentScreenshot'].includes(firstErrorKey)) {
-        errorTab = 3;
-      }
-      
+      if (['projectCategory', 'domain', 'domainOther', 'title', 'projectFile'].includes(firstErrorKey)) errorTab = 2;
+      if (['paymentScreenshot'].includes(firstErrorKey)) errorTab = 3;
       setCurrentTab(errorTab);
-      
       setTimeout(() => {
-        const errorElement = document.querySelector(`[data-error="${firstErrorKey}"]`);
-        if (errorElement) {
-          errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
+        const el = document.querySelector(`[data-error="${firstErrorKey}"]`);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }, 300);
     }
-    
+
     return Object.keys(newErrors).length === 0;
   };
 
@@ -219,62 +258,72 @@ export default function RegistrationForm() {
     if (container) container.scrollTop = 0;
   };
 
-  const handleSubmit = () => {
-    if (validateAllTabs()) {
-      console.log('Form Data:', formData);
-      console.log('Project File:', projectFile);
-      console.log('UTR:', utrNumber);
-      console.log('Payment Screenshot:', paymentScreenshot);
-      setMessage({ type: 'success', text: '🎉 Registration Confirmed! See you at PRAKALPA\'26!' });
+  const handleSubmit = async () => {
+    if (!validateAllTabs()) return;
+
+    setIsSubmitting(true);
+    try {
+      const payload = {
+        participants: formData.participants
+          .slice(0, parseInt(formData.numberOfParticipants))
+          .map((p, i) => ({ ...p, isPrimaryContact: i === 0 })),
+        project: {
+          category: formData.projectCategory,
+          domain: formData.domain === 'other' ? formData.domainOther : formData.domain,
+          title: formData.title,
+        },
+        payment: {
+          amount: REGISTRATION_FEE,
+          screenshotBase64: paymentScreenshotBase64,
+          screenshotFileName: paymentScreenshot?.name,
+          screenshotFileType: paymentScreenshot?.type,
+        },
+      };
+
+      await submitRegistration(payload);
+
       setShowMessage(true);
       setTimeout(() => {
         setShowMessage(false);
         setIsOpen(false);
-        setFormData({
-          numberOfParticipants: '',
-          projectCategory: '',
-          domain: '',
-          domainOther: '',
-          title: '',
-          participants: [{}, {}, {}, {}]
-        });
+        setFormData({ numberOfParticipants: '', projectCategory: '', domain: '', domainOther: '', title: '', participants: [{}, {}, {}, {}] });
         setProjectFile(null);
         setPaymentScreenshot(null);
-        setUtrNumber('');
+        setPaymentScreenshotBase64('');
         setErrors({});
         setCurrentTab(1);
-      }, 2000);
+      }, 3000);
+    } catch (err) {
+      console.error('Submission failed:', err);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   const renderParticipant = (index: number) => {
     const labels = ['Participant 1', 'Participant 2', 'Participant 3', 'Participant 4'];
-    const isRequired = index === 0;
     const participant = formData.participants[index];
 
     const getYearOptions = () => {
       if (!participant.degree) return [];
       switch (participant.degree) {
-        case 'B.Tech':
-          return [
-            { value: '1st Year', label: '1st Year' },
-            { value: '2nd Year', label: '2nd Year' },
-            { value: '3rd Year', label: '3rd Year' },
-            { value: '4th Year', label: '4th Year' }
-          ];
-        case 'Postgraduate':
-          return [
-            { value: '1st Year', label: '1st Year' },
-            { value: '2nd Year', label: '2nd Year' }
-          ];
-        case 'Diploma':
-          return [
-            { value: '1st Year', label: '1st Year' },
-            { value: '2nd Year', label: '2nd Year' },
-            { value: '3rd Year', label: '3rd Year' }
-          ];
-        default:
-          return [];
+        case 'B.Tech': return [
+          { value: '1st Year', label: '1st Year' },
+          { value: '2nd Year', label: '2nd Year' },
+          { value: '3rd Year', label: '3rd Year' },
+          { value: '4th Year', label: '4th Year' }
+        ];
+        case 'Postgraduate': return [
+          { value: '1st Year', label: '1st Year' },
+          { value: '2nd Year', label: '2nd Year' }
+        ];
+        case 'Others': return [
+          { value: '1st Year', label: '1st Year' },
+          { value: '2nd Year', label: '2nd Year' },
+          { value: '3rd Year', label: '3rd Year' },
+          { value: '4th Year', label: '4th Year' }
+        ];
+        default: return [];
       }
     };
 
@@ -298,69 +347,34 @@ export default function RegistrationForm() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Input
-            label="Full Name"
-            required={isRequired}
-            name={`name${index + 1}`}
-            value={participant.name || ''}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleParticipantChange(index, 'name', e.target.value)}
-            placeholder="Enter full name"
-            error={errors[`name${index + 1}`]}
-          />
-          <Input
-            label="Email Address"
-            required={isRequired}
-            type="email"
-            name={`email${index + 1}`}
-            value={participant.email || ''}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleParticipantChange(index, 'email', e.target.value)}
-            placeholder="participant@email.com"
-            error={errors[`email${index + 1}`]}
-          />
-          <Input
-            label="Contact Number"
-            required={isRequired}
-            name={`contact${index + 1}`}
-            value={participant.contact || ''}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleParticipantChange(index, 'contact', e.target.value)}
-            placeholder="1234567890"
-            error={errors[`contact${index + 1}`]}
-          />
-          <Input
-            label="Institute/Organization"
-            required={isRequired}
-            name={`institute${index + 1}`}
-            value={participant.institute || ''}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleParticipantChange(index, 'institute', e.target.value)}
-            placeholder="Enter institute name"
-            error={errors[`institute${index + 1}`]}
-          />
+          <Input label="Full Name" required name={`name${index + 1}`} value={participant.name || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleParticipantChange(index, 'name', e.target.value)} placeholder="Enter full name" error={errors[`name${index + 1}`]} />
+          <Input label="Email Address" required type="email" name={`email${index + 1}`} value={participant.email || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleParticipantChange(index, 'email', e.target.value)} placeholder="@gmail.com" error={errors[`email${index + 1}`]} />
+          <Input label="Contact Number" required name={`contact${index + 1}`} value={participant.contact || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleParticipantChange(index, 'contact', e.target.value)} placeholder="10-digit number" error={errors[`contact${index + 1}`]} />
+          <Input label="Institute/Organization" required name={`institute${index + 1}`} value={participant.institute || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleParticipantChange(index, 'institute', e.target.value)} placeholder="Enter institute name" error={errors[`institute${index + 1}`]} />
           <Select
-            label="Degree"
-            required={isRequired}
-            name={`degree${index + 1}`}
-            value={participant.degree || ''}
+            label="Degree" required name={`degree${index + 1}`} value={participant.degree || ''}
             onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
               const newParticipants = [...formData.participants];
-              newParticipants[index] = { 
-                ...newParticipants[index], 
-                degree: e.target.value,
-                year: ''
-              };
+              newParticipants[index] = { ...newParticipants[index], degree: e.target.value, year: '', degreeOther: '' };
               setFormData(prev => ({ ...prev, participants: newParticipants }));
             }}
             options={[
               { value: 'B.Tech', label: 'B.Tech' },
               { value: 'Postgraduate', label: 'Postgraduate' },
-              { value: 'Diploma', label: 'Diploma' }
+              { value: 'Others', label: 'Others' }
             ]}
             error={errors[`degree${index + 1}`]}
           />
+          {participant.degree === 'Others' && (
+            <Input
+              label="Specify Degree" required name={`degreeOther${index + 1}`}
+              value={(participant as any).degreeOther || ''}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleParticipantChange(index, 'degreeOther', e.target.value)}
+              placeholder="Enter your degree" error={errors[`degreeOther${index + 1}`]}
+            />
+          )}
           <Select
-            label="Branch/Specialization"
-            required={isRequired}
-            name={`branch${index + 1}`}
-            value={participant.branch || ''}
+            label="Branch/Specialization" required name={`branch${index + 1}`} value={participant.branch || ''}
             onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleParticipantChange(index, 'branch', e.target.value)}
             options={[
               { value: 'Computer Science Engineering', label: 'Computer Science Engineering' },
@@ -381,42 +395,23 @@ export default function RegistrationForm() {
             error={errors[`branch${index + 1}`]}
           />
           {participant.branch === 'Other' && (
-            <Input
-              label="Specify Branch/Specialization"
-              required={isRequired}
-              name={`branchOther${index + 1}`}
-              value={participant.branchOther || ''}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleParticipantChange(index, 'branchOther', e.target.value)}
-              placeholder="Enter your branch"
-              error={errors[`branchOther${index + 1}`]}
-            />
+            <Input label="Specify Branch/Specialization" required name={`branchOther${index + 1}`} value={participant.branchOther || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleParticipantChange(index, 'branchOther', e.target.value)} placeholder="Enter your branch" error={errors[`branchOther${index + 1}`]} />
           )}
           <div className="space-y-2" data-error={errors[`year${index + 1}`] ? `year${index + 1}` : undefined}>
             <label className="text-purple-300 font-semibold block" style={{ fontFamily: 'Rajdhani, sans-serif' }}>
-              Year of Study {isRequired && <span className="text-pink-500">*</span>}
+              Year of Study <span className="text-pink-500">*</span>
             </label>
             <select
-              name={`year${index + 1}`}
-              value={participant.year || ''}
+              name={`year${index + 1}`} value={participant.year || ''}
               onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleParticipantChange(index, 'year', e.target.value)}
-              className="w-full px-4 py-3 bg-black/60 border-2 border-purple-500/40 rounded text-white focus:border-pink-500 focus:outline-none transition-all"
+              className={`w-full px-4 py-3 bg-black/60 border-2 border-purple-500/40 rounded focus:border-pink-500 focus:outline-none transition-all ${participant.year ? 'text-white' : 'text-gray-400'}`}
               disabled={!participant.degree}
             >
-              <option value="">
-                {participant.degree ? 'Select...' : 'Select degree first'}
-              </option>
-              {getYearOptions().map((opt) => (
-                <option key={opt.value} value={opt.value} className="bg-black">
-                  {opt.label}
-                </option>
-              ))}
+              <option value="" className="bg-black text-gray-400">{participant.degree ? 'Select...' : 'Select degree first'}</option>
+              {getYearOptions().map(opt => <option key={opt.value} value={opt.value} className="bg-black text-white">{opt.label}</option>)}
             </select>
-            {!participant.degree && (
-              <p className="text-sm text-gray-400">Please select a degree first</p>
-            )}
-            {errors[`year${index + 1}`] && (
-              <span className="text-red-400 text-sm">{errors[`year${index + 1}`]}</span>
-            )}
+            {!participant.degree && <p className="text-sm text-gray-400">Please select a degree first</p>}
+            {errors[`year${index + 1}`] && <span className="text-red-400 text-sm">{errors[`year${index + 1}`]}</span>}
           </div>
         </div>
       </motion.div>
@@ -425,7 +420,7 @@ export default function RegistrationForm() {
 
   return (
     <>
-      {/* REGISTER BUTTON — centered, home page only */}
+      {/* REGISTER BUTTON */}
       <AnimatePresence>
         {showButton && (
           <motion.div
@@ -444,10 +439,7 @@ export default function RegistrationForm() {
               className="px-12 py-5 bg-gradient-to-r from-pink-500 to-purple-500 text-white text-2xl font-black rounded-xl shadow-2xl backdrop-blur-sm"
               style={{ fontFamily: 'Pricedown, sans-serif', textShadow: '3px 3px 6px rgba(0,0,0,0.9)' }}
             >
-              <motion.span
-                animate={{ scale: [1, 1.05, 1] }}
-                transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-              >
+              <motion.span animate={{ scale: [1, 1.05, 1] }} transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}>
                 REGISTER NOW
               </motion.span>
             </motion.button>
@@ -458,33 +450,24 @@ export default function RegistrationForm() {
       {/* FULL-SCREEN SLIDING PAGE */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div 
+          <motion.div
             id="registration-scroll-container"
-            initial={{ x: '100%' }}
-            animate={{ x: 0 }}
-            exit={{ x: '100%' }}
+            initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
             className="fixed inset-0 z-[9999] overflow-y-auto"
-            style={{ 
+            style={{
               fontFamily: 'Rajdhani, sans-serif',
               background: `linear-gradient(rgba(0,0,0,0.92), rgba(0,0,0,0.92)), url('${bgImage}')`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundAttachment: 'fixed'
+              backgroundSize: 'cover', backgroundPosition: 'center', backgroundAttachment: 'fixed'
             }}
           >
-            {/* Scanlines */}
-            <div className="fixed inset-0 pointer-events-none opacity-5"
-                 style={{ backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, purple 2px, purple 4px)' }} />
+            <div className="fixed inset-0 pointer-events-none opacity-5" style={{ backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, purple 2px, purple 4px)' }} />
 
             {/* Close Button */}
             <div className="fixed top-8 right-8 z-[10000]">
               <motion.button
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.3 }}
-                whileHover={{ scale: 1.1, rotate: 90 }}
-                whileTap={{ scale: 0.9 }}
+                initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.3 }}
+                whileHover={{ scale: 1.1, rotate: 90 }} whileTap={{ scale: 0.9 }}
                 onClick={() => { setIsOpen(false); setCurrentTab(1); }}
                 className="bg-pink-500 hover:bg-purple-500 text-white w-12 h-12 rounded-lg flex items-center justify-center font-bold transition-all duration-300 border-2 border-purple-400 shadow-lg"
               >
@@ -492,92 +475,39 @@ export default function RegistrationForm() {
               </motion.button>
             </div>
 
-            {/* Content Container */}
+            <form autoComplete="off" onSubmit={(e) => e.preventDefault()}>
             <div className="relative z-10 max-w-5xl mx-auto px-4 pt-24 pb-20">
               {/* Header */}
-              <motion.div 
-                initial={{ opacity: 0, y: -50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2, type: "spring" }}
-                className="text-center mb-8"
-              >
-                <motion.h1 
-                  initial={{ scale: 0.8 }}
-                  animate={{ scale: 1 }}
-                  transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
-                  className="text-5xl md:text-7xl font-black mb-4 text-pink-500 transform -skew-x-6" 
-                  style={{ 
-                    fontFamily: 'Pricedown, sans-serif',
-                    textShadow: '4px 4px 0px rgba(168,85,247,0.7), -2px -2px 0px rgba(236,72,153,0.4), 5px 5px 15px rgba(0,0,0,0.9)'
-                  }}
+              <motion.div initial={{ opacity: 0, y: -50 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, type: "spring" }} className="text-center mb-8">
+                <motion.h1
+                  initial={{ scale: 0.8 }} animate={{ scale: 1 }} transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
+                  className="text-5xl md:text-7xl font-black mb-4 text-pink-500 transform -skew-x-6"
+                  style={{ fontFamily: 'Pricedown, sans-serif', textShadow: '4px 4px 0px rgba(168,85,247,0.7), -2px -2px 0px rgba(236,72,153,0.4), 5px 5px 15px rgba(0,0,0,0.9)' }}
                 >
                   PRAKALPA'26 REGISTRATION
                 </motion.h1>
-                <motion.p 
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.4 }}
-                  className="text-purple-300 text-lg"
-                >
+                <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }} className="text-purple-300 text-lg">
                   Complete all fields to register for the event
                 </motion.p>
               </motion.div>
 
               {/* Tab Navigation */}
-              <motion.div 
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-                className="flex justify-center mb-8"
-              >
+              <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="flex justify-center mb-8">
                 <div className="bg-black/40 backdrop-blur-sm border-2 border-purple-500/30 rounded-lg p-2 inline-flex gap-2">
-                  <button
-                    onClick={() => setCurrentTab(1)}
-                    className={`px-6 py-3 rounded-lg font-bold transition-all ${
-                      currentTab === 1 
-                        ? 'bg-gradient-to-r from-pink-500 to-purple-500 text-white' 
-                        : 'text-purple-300 hover:text-white hover:bg-purple-500/20'
-                    }`}
-                  >
-                    1. Participants
-                  </button>
-                  <button
-                    onClick={() => setCurrentTab(2)}
-                    className={`px-6 py-3 rounded-lg font-bold transition-all ${
-                      currentTab === 2 
-                        ? 'bg-gradient-to-r from-pink-500 to-purple-500 text-white' 
-                        : 'text-purple-300 hover:text-white hover:bg-purple-500/20'
-                    }`}
-                  >
-                    2. Project
-                  </button>
-                  <button
-                    onClick={() => setCurrentTab(3)}
-                    className={`px-6 py-3 rounded-lg font-bold transition-all ${
-                      currentTab === 3 
-                        ? 'bg-gradient-to-r from-pink-500 to-purple-500 text-white' 
-                        : 'text-purple-300 hover:text-white hover:bg-purple-500/20'
-                    }`}
-                  >
-                    3. Payment
-                  </button>
+                  {[{ n: 1, label: '1. Participants' }, { n: 2, label: '2. Project' }, { n: 3, label: '3. Payment' }].map(({ n, label }) => (
+                    <button key={n} onClick={() => setCurrentTab(n)}
+                      className={`px-6 py-3 rounded-lg font-bold transition-all ${currentTab === n ? 'bg-pink-500 text-white' : 'text-purple-300 hover:text-white hover:bg-purple-500/20'}`}
+                    >
+                      {label}
+                    </button>
+                  ))}
                 </div>
               </motion.div>
 
               {/* Progress Bar */}
-              <motion.div 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.5 }}
-                className="mb-8"
-              >
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} className="mb-8">
                 <div className="bg-black/40 h-2 rounded-full overflow-hidden">
-                  <motion.div 
-                    className="h-full bg-gradient-to-r from-pink-500 to-purple-500"
-                    initial={{ width: '0%' }}
-                    animate={{ width: `${(currentTab / 3) * 100}%` }}
-                    transition={{ duration: 0.5 }}
-                  />
+                  <motion.div className="h-full bg-gradient-to-r from-pink-500 to-purple-500" initial={{ width: '0%' }} animate={{ width: `${(currentTab / 3) * 100}%` }} transition={{ duration: 0.5 }} />
                 </div>
               </motion.div>
 
@@ -585,31 +515,17 @@ export default function RegistrationForm() {
               <AnimatePresence mode="wait">
                 <motion.div
                   key={currentTab}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  transition={{ duration: 0.3 }}
-                  className="space-y-6"
+                  initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.3 }} className="space-y-6"
                 >
-                  {/* TAB 1: Participants */}
+                  {/* TAB 1 */}
                   {currentTab === 1 && (
                     <div className="space-y-6">
-                      <h2 className="text-3xl md:text-4xl font-black text-pink-500 text-center mb-6" style={{ fontFamily: 'Pricedown, sans-serif' }}>
-                        PARTICIPANT INFORMATION
-                      </h2>
+                      <h2 className="text-3xl md:text-4xl font-black text-pink-500 text-center mb-6" style={{ fontFamily: 'Pricedown, sans-serif' }}>PARTICIPANT INFORMATION</h2>
                       <div className="bg-black/40 backdrop-blur-sm border-2 border-purple-500/30 rounded-lg p-6">
-                        <Select
-                          label="Number of Participants"
-                          required
-                          name="numberOfParticipants"
-                          value={formData.numberOfParticipants}
+                        <Select label="Number of Participants" required name="numberOfParticipants" value={formData.numberOfParticipants}
                           onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange('numberOfParticipants', e.target.value)}
-                          options={[
-                            { value: '1', label: '1 Participant' },
-                            { value: '2', label: '2 Participants' },
-                            { value: '3', label: '3 Participants' },
-                            { value: '4', label: '4 Participants' }
-                          ]}
+                          options={[{ value: '1', label: '1 Participant' }, { value: '2', label: '2 Participants' }, { value: '3', label: '3 Participants' }, { value: '4', label: '4 Participants' }]}
                           error={errors.numberOfParticipants}
                         />
                       </div>
@@ -621,78 +537,24 @@ export default function RegistrationForm() {
                     </div>
                   )}
 
-                  {/* TAB 2: Project Details */}
+                  {/* TAB 2 */}
                   {currentTab === 2 && (
                     <div className="space-y-6">
-                      <h2 className="text-3xl md:text-4xl font-black text-pink-500 text-center mb-6" style={{ fontFamily: 'Pricedown, sans-serif' }}>
-                        PROJECT DETAILS
-                      </h2>
+                      <h2 className="text-3xl md:text-4xl font-black text-pink-500 text-center mb-6" style={{ fontFamily: 'Pricedown, sans-serif' }}>PROJECT DETAILS</h2>
                       <div className="bg-black/40 backdrop-blur-sm border-2 border-pink-500/30 rounded-lg p-6 space-y-6">
-                        <Select
-                          label="Project Category"
-                          required
-                          name="projectCategory"
-                          value={formData.projectCategory}
-                          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange('projectCategory', e.target.value)}
-                          options={[
-                            { value: 'working-model', label: 'Working Model' },
-                            { value: 'software-competition', label: 'Software Competition' },
-                            { value: 'paper-presentation', label: 'Paper Presentation' }
-                          ]}
-                          error={errors.projectCategory}
-                        />
-                        <Select
-                          label="Domain"
-                          required
-                          name="domain"
-                          value={formData.domain}
-                          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange('domain', e.target.value)}
-                          options={domains}
-                          error={errors.domain}
-                        />
-                        {formData.domain === 'other' && (
-                          <Input
-                            label="Specify Domain"
-                            required
-                            name="domainOther"
-                            value={formData.domainOther}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('domainOther', e.target.value)}
-                            placeholder="Enter your domain"
-                            error={errors.domainOther}
-                          />
-                        )}
-                        <Input
-                          label="Project Title"
-                          required
-                          name="title"
-                          value={formData.title}
-                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('title', e.target.value)}
-                          placeholder="Enter project title"
-                          error={errors.title}
-                        />
+                        <Select label="Project Category" required name="projectCategory" value={formData.projectCategory} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange('projectCategory', e.target.value)} options={[{ value: 'working-model', label: 'Working Model' }, { value: 'software-competition', label: 'Software Competition' }, { value: 'paper-presentation', label: 'Paper Presentation' }]} error={errors.projectCategory} />
+                        <Select label="Domain" required name="domain" value={formData.domain} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange('domain', e.target.value)} options={domains} error={errors.domain} />
+                        {formData.domain === 'other' && <Input label="Specify Domain" required name="domainOther" value={formData.domainOther} onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('domainOther', e.target.value)} placeholder="Enter your domain" error={errors.domainOther} />}
+                        <Input label="Project Title" required name="title" value={formData.title} onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('title', e.target.value)} placeholder="Enter project title" error={errors.title} />
                       </div>
-
                       <div className="bg-black/40 backdrop-blur-sm border-2 border-purple-500/30 rounded-lg p-6">
-                        <h3 className="text-2xl font-black text-purple-400 mb-4" style={{ fontFamily: 'Pricedown, sans-serif' }}>
-                          DOCUMENT UPLOAD
-                        </h3>
+                        <h3 className="text-2xl font-black text-purple-400 mb-4" style={{ fontFamily: 'Pricedown, sans-serif' }}>DOCUMENT UPLOAD</h3>
                         <div className="space-y-2" data-error={errors.projectFile ? 'projectFile' : undefined}>
-                          <label className="text-purple-300 font-semibold block">
-                            Project Presentation/Paper <span className="text-pink-500">*</span>
-                          </label>
-                          <input
-                            type="file"
-                            accept=".pdf"
-                            onChange={(e) => setProjectFile(e.target.files?.[0] || null)}
-                            className="w-full px-4 py-3 bg-black/60 border-2 border-purple-500/40 rounded text-white file:bg-gradient-to-r file:from-pink-500 file:to-purple-500 file:text-white file:border-0 file:px-4 file:py-2 file:mr-4 file:rounded cursor-pointer"
-                          />
+                          <label className="text-purple-300 font-semibold block">Project Presentation/Paper <span className="text-pink-500">*</span></label>
+                          <input type="file" accept=".pdf" onChange={(e) => setProjectFile(e.target.files?.[0] || null)} className="w-full px-4 py-3 bg-black/60 border-2 border-purple-500/40 rounded text-white file:bg-pink-500 file:text-white file:border-0 file:px-4 file:py-2 file:mr-4 file:rounded cursor-pointer" />
                           <p className="text-sm text-gray-400">PDF format only</p>
-                          {projectFile && (
-                            <p className="text-sm text-purple-300">✓ Selected: {projectFile.name}</p>
-                          )}
-                          {errors.projectFile && (
-                            <span className="text-red-400 text-sm">{errors.projectFile}</span>
-                          )}
+                          {projectFile && <p className="text-sm text-purple-300">✓ Selected: {projectFile.name}</p>}
+                          {errors.projectFile && <span className="text-red-400 text-sm">{errors.projectFile}</span>}
                         </div>
                       </div>
                     </div>
@@ -701,98 +563,46 @@ export default function RegistrationForm() {
                   {/* TAB 3: Payment */}
                   {currentTab === 3 && (
                     <div className="space-y-6">
-                      <h2 className="text-3xl md:text-4xl font-black text-pink-500 text-center mb-6" style={{ fontFamily: 'Pricedown, sans-serif' }}>
-                        PAYMENT
-                      </h2>
+                      <h2 className="text-3xl md:text-4xl font-black text-pink-500 text-center mb-6" style={{ fontFamily: 'Pricedown, sans-serif' }}>PAYMENT</h2>
 
-                      {/* Fee Summary */}
-                      <div className="bg-black/40 backdrop-blur-sm border-2 border-pink-500/40 rounded-lg p-6">
-                        <h3 className="text-xl font-black text-purple-300 mb-4 tracking-widest" style={{ fontFamily: 'Rajdhani, sans-serif' }}>REGISTRATION FEE</h3>
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <p className="text-gray-400 text-sm">
-                              {formData.numberOfParticipants
-                                ? `${formData.numberOfParticipants} Participant${parseInt(formData.numberOfParticipants) > 1 ? 's' : ''} × ₹${REGISTRATION_FEE}`
-                                : 'Per team'}
-                            </p>
-                            <p className="text-white text-sm mt-1">PRAKALPA'26 — {formData.projectCategory || 'Registration'}</p>
-                          </div>
-                          <div className="text-right">
-                            <p className="text-5xl font-black text-pink-500" style={{ fontFamily: 'Pricedown, sans-serif' }}>₹{REGISTRATION_FEE}</p>
-                            <p className="text-gray-400 text-xs tracking-widest">TOTAL AMOUNT</p>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* QR + Instructions */}
-                      <div className="bg-black/40 backdrop-blur-sm border-2 border-purple-500/30 rounded-lg p-6">
-                        <h3 className="text-xl font-black text-purple-300 mb-6 tracking-widest" style={{ fontFamily: 'Rajdhani, sans-serif' }}>SCAN & PAY</h3>
-                        <div className="flex flex-col md:flex-row items-center gap-8">
-                          {/* QR Placeholder */}
-                          <div className="flex-shrink-0 w-48 h-48 bg-white rounded-lg flex items-center justify-center relative p-3">
-                            <div className="w-full h-full border-4 border-black rounded flex items-center justify-center">
-                              <p className="text-black font-black text-xs text-center leading-relaxed" style={{ fontFamily: 'Rajdhani, sans-serif' }}>
-                                REPLACE<br/>WITH YOUR<br/>QR CODE
-                              </p>
-                            </div>
-                          </div>
-
-                          {/* Steps */}
-                          <div className="flex-1 space-y-4">
-                            {[
-                              'Open any UPI app (GPay, PhonePe, Paytm, BHIM)',
-                              `Scan the QR or pay to UPI ID: ${UPI_ID}`,
-                              `Pay ₹${REGISTRATION_FEE} and note your UTR/Transaction ID`,
-                              'Enter the UTR ID and upload your payment screenshot below'
-                            ].map((step, i) => (
-                              <div key={i} className="flex items-start gap-3">
-                                <span className="bg-gradient-to-r from-pink-500 to-purple-500 text-white font-black w-7 h-7 rounded-full flex items-center justify-center text-sm flex-shrink-0">{i + 1}</span>
-                                <p className="text-gray-300" style={{ fontFamily: 'Rajdhani, sans-serif' }}>{step}</p>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* UTR + Screenshot */}
+                      {/* Screenshot Upload */}
                       <div className="bg-black/40 backdrop-blur-sm border-2 border-purple-500/30 rounded-lg p-6 space-y-6">
-                        <h3 className="text-2xl font-black text-purple-400 mb-2" style={{ fontFamily: 'Pricedown, sans-serif' }}>PAYMENT CONFIRMATION</h3>
+                        <h3 className="text-2xl font-black text-purple-400" style={{ fontFamily: 'Pricedown, sans-serif' }}>PAYMENT CONFIRMATION</h3>
 
-                        <div className="space-y-2" data-error={errors.utrNumber ? 'utrNumber' : undefined}>
-                          <label className="text-purple-300 font-semibold block" style={{ fontFamily: 'Rajdhani, sans-serif' }}>
-                            UTR / Transaction ID <span className="text-pink-500">*</span>
-                          </label>
-                          <input
-                            type="text"
-                            name="utrNumber"
-                            value={utrNumber}
-                            onChange={(e) => {
-                              setUtrNumber(e.target.value);
-                              if (errors.utrNumber) setErrors(prev => { const n = { ...prev }; delete n.utrNumber; return n; });
-                            }}
-                            placeholder="e.g. 123456789012"
-                            className="w-full px-4 py-3 bg-black/60 border-2 border-purple-500/40 rounded text-white placeholder:text-gray-500 focus:border-pink-500 focus:outline-none transition-all font-mono tracking-widest"
-                          />
-                          <p className="text-xs text-gray-400">12-digit UTR number from your UPI app payment receipt</p>
-                          {errors.utrNumber && <span className="text-red-400 text-sm">{errors.utrNumber}</span>}
-                        </div>
-
+                        {/* Screenshot Upload with base64 */}
                         <div className="space-y-2" data-error={errors.paymentScreenshot ? 'paymentScreenshot' : undefined}>
                           <label className="text-purple-300 font-semibold block" style={{ fontFamily: 'Rajdhani, sans-serif' }}>
                             Payment Screenshot <span className="text-pink-500">*</span>
                           </label>
                           <input
-                            type="file"
-                            accept="image/*"
-                            onChange={(e) => {
-                              setPaymentScreenshot(e.target.files?.[0] || null);
-                              if (errors.paymentScreenshot) setErrors(prev => { const n = { ...prev }; delete n.paymentScreenshot; return n; });
-                            }}
-                            className="w-full px-4 py-3 bg-black/60 border-2 border-purple-500/40 rounded text-white file:bg-gradient-to-r file:from-pink-500 file:to-purple-500 file:text-white file:border-0 file:px-4 file:py-2 file:mr-4 file:rounded cursor-pointer"
+                            type="file" accept="image/*"
+                            onChange={handleScreenshotChange}
+                            className="w-full px-4 py-3 bg-black/60 border-2 border-purple-500/40 rounded text-white file:bg-pink-500 file:text-white file:border-0 file:px-4 file:py-2 file:mr-4 file:rounded cursor-pointer"
                           />
                           <p className="text-xs text-gray-400">Upload screenshot from your UPI app (JPG, PNG)</p>
+
+                          {/* Preview + encode status */}
                           {paymentScreenshot && (
-                            <p className="text-sm text-purple-300">✓ Selected: {paymentScreenshot.name}</p>
+                            <div className="mt-3 space-y-2">
+                              <p className="text-sm text-purple-300">✓ Selected: {paymentScreenshot.name}</p>
+                              {paymentScreenshotBase64 ? (
+                                <div className="flex items-center gap-2">
+                                  <span className="w-2 h-2 rounded-full bg-green-400 inline-block"></span>
+                                  <p className="text-xs text-green-400">Encoded successfully ({Math.round(paymentScreenshotBase64.length / 1024)} KB)</p>
+                                </div>
+                              ) : (
+                                <div className="flex items-center gap-2">
+                                  <span className="w-2 h-2 rounded-full bg-yellow-400 inline-block animate-pulse"></span>
+                                  <p className="text-xs text-yellow-400">Encoding...</p>
+                                </div>
+                              )}
+                              {/* Image Preview */}
+                              <img
+                                src={paymentScreenshotBase64 || ''}
+                                alt="Payment screenshot preview"
+                                className="mt-2 max-h-48 rounded-lg border-2 border-purple-500/40 object-contain"
+                              />
+                            </div>
                           )}
                           {errors.paymentScreenshot && <span className="text-red-400 text-sm">{errors.paymentScreenshot}</span>}
                         </div>
@@ -803,106 +613,112 @@ export default function RegistrationForm() {
               </AnimatePresence>
 
               {/* Navigation Buttons */}
-              <motion.div 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.6 }}
-                className="flex justify-between items-center mt-8 gap-4"
-              >
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }} className="flex justify-between items-center mt-8 gap-4">
                 <button
-                  onClick={handlePrevious}
-                  disabled={currentTab === 1}
-                  className={`px-8 py-3 rounded-lg font-bold transition-all ${
-                    currentTab === 1 
-                      ? 'bg-gray-600 text-gray-400 cursor-not-allowed' 
-                      : 'bg-purple-600 hover:bg-purple-700 text-white'
-                  }`}
+                  onClick={handlePrevious} disabled={currentTab === 1}
+                  className={`px-8 py-3 rounded-lg font-bold transition-all ${currentTab === 1 ? 'bg-gray-600 text-gray-400 cursor-not-allowed' : 'bg-purple-600 hover:bg-purple-700 text-white'}`}
                 >
-                  ← Previous
+                   Previous
                 </button>
                 {currentTab < 3 ? (
-                  <button
-                    onClick={handleNext}
-                    className="px-8 py-3 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-purple-500 hover:to-pink-500 text-white rounded-lg font-bold transition-all"
-                  >
-                    Next →
+                  <button onClick={handleNext} className="px-8 py-3 bg-pink-500 hover:bg-pink-600 text-white rounded-lg font-bold transition-all">
+                    Next 
                   </button>
                 ) : (
                   <button
-                    onClick={handleSubmit}
-                    className="px-12 py-3 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-purple-500 hover:to-pink-500 text-white rounded-lg font-black text-lg transition-all shadow-xl"
+                    onClick={handleSubmit} disabled={isSubmitting}
+                    className="px-12 py-3 bg-pink-500 hover:bg-pink-600 text-white rounded-lg font-black text-lg transition-all shadow-xl disabled:opacity-60 disabled:cursor-not-allowed"
                     style={{ fontFamily: 'Pricedown, sans-serif' }}
                   >
-                    SUBMIT REGISTRATION
+                    {isSubmitting ? 'SUBMITTING...' : 'SUBMIT REGISTRATION'}
                   </button>
                 )}
               </motion.div>
             </div>
+            </form>
 
-            {/* Success Screen */}
+            {/* Registration Completed Stamp Screen */}
             <AnimatePresence>
               {showMessage && (
                 <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="fixed inset-0 z-[10001] flex items-center justify-center bg-black/80 backdrop-blur-sm"
+                  initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                  className="fixed inset-0 z-[10001] flex items-center justify-center bg-black/90 backdrop-blur-sm px-4"
                 >
                   <motion.div
-                    initial={{ scale: 0.8, opacity: 0 }}
+                    initial={{ scale: 0.8, opacity: 0 }} 
                     animate={{ scale: 1, opacity: 1 }}
-                    transition={{ type: 'spring', stiffness: 200, damping: 20 }}
-                    className="bg-gradient-to-br from-purple-600 to-pink-600 rounded-2xl p-12 max-w-2xl text-center shadow-2xl"
+                    transition={{ type: 'spring', stiffness: 150, damping: 20 }}
+                    className="relative"
                   >
+                    {/* Registration Completed Stamp */}
                     <motion.div
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-                      className="mb-6 flex justify-center"
+                      className="relative w-[500px] h-[300px]"
                     >
-                      <div className="w-24 h-24 rounded-full bg-white/20 flex items-center justify-center">
-                        <svg className="w-16 h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <motion.path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={3}
-                            d="M5 13l4 4L19 7"
-                            initial={{ pathLength: 0 }}
-                            animate={{ pathLength: 1 }}
-                            transition={{ delay: 0.4, duration: 0.5 }}
-                          />
-                        </svg>
+                      {/* No border, no background - just text */}
+                      <div className="absolute inset-0 rounded-3xl"
+                        style={{
+                          backgroundColor: 'transparent'
+                        }}
+                      >
                       </div>
+
+                      {/* Main text */}
+                      <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
+                        <motion.div
+                          initial={{ scale: 0.8, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
+                          className="text-center px-8"
+                        >
+                          <div className="text-7xl font-black leading-tight tracking-wider mb-2"
+                            style={{ 
+                              fontFamily: 'Pricedown, sans-serif',
+                              textShadow: '3px 3px 6px rgba(0,0,0,0.5), -1px -1px 2px rgba(255,255,255,0.3)',
+                              letterSpacing: '0.15em'
+                            }}
+                          >
+                            REGISTRATION
+                          </div>
+                          <div className="text-7xl font-black leading-tight tracking-wider"
+                            style={{ 
+                              fontFamily: 'Pricedown, sans-serif',
+                              textShadow: '3px 3px 6px rgba(0,0,0,0.5), -1px -1px 2px rgba(255,255,255,0.3)',
+                              letterSpacing: '0.15em'
+                            }}
+                          >
+                            COMPLETED
+                          </div>
+                        </motion.div>
+
+                        {/* Decorative lines */}
+                        <motion.div
+                          initial={{ scaleX: 0 }}
+                          animate={{ scaleX: 1 }}
+                          transition={{ delay: 0.4, duration: 0.5 }}
+                          className="w-3/4 h-1 bg-white/40 mt-6"
+                        />
+                      </div>
+
+                      {/* Corner decorations removed */}
                     </motion.div>
-                    <motion.h2
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.5 }}
-                      className="text-5xl font-black text-white mb-4"
-                      style={{ fontFamily: 'Pricedown, sans-serif' }}
-                    >
-                      ALL SET!
-                    </motion.h2>
-                    <motion.p
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.7 }}
-                      className="text-2xl text-white font-semibold"
-                      style={{ fontFamily: 'Rajdhani, sans-serif' }}
-                    >
-                      Your registration for PRAKALPA'26 is confirmed
-                    </motion.p>
                   </motion.div>
                 </motion.div>
               )}
             </AnimatePresence>
 
-            {/* Font Import */}
             <style>{`
               @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap');
               @font-face {
                 font-family: 'Pricedown';
                 src: url('https://cdn.jsdelivr.net/gh/LuisFerOD/Fonts/fonts/pricedown.ttf') format('truetype');
+              }
+              input:-webkit-autofill,
+              input:-webkit-autofill:hover,
+              input:-webkit-autofill:focus {
+                -webkit-box-shadow: 0 0 0px 1000px rgba(0,0,0,0.6) inset !important;
+                -webkit-text-fill-color: #ffffff !important;
+                caret-color: white;
+                transition: background-color 5000s ease-in-out 0s;
               }
             `}</style>
           </motion.div>
