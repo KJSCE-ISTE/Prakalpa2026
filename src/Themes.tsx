@@ -155,7 +155,8 @@ const themes = [
       'Zero Trust Architecture'
     ],
     color: 'from-purple-700 to-purple-900',
-image: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080',    position: { top: '45%', left: '26%', width: '21%', height: '33%', rotate: -2 },
+    image: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080',    
+    position: { top: '45%', left: '26%', width: '21%', height: '33%', rotate: -2 },
     galleryImages: [
       'https://images.unsplash.com/photo-1660644807804-ffacfd7a4137?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080',
       'https://images.unsplash.com/photo-1477039181047-efb4357d01bd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080'
@@ -194,7 +195,8 @@ image: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?crop=entropy&c
       'Collaborative Robots'
     ],
     color: 'from-purple-600 to-purple-800',
-image: 'https://images.unsplash.com/photo-1563207153-f403bf289096?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080',    position: { top: '11%', left: '48%', width: '23%', height: '35%', rotate: -1 },
+    image: 'https://images.unsplash.com/photo-1563207153-f403bf289096?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080',    
+    position: { top: '11%', left: '48%', width: '23%', height: '35%', rotate: -1 },
     galleryImages: [
       'https://images.unsplash.com/photo-1761195696590-3490ea770aa1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080',
       'https://images.unsplash.com/photo-1716191299980-a6e8827ba10b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080'
@@ -253,7 +255,8 @@ image: 'https://images.unsplash.com/photo-1563207153-f403bf289096?crop=entropy&c
       'Biomedical Imaging'
     ],
     color: 'from-purple-700 to-purple-900',
-image: 'https://images.unsplash.com/photo-1576086213369-97a306d36557?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080',    position: { top: '44%', left: '73%', width: '20%', height: '25%', rotate: 1 },
+    image: 'https://images.unsplash.com/photo-1576086213369-97a306d36557?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080',    
+    position: { top: '44%', left: '73%', width: '20%', height: '25%', rotate: 1 },
     galleryImages: [
       'https://images.unsplash.com/photo-1668511237388-404cc7e56e9d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080',
       'https://images.unsplash.com/photo-1580795479025-93d13fd9aa6c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080'
@@ -272,7 +275,8 @@ image: 'https://images.unsplash.com/photo-1576086213369-97a306d36557?crop=entrop
       'Future Tech Concepts'
     ],
     color: 'from-purple-600 to-purple-800',
-image: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080',    position: { top: '72%', left: '74%', width: '19%', height: '24%', rotate: -2 },
+    image: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080',    
+    position: { top: '72%', left: '74%', width: '19%', height: '24%', rotate: -2 },
     galleryImages: [
       'https://images.unsplash.com/photo-1760629863094-5b1e8d1aae74?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080',
       'https://images.unsplash.com/photo-1756908992154-c8a89f5e517f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=1080'
@@ -284,7 +288,6 @@ image: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?crop=entrop
 function ThemeDetailsModal({ theme, onClose }: { theme: any; onClose: () => void }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  // Always call all useEffects, but control their behavior with conditions inside
   useEffect(() => {
     if (theme) {
       setCurrentImageIndex(0);
@@ -293,12 +296,11 @@ function ThemeDetailsModal({ theme, onClose }: { theme: any; onClose: () => void
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-  if (e.key === 'Escape') {
-    // Replace current history state to remove hash, then close
-    window.history.replaceState(null, '', window.location.pathname);
-    onClose();
-  }
-};
+      if (e.key === 'Escape') {
+        window.history.replaceState(null, '', window.location.pathname);
+        onClose();
+      }
+    };
 
     if (theme) {
       document.addEventListener('keydown', handleEscape);
@@ -311,18 +313,14 @@ function ThemeDetailsModal({ theme, onClose }: { theme: any; onClose: () => void
     };
   }, [theme, onClose]);
 
-  // Add hash to URL when modal opens
-  // Add hash to URL when modal opens
-useEffect(() => {
-  if (theme) {
-    // Only push state if the hash doesn't already match
-    if (window.location.hash !== `#${theme.id}`) {
-      window.history.pushState(null, '', `#${theme.id}`);
+  useEffect(() => {
+    if (theme) {
+      if (window.location.hash !== `#${theme.id}`) {
+        window.history.pushState(null, '', `#${theme.id}`);
+      }
     }
-  }
-}, [theme]);
+  }, [theme]);
 
-  // Listen for back button (popstate event)
   useEffect(() => {
     const handlePopState = () => {
       if (theme && window.location.hash === '') {
@@ -350,7 +348,6 @@ useEffect(() => {
   };
 
   return (
-    // ... rest of the component
     <div className="fixed inset-0 z-50 bg-black flex flex-col" style={{ fontFamily: 'Orbitron, sans-serif' }}>
       {/* Background Image */}
       <img 
@@ -369,34 +366,33 @@ useEffect(() => {
            }} />
 
       {/* Main Content */}
-      <div className="relative flex-1 flex items-start justify-center overflow-y-auto pt-16 pb-8">
+      <div className="relative flex-1 flex items-start justify-center overflow-y-auto pt-16 sm:pt-20 pb-8 px-4 sm:px-6">
         {/* Close Button */}
         <button
-  onClick={() => {
-    // Replace current history state to remove hash, then close
-    window.history.replaceState(null, '', window.location.pathname);
-    onClose();
-  }}
-  className="fixed top-6 right-6 z-20 text-purple-400 hover:text-pink-400 transition-all duration-300 bg-black/60 backdrop-blur-sm rounded-sm p-2 border-2 border-purple-500/30 hover:border-pink-500"
->
-  <XIcon />
-</button>
+          onClick={() => {
+            window.history.replaceState(null, '', window.location.pathname);
+            onClose();
+          }}
+          className="fixed top-4 right-4 sm:top-6 sm:right-6 z-20 text-purple-400 hover:text-pink-400 transition-all duration-300 bg-black/60 backdrop-blur-sm rounded-sm p-2 border-2 border-purple-500/30 hover:border-pink-500"
+        >
+          <XIcon />
+        </button>
 
         {/* Content Area */}
-        <div className="relative w-full flex items-center justify-center px-12 py-4">
+        <div className="relative w-full flex items-center justify-center">
           <div className="max-w-5xl w-full">
             {/* Image Preview */}
             <div className="relative rounded-sm overflow-hidden mb-6 border-4 border-pink-500/60 shadow-xl transform -rotate-1">
               <img
                 src={theme.image}
                 alt={theme.title}
-                className="w-full h-[420px] object-cover"
+                className="w-full h-[250px] sm:h-[350px] md:h-[420px] object-cover"
               />
               
               {/* Overlay with theme title */}
               <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-transparent to-black/90 flex items-center justify-center">
-                <div className="text-center">
-                  <h1 className="text-pink-500 text-7xl font-black mb-3 tracking-wider transform -skew-x-12"
+                <div className="text-center px-4">
+                  <h1 className="text-pink-500 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-2 sm:mb-3 tracking-wider transform -skew-x-12"
                       style={{ 
                         fontFamily: 'pricedown, sans-serif',
                         textShadow: `
@@ -407,7 +403,7 @@ useEffect(() => {
                       }}>
                     {theme.title}
                   </h1>
-                  <p className="text-purple-400 text-2xl font-black tracking-wide"
+                  <p className="text-purple-400 text-base sm:text-xl md:text-2xl font-black tracking-wide"
                      style={{ 
                        fontFamily: 'Orbitron, sans-serif',
                        textShadow: '2px 2px 6px rgba(0,0,0,0.9)'
@@ -419,33 +415,33 @@ useEffect(() => {
             </div>
 
             {/* Theme Details */}
-            <div className="bg-black/60 backdrop-blur-sm rounded-sm p-8 border-2 border-purple-500/40 shadow-lg transform rotate-1">
-              <h3 className="text-pink-400 text-3xl font-black mb-4 tracking-wider transform -skew-x-6"
+            <div className="bg-black/60 backdrop-blur-sm rounded-sm p-4 sm:p-6 md:p-8 border-2 border-purple-500/40 shadow-lg transform rotate-1">
+              <h3 className="text-pink-400 text-2xl sm:text-3xl font-black mb-3 sm:mb-4 tracking-wider transform -skew-x-6"
                   style={{ 
                     fontFamily: 'pricedown, sans-serif',
                     textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
                   }}>
                 &gt;&gt; ABOUT THIS THEME
               </h3>
-              <p className="text-purple-200 text-lg mb-6 leading-relaxed font-medium"
+              <p className="text-purple-200 text-base sm:text-lg mb-4 sm:mb-6 leading-relaxed font-medium"
                  style={{ fontFamily: 'Orbitron, sans-serif' }}>
                 {theme.details}
               </p>
 
-              <h4 className="text-pink-400 text-2xl font-black mb-4 tracking-wider transform -skew-x-6"
+              <h4 className="text-pink-400 text-xl sm:text-2xl font-black mb-3 sm:mb-4 tracking-wider transform -skew-x-6"
                   style={{ 
                     fontFamily: 'pricedown, sans-serif',
                     textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
                   }}>
                 &gt;&gt; KEY AREAS
               </h4>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {theme.examples.map((example: string, index: number) => (
                   <div
                     key={index}
-                    className="bg-gradient-to-br from-purple-900/50 to-pink-900/50 border-2 border-purple-400/30 rounded-sm px-4 py-3 hover:border-pink-500 hover:from-purple-800/50 hover:to-pink-800/50 transition-all duration-300 shadow-md transform hover:-rotate-1"
+                    className="bg-gradient-to-br from-purple-900/50 to-pink-900/50 border-2 border-purple-400/30 rounded-sm px-3 sm:px-4 py-2 sm:py-3 hover:border-pink-500 hover:from-purple-800/50 hover:to-pink-800/50 transition-all duration-300 shadow-md transform hover:-rotate-1"
                   >
-                    <p className="text-purple-300 font-bold tracking-wide"
+                    <p className="text-purple-300 text-sm sm:text-base font-bold tracking-wide"
                        style={{ 
                          fontFamily: 'Orbitron, sans-serif',
                          textShadow: '1px 1px 3px rgba(0,0,0,0.8)'
@@ -463,77 +459,53 @@ useEffect(() => {
   );
 }
 
-
-    //   {/* Bottom Thumbnails */}
-    //   <div className="relative border-t border-purple-500/30 px-6 py-4 bg-black/40 backdrop-blur-sm">
-    //     <div className="flex gap-4 overflow-x-auto">
-    //       {galleryImages.map((img: string, index: number) => (
-    //         <button
-    //           key={index}
-    //           onClick={() => setCurrentImageIndex(index)}
-    //           className={cn(
-    //             "flex-shrink-0 relative group rounded-sm overflow-hidden border-2 transition-all duration-300",
-    //             index === currentImageIndex 
-    //               ? 'border-pink-500 shadow-lg scale-110 rotate-0' 
-    //               : 'border-purple-400/30 hover:border-purple-400 rotate-2'
-    //           )}
-    //         >
-    //           <img
-    //             src={img}
-    //             alt={`Thumbnail ${index + 1}`}
-    //             className="w-20 h-20 object-cover"
-    //           />
-    //           <div className="absolute inset-0 bg-gradient-to-br from-pink-600/40 to-purple-600/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition">
-    //             <DownloadIcon />
-    //           </div>
-    //         </button>
-    //       ))}
-    //     </div>
-    //   </div>
-    // </div>
-  
-
 // ThemesSection Component
 function ThemesSection() {
   const [selectedTheme, setSelectedTheme] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
 
-  // Handle browser navigation (back/forward buttons and initial hash)
+  // Detect mobile view
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 1024); // iPad Pro portrait (1024px) and below use grid layout
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Handle browser navigation
   useEffect(() => {
     const handleHashChange = () => {
-  // Prevent scroll jump
-  const currentScroll = window.scrollY;
-  
-  const hash = window.location.hash.slice(1);
-  if (hash && !selectedTheme) {
-    // If there's a hash but no modal is open, it's forward navigation - block it
-    window.history.replaceState(null, '', window.location.pathname);
-    window.scrollTo(0, currentScroll); // Maintain scroll position
-  } else if (!hash && selectedTheme) {
-    // If there's no hash and modal is open, it's back navigation - close it
-    setSelectedTheme(null);
-    window.scrollTo(0, currentScroll); // Maintain scroll position
-  }
-};
+      const currentScroll = window.scrollY;
+      
+      const hash = window.location.hash.slice(1);
+      if (hash && !selectedTheme) {
+        window.history.replaceState(null, '', window.location.pathname);
+        window.scrollTo(0, currentScroll);
+      } else if (!hash && selectedTheme) {
+        setSelectedTheme(null);
+        window.scrollTo(0, currentScroll);
+      }
+    };
 
-    // Check hash on mount
     handleHashChange();
-
-    // Listen for hash changes (back/forward buttons)
     window.addEventListener('hashchange', handleHashChange);
 
     return () => {
       window.removeEventListener('hashchange', handleHashChange);
     };
-  }, []);
+  }, [selectedTheme]);
 
   return (
-    // ... rest of component
     <>
       <div className="w-full relative">
-        {/* Title Overlay - Angled like GTA */}
-        <div className="absolute top-[-5px] left-1/2 transform -translate-x-1/2 z-20 pointer-events-none">
+        {/* Title Overlay - Responsive */}
+        <div className="absolute top-[-5px] left-1/2 transform -translate-x-1/2 z-20 pointer-events-none px-4">
           <div className="relative">
-            <h1 className="text-pink-500 text-8xl font-black tracking-wider transform -skew-x-12"
+            <h1 className="text-pink-500 text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-wider transform -skew-x-12"
                 style={{ 
                   fontFamily: 'pricedown, sans-serif',
                   textShadow: `
@@ -544,82 +516,136 @@ function ThemesSection() {
                 }}>
               THEMES
             </h1>
-            <p className="text-purple-400 text-2xl font-bold tracking-widest transform skew-x-6 mt-2"
-               style={{ 
-                 fontFamily: 'Orbitron, sans-serif',
-                 textShadow: '2px 2px 8px rgba(0,0,0,0.9)'
-               }}>
-            </p>
           </div>
         </div>
 
-        {/* Chaotic Collage Layout - Like GTA Cover */}
-        <div className="relative h-[1050px] border-2 border-pink-500/40 overflow-hidden">
-         {/* Vice City Background with Vignette Effect */}
-<div 
-  className="absolute inset-0 w-full h-full"
-  style={{
-    backgroundImage: `linear-gradient(to right, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.85) 100%), url(${bgImage})`,
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-  }}
-/>
-
-{/* Additional gradient overlay for purple tint */}
-<div className="absolute inset-0 bg-gradient-to-b from-purple-950/20 via-transparent to-black/30" />
-          {/* Theme Cards */}
-          {themes.map((theme: any) => (
-            <button
-              key={theme.id}
-              onClick={() => setSelectedTheme(theme)}
-              style={{ 
-                position: 'absolute',
-                top: theme.position.top,
-                left: theme.position.left,
-                width: theme.position.width,
-                height: theme.position.height,
-                transform: `rotate(${theme.position.rotate}deg)`,
+        {/* Mobile: Grid Layout with tilted cards */}
+        {isMobile ? (
+          <div className="relative px-4 py-16">
+            {/* Background Image for Mobile - extends with content */}
+            <div 
+              className="absolute top-0 left-0 right-0 bottom-0 w-full"
+              style={{
+                backgroundImage: `linear-gradient(to right, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.85) 100%), url(${bgImage})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
               }}
-              className="group cursor-pointer transition-all duration-300 hover:scale-105 hover:z-30 hover:rotate-0 border-2 border-black hover:border-pink-500 shadow-[0_4px_15px_rgba(0,0,0,0.8)]"
-            >
-              {/* Background Image */}
-              <img
-                src={theme.image}
-                alt={theme.title}
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-              
-              {/* Purple Color Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-br from-pink-600/60 via-purple-600/70 to-fuchsia-600/60 opacity-75 group-hover:opacity-50 transition-opacity duration-300 mix-blend-multiply" />
-              
-              {/* Subtle Glow on Hover */}
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-[inset_0_0_20px_rgba(168,85,247,0.5)]" />
-              
-              {/* Content - Angled */}
-              <div className="relative h-full flex flex-col justify-end p-4 text-left">
-                <h3 className="text-purple-200 font-black text-xl tracking-wide group-hover:text-pink-400 transition-colors duration-300 transform -rotate-2"
-                    style={{ 
-                      fontFamily: 'pricedown, sans-serif',
-                      textShadow: `
-                        2px 2px 0px rgba(0,0,0,0.9),
-                        0 0 8px rgba(168,85,247,0.6)
-                      `
-                    }}>
-                  {theme.title}
-                </h3>
-                <p className="text-pink-300 text-xs mt-1 font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                   style={{ 
-                     fontFamily: 'Orbitron, sans-serif',
-                     textShadow: '1px 1px 3px rgba(0,0,0,0.9)'
-                   }}>
-                  &gt; CLICK TO EXPLORE
-                </p>
+            />
+            
+            {/* Purple gradient overlay */}
+            <div className="absolute top-0 left-0 right-0 bottom-0 w-full bg-gradient-to-b from-purple-950/20 via-transparent to-black/30" />
+            
+            {/* Grid Content with tilted cards */}
+            <div className="relative grid grid-cols-2 gap-4 mt-12 px-2 pb-8">
+              {themes.map((theme: any, index: number) => {
+                const isLastOdd = index === themes.length - 1 && themes.length % 2 !== 0;
+                
+                return (
+                  <div
+                    key={theme.id}
+                    className={isLastOdd ? "col-span-2 flex justify-center" : ""}
+                  >
+                    <button
+                      onClick={() => setSelectedTheme(theme)}
+                      className="relative aspect-square group cursor-pointer transition-all duration-300 hover:scale-105 hover:rotate-0 border-2 border-black hover:border-pink-500 shadow-lg rounded-sm overflow-hidden w-full"
+                      style={{
+                        transform: `rotate(${index % 2 === 0 ? -2 : 2}deg)`,
+                        maxWidth: isLastOdd ? 'calc(50% - 0.5rem)' : '100%',
+                      }}
+                    >
+                  {/* Background Image */}
+                  <img
+                    src={theme.image}
+                    alt={theme.title}
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                  
+                  {/* Purple Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-pink-600/60 via-purple-600/70 to-fuchsia-600/60 opacity-75 group-hover:opacity-50 transition-opacity duration-300 mix-blend-multiply" />
+                  
+                  {/* Content */}
+                  <div className="relative h-full flex flex-col justify-end p-3 text-left">
+                    <h3 className="text-lg sm:text-xl md:text-2xl lg:text-3xl tracking-wide group-hover:text-pink-400 transition-colors duration-300 transform -rotate-2 text-purple-200 font-black"
+                        style={{ 
+                          fontFamily: 'pricedown, sans-serif',
+                          textShadow: '2px 2px 0px rgba(0,0,0,0.9), 0 0 8px rgba(168,85,247,0.6)'
+                        }}>
+                      {theme.title}
+                    </h3>
+                  </div>
+                </button>
               </div>
+            );
+          })}
+            </div>
+          </div>
+        ) : (
+          /* Desktop: Collage Layout */
+          <div className="relative h-[1050px] border-2 border-pink-500/40 overflow-hidden">
+            {/* Vice City Background */}
+            <div 
+              className="absolute inset-0 w-full h-full"
+              style={{
+                backgroundImage: `linear-gradient(to right, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.85) 100%), url(${bgImage})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+              }}
+            />
 
-              
-            </button>
-          ))}
-        </div>
+            <div className="absolute inset-0 bg-gradient-to-b from-purple-950/20 via-transparent to-black/30" />
+            
+            {/* Theme Cards */}
+            {themes.map((theme: any) => (
+              <button
+                key={theme.id}
+                onClick={() => setSelectedTheme(theme)}
+                style={{ 
+                  position: 'absolute',
+                  top: theme.position.top,
+                  left: theme.position.left,
+                  width: theme.position.width,
+                  height: theme.position.height,
+                  transform: `rotate(${theme.position.rotate}deg)`,
+                }}
+                className="group cursor-pointer transition-all duration-300 hover:scale-105 hover:z-30 hover:rotate-0 border-2 border-black hover:border-pink-500 shadow-[0_4px_15px_rgba(0,0,0,0.8)]"
+              >
+                {/* Background Image */}
+                <img
+                  src={theme.image}
+                  alt={theme.title}
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+                
+                {/* Purple Color Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-br from-pink-600/60 via-purple-600/70 to-fuchsia-600/60 opacity-75 group-hover:opacity-50 transition-opacity duration-300 mix-blend-multiply" />
+                
+                {/* Subtle Glow on Hover */}
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-[inset_0_0_20px_rgba(168,85,247,0.5)]" />
+                
+                {/* Content */}
+                <div className="relative h-full flex flex-col justify-end p-4 text-left">
+                  <h3 className="text-purple-200 font-black text-xl tracking-wide group-hover:text-pink-400 transition-colors duration-300 transform -rotate-2"
+                      style={{ 
+                        fontFamily: 'pricedown, sans-serif',
+                        textShadow: `
+                          2px 2px 0px rgba(0,0,0,0.9),
+                          0 0 8px rgba(168,85,247,0.6)
+                        `
+                      }}>
+                    {theme.title}
+                  </h3>
+                  <p className="text-pink-300 text-xs mt-1 font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                     style={{ 
+                       fontFamily: 'Orbitron, sans-serif',
+                       textShadow: '1px 1px 3px rgba(0,0,0,0.9)'
+                     }}>
+                    &gt; CLICK TO EXPLORE
+                  </p>
+                </div>
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       <ThemeDetailsModal
