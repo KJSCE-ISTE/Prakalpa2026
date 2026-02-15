@@ -86,11 +86,11 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="w-4 h-4 text-pink-300 shrink-0" />
-                <span>Aditi Kanagala: <a href="tel:+919820493896" className="hover:text-pink-300 transition-colors">+91 98204 93896</a></span>
+                <span>Tanish Shetty: <a href="tel:+917700048974" className="hover:text-pink-300 transition-colors">+91 77000 48974</a></span>
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="w-4 h-4 text-pink-300 shrink-0" />
-                <span>Tanish Shetty: <a href="tel:+917700048974" className="hover:text-pink-300 transition-colors">+91 77000 48974</a></span>
+                <span>Aditi Kanagala: <a href="tel:+919820493896" className="hover:text-pink-300 transition-colors">+91 98204 93896</a></span>
               </li>
             </ul>
           </div>
