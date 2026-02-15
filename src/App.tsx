@@ -14,6 +14,7 @@ import RegistrationForm from "./RegistrationForm"
 import Timeline from "./Timeline"
 import Prizes from "./Prizes"
 import FAQ from "./FAQ"
+import Sponsors from "./Sponsors"
 import Footer from "./footer"
 
 
@@ -120,6 +121,7 @@ function App() {
               { label: "Prizes", href: "#prizes" },
               { label: "Timeline", href: "#timeline" },
               { label: "Memories", href: "#gallery" },
+              { label: "Sponsors", href: "#sponsors" },
               { label: "FAQs", href: "#faqs" },
             ]}
           />
@@ -146,6 +148,7 @@ function App() {
       {!loading && <div id="prizes"><Prizes /></div>}
       {!loading && <div id="timeline"><Timeline /></div>}
       {!loading && <div id="gallery"><Gallery /></div>}
+      {!loading && <div id="sponsors"><Sponsors /></div>}
       {!loading && <div id="faqs"><FAQ /></div>}
 
       {/* ================= FOOTER ================= */}

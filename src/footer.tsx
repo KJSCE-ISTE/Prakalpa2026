@@ -61,6 +61,12 @@ export default function Footer() {
                 </a>
               </li>
               <li>
+                <a href="#sponsors" className="group flex items-center gap-2 hover:text-pink-300 transition-all hover:translate-x-2 w-fit relative after:absolute after:bottom-[-2px] after:left-0 after:h-[2px] after:w-0 after:bg-pink-300 after:transition-all after:duration-300 hover:after:w-full">
+                  <span className="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-pink-300">›</span>
+                  Sponsors
+                </a>
+              </li>
+              <li>
                 <a href="#faqs" className="group flex items-center gap-2 hover:text-pink-300 transition-all hover:translate-x-2 w-fit relative after:absolute after:bottom-[-2px] after:left-0 after:h-[2px] after:w-0 after:bg-pink-300 after:transition-all after:duration-300 hover:after:w-full">
                   <span className="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-pink-300">›</span>
                   FAQ's

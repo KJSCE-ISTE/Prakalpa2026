@@ -274,7 +274,7 @@ export default function Gallery() {
       <style>{galleryStyles}</style>
       <section
         id="gallery"
-        className="relative w-full bg-gradient-to-b from-zinc-950 to-black text-white py-2 px-0 flex items-center justify-center overflow-hidden"
+        className="relative w-full bg-gradient-to-b from-black to-zinc-950 text-white py-2 px-0 flex items-center justify-center overflow-hidden"
       >
         {/* Abstract Background Glows (Same as FAQ/Footer) */}
         <div className="absolute top-[-20%] left-[-10%] w-[40%] h-[40%] rounded-full bg-pink-500/20 blur-[120px] pointer-events-none" />
