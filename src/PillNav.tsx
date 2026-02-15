@@ -79,7 +79,6 @@ const PillNav: React.FC<PillNavProps> = ({
 
   const drawer = (
     <div className="fixed inset-0 z-[999999] md:hidden">
-
       <div
         className="absolute inset-0 bg-black/40 backdrop-blur-sm"
         onClick={closeMenu}
@@ -89,27 +88,27 @@ const PillNav: React.FC<PillNavProps> = ({
         ref={drawerRef}
         className="
           absolute left-0 top-0 h-full w-[70%]
-          bg-white shadow-2xl
+          bg-black shadow-2xl
           p-6
         "
       >
-        {/* Header (text removed) */}
         <div className="flex justify-end mb-6">
           <button
             onClick={closeMenu}
-            className="text-3xl leading-none"
+            className="text-3xl leading-none text-white"
           >
             ✕
           </button>
         </div>
 
+        {/* ✅ AUTO CLOSE FOR ALL ITEMS */}
         <ul className="flex flex-col gap-5 list-none p-0 m-0">
           {items.map(item => (
             <li key={item.href}>
               {isRouterLink(item.href) ? (
                 <Link
                   to={item.href}
-                  className="text-xl font-semibold font-pricedown"
+                  className="text-xl font-semibold font-pricedown text-white"
                   onClick={closeMenu}
                 >
                   {item.label}
@@ -117,7 +116,8 @@ const PillNav: React.FC<PillNavProps> = ({
               ) : (
                 <a
                   href={item.href}
-                  className="text-xl font-semibold font-pricedown"
+                  className="text-xl font-semibold font-pricedown text-white"
+                  onClick={closeMenu}
                 >
                   {item.label}
                 </a>
@@ -151,7 +151,7 @@ const PillNav: React.FC<PillNavProps> = ({
 
           <button
             onClick={toggleMobileMenu}
-            className="text-3xl mt-1"
+            className="text-3xl mt-1 text-white"
           >
             ☰
           </button>
@@ -219,3 +219,35 @@ const PillNav: React.FC<PillNavProps> = ({
 };
 
 export default PillNav;
+
+/* ✅ GREEN HOVER EFFECT */
+const style = document.createElement('style');
+style.innerHTML = `
+.nav-link {
+  position: relative;
+  z-index: 1;
+}
+.nav-link::before {
+  content: '';
+  position: absolute;
+  left: -5%;
+  top: 50%;
+  transform: translateY(-50%) skew(20deg) scaleX(0.85);
+  width: 120%;
+  height: 85%;
+  background: #02753E;
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.2s;
+  border-radius: 0.6em;
+}
+.nav-link:hover::before {
+  opacity: 1;
+}
+`;
+
+if (typeof window !== 'undefined' &&
+    !document.getElementById('nav-link-parallelogram-style')) {
+  style.id = 'nav-link-parallelogram-style';
+  document.head.appendChild(style);
+}

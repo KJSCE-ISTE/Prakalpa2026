@@ -3,7 +3,7 @@ import gtaBg1 from "./assets/Gta6_bg.jpeg"
 import gtaBg2 from "./assets/Load_1.webp"
 import gtaBg3 from "./assets/Load_2.webp"
 
-const images = [gtaBg1, gtaBg2, gtaBg3]
+const images = [gtaBg1, gtaBg3, gtaBg2]
 
 export default function LoadingScreen({
   exiting = false,
@@ -52,16 +52,18 @@ export default function LoadingScreen({
         ${exiting ? "opacity-0 translate-y-4" : "opacity-100 translate-y-0"}
       `}
     >
-      {/* Image section */}
       <div className="flex-1 relative overflow-hidden bg-black">
 
-        {/* ✅ RESPONSIVE BACKGROUND FIX */}
+        {/* ✅ RESPONSIVE IMAGE POSITION FIX */}
         <div
           className="
-            absolute inset-0 bg-cover
+            absolute inset-0
+            bg-contain sm:bg-cover
             bg-center
-            sm:bg-[center_-40px]
-            md:bg-[center_-120px]
+            sm:bg-[center_-80px]
+            md:bg-[center_-180px]
+            lg:bg-[center_-220px]
+            bg-no-repeat
           "
           style={{
             backgroundImage: `url(${images[index]})`,
@@ -76,15 +78,13 @@ export default function LoadingScreen({
 
         <div className="absolute inset-0 bg-black/30 pointer-events-none" />
 
-        {/* LEFT TEXT */}
         <div className="
           absolute
-          top-16 left-4
-          sm:top-28 sm:left-10
+          top-1/2 left-4
+          -translate-y-1/2
+          sm:left-10
           text-white
-          text-3xl
-          sm:text-5xl
-          md:text-6xl
+          text-3xl sm:text-5xl md:text-6xl
           leading-tight
         ">
           <span className="block">ISTE</span>
@@ -92,15 +92,13 @@ export default function LoadingScreen({
           <span className="block">presents</span>
         </div>
 
-        {/* RIGHT TEXT */}
         <div className="
           absolute
-          top-20 right-4
-          sm:top-40 sm:right-10
+          top-1/2 right-4
+          -translate-y-1/2
+          sm:right-10
           text-right text-white
-          text-4xl
-          sm:text-6xl
-          md:text-7xl
+          text-4xl sm:text-6xl md:text-7xl
           leading-none
         ">
           <span className="block">Prakalpa</span>
@@ -108,9 +106,8 @@ export default function LoadingScreen({
         </div>
       </div>
 
-      {/* Bottom bar */}
       <div className="
-        h-20 sm:h-24
+        h-28 sm:h-24
         bg-black flex items-center
         px-4 sm:px-10
       ">
