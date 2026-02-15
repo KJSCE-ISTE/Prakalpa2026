@@ -124,7 +124,7 @@ function App() {
           <PillNav
             logo={logo}
             items={[
-              { label: "Home", href: "/" },
+              { label: "Home", href: "#home" },
               { label: "Themes", href: "#themes" },
               { label: "Prizes", href: "#prizes" },
               { label: "Timeline", href: "#timeline" },
@@ -152,6 +152,7 @@ function App() {
       {!loading && <RegistrationForm />}
 
       {/* ================= SCROLL CONTENT ================= */}
+       {!loading && <div id="home"><Background/></div>}
       {!loading && <div id="themes"><Themes /></div>}
       {!loading && <div id="prizes"><Prizes /></div>}
       {!loading && <div id="timeline"><Timeline /></div>}
