@@ -41,7 +41,7 @@ const GTAMinimapEmbed: React.FC = () => {
         onClick={openMaps}
         aria-label="Open K J Somaiya College of Engineering in Google Maps"
         className="
-          relative rounded-full p-[6px] bg-pink-400 cursor-pointer
+          relative rounded-full p-[5px] bg-pink-400 cursor-pointer
           transition hover:scale-105 hover:brightness-110
 
           w-24 h-24   /* ✅ slightly larger on phones */
