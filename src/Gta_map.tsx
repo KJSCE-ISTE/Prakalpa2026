@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState } from "react"
+// Replace with your actual map image path
+import mapBg from "./assets/Map_Image.png"
 
 const MAPS_URL =
   "https://www.google.com/maps/search/?api=1&query=K+J+Somaiya+College+of+Engineering+19.072847,72.899926"
@@ -39,7 +41,7 @@ const GTAMinimapEmbed: React.FC = () => {
         onClick={openMaps}
         aria-label="Open K J Somaiya College of Engineering in Google Maps"
         className="
-          relative rounded-full p-[6px] bg-pink-500 cursor-pointer
+          relative rounded-full p-[6px] bg-pink-400 cursor-pointer
           transition hover:scale-105 hover:brightness-110
 
           w-24 h-24   /* ✅ slightly larger on phones */
@@ -50,14 +52,13 @@ const GTAMinimapEmbed: React.FC = () => {
       >
         <div
           ref={minimapRef}
-          className="relative w-full h-full rounded-full overflow-hidden bg-black"
+          className="relative w-full h-full rounded-full overflow-hidden bg-black cursor-pointer"
         >
-          <iframe
-            title="K J Somaiya College of Engineering"
-            src="https://www.google.com/maps?q=K+J+Somaiya+College+of+Engineering&z=16&output=embed"
-            className="absolute inset-0 w-full h-full border-0 pointer-events-none"
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
+          {/* Replaced iframe with static image */}
+          <img
+            src={mapBg}
+            alt="Event Location Map"
+            className="absolute inset-0 w-full h-full object-cover pointer-events-none"
           />
 
           <div
