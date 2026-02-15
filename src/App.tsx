@@ -78,19 +78,27 @@ function App() {
       <BackgroundMusic ref={audioRef} muted={muted} />
 
       {/* Music Toggle Button */}
-      <button
-        onClick={() => {
-          if (!audioRef.current) return;
-          const isMuted = !muted;
-          audioRef.current.muted = isMuted;
-          setMuted(isMuted);
-        }}
-        className="fixed bottom-4 right-4 bg-black text-white px-4 py-2 rounded-md shadow-lg z-50 hover:bg-black"
+    <button
+  onClick={() => {
+    if (!audioRef.current) return;
 
+    const nextMuted = !muted;
 
-      >
-        {muted ? "🔇" : "🔊"}
-      </button>
+    audioRef.current.muted = nextMuted;
+
+    if (!nextMuted) {
+      audioRef.current.play().catch(() => {});
+    } else {
+      audioRef.current.pause();
+    }
+
+    setMuted(nextMuted);
+  }}
+  className="fixed bottom-4 right-4 bg-black text-white px-4 py-2 rounded-md shadow-lg z-50 hover:bg-black"
+>
+  {muted ? "🔇" : "🔊"}
+</button>
+
 
       {/* ================= HUD LAYER (FIXED, NO TRANSFORMS) ================= */}
       {!loading && (
