@@ -49,6 +49,20 @@ const wipeVariants: Variants = {
 const Prizes: React.FC = () => {
   const [activeTab, setActiveTab] = useState<keyof typeof PRIZE_DATA | null>(null);
   const [isAnimating, setIsAnimating] = useState(false);
+  // Add state to track window width for responsive animations
+  const [isMobile, setIsMobile] = useState(false);
+
+  React.useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+
+    // Initial check
+    handleResize();
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const handleNavigation = (key: keyof typeof PRIZE_DATA | null) => {
     if (key === activeTab || isAnimating) return;
@@ -58,7 +72,7 @@ const Prizes: React.FC = () => {
   };
 
   return (
-    <div className="relative w-full h-screen overflow-hidden bg-[#0a0a0a] text-white uppercase font-black tracking-tighter select-none">
+    <div className="relative w-full h-[110vh] lg:h-[110vh] overflow-hidden bg-[#0a0a0a] text-white uppercase font-black tracking-tighter select-none">
 
       {/* BACKGROUND LAYER */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
@@ -101,8 +115,8 @@ const Prizes: React.FC = () => {
           <motion.div
             animate={{
               // Mobile: Always 1. Desktop: Previous logic
-              scale: typeof window !== 'undefined' && window.innerWidth < 1024 ? 1 : (activeTab ? 1 : 1.5),
-              x: typeof window !== 'undefined' && window.innerWidth < 1024 ? 0 : (activeTab ? 0 : 100),
+              scale: isMobile ? 1 : 1.5,
+              x: isMobile ? 0 : (activeTab ? 0 : 100),
               transformOrigin: "left center"
             }}
             transition={{ duration: 0.6, ease: [0.77, 0, 0.175, 1] }}
@@ -118,7 +132,7 @@ const Prizes: React.FC = () => {
                 <button
                   key={key}
                   onClick={() => handleNavigation(key)}
-                  className={`text-3xl lg:text-3xl italic transition-all duration-300 transform hover:scale-110 lg:hover:translate-x-3 w-full lg:w-auto text-center lg:text-left ${activeTab === key ? 'text-white' : 'text-zinc-500 hover:text-center'}`}
+                  className={`text-3xl lg:text-3xl italic transition-all duration-300 transform hover:scale-110 lg:hover:translate-x-3 w-full lg:w-auto text-center lg:text-left ${activeTab === key ? 'text-white' : 'text-white lg:text-zinc-500 hover:text-center'}`}
                 >
                   {PRIZE_DATA[key].id.replace('-', ' ')}
                 </button>
@@ -129,7 +143,7 @@ const Prizes: React.FC = () => {
 
         {/* Center Panel */}
         {/* Mobile: Hidden when NO activeTab. Desktop: Always visible (content handles opacity) */}
-        <div className={`w-full lg:col-span-6 flex flex-col justify-start lg:justify-center items-center font-pricedown py-4 lg:py-0 h-auto lg:h-full overflow-y-auto lg:overflow-visible ${!activeTab ? 'hidden lg:flex' : 'flex'}`}>
+        <div className={`w-full lg:col-span-6 flex flex-col justify-start lg:justify-center items-center font-pricedown py-4 lg:py-0 h-auto lg:h-full overflow-hidden lg:overflow-visible ${!activeTab ? 'hidden lg:flex' : 'flex'}`}>
           <AnimatePresence mode="wait">
             {activeTab && (
               <motion.div

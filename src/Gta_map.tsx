@@ -42,7 +42,7 @@ const GTAMinimapEmbed: React.FC = () => {
           relative rounded-full p-[6px] bg-pink-500 cursor-pointer
           transition hover:scale-105 hover:brightness-110
 
-          w-20 h-20
+          w-24 h-24   /* ✅ slightly larger on phones */
           sm:w-30 sm:h-30
           md:w-40 md:h-40
           lg:w-40 lg:h-40
@@ -91,8 +91,6 @@ const GTAMinimapEmbed: React.FC = () => {
               <polygon points="50,5 65,35 35,35" fill="white" />
             </svg>
           </div>
-
-         
         </div>
       </button>
     </div>
@@ -100,4 +98,3 @@ const GTAMinimapEmbed: React.FC = () => {
 }
 
 export default GTAMinimapEmbed
-  
