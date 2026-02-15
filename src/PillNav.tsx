@@ -17,6 +17,7 @@ export interface PillNavProps {
   activeHref?: string;
   className?: string;
   ease?: string;
+  showMobileNav?: boolean;   // ✅ ADDED
 }
 
 const PillNav: React.FC<PillNavProps> = ({
@@ -26,6 +27,7 @@ const PillNav: React.FC<PillNavProps> = ({
   activeHref,
   className = '',
   ease = 'power3.easeOut',
+  showMobileNav = true,      // ✅ DEFAULT
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -44,13 +46,8 @@ const PillNav: React.FC<PillNavProps> = ({
 
   const openMenu = () => {
     setIsMobileMenuOpen(true);
-
     requestAnimationFrame(() => {
-      gsap.fromTo(
-        drawerRef.current,
-        { x: "-100%" },
-        { x: "0%", duration: 0.35, ease }
-      );
+      gsap.fromTo(drawerRef.current, { x: "-100%" }, { x: "0%", duration: 0.35, ease });
     });
   };
 
@@ -79,29 +76,16 @@ const PillNav: React.FC<PillNavProps> = ({
 
   const drawer = (
     <div className="fixed inset-0 z-[999999] md:hidden">
-      <div
-        className="absolute inset-0 bg-black/40 backdrop-blur-sm"
-        onClick={closeMenu}
-      />
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={closeMenu} />
 
       <div
         ref={drawerRef}
-        className="
-          absolute left-0 top-0 h-full w-[70%]
-          bg-black shadow-2xl
-          p-6
-        "
+        className="absolute left-0 top-0 h-full w-[70%] bg-black shadow-2xl p-6"
       >
         <div className="flex justify-end mb-6">
-          <button
-            onClick={closeMenu}
-            className="text-3xl leading-none text-white"
-          >
-            ✕
-          </button>
+          <button onClick={closeMenu} className="text-3xl text-white">✕</button>
         </div>
 
-        {/* ✅ AUTO CLOSE FOR ALL ITEMS */}
         <ul className="flex flex-col gap-5 list-none p-0 m-0">
           {items.map(item => (
             <li key={item.href}>
@@ -129,37 +113,41 @@ const PillNav: React.FC<PillNavProps> = ({
     </div>
   );
 
+  const mobileHamburger = (
+    <button
+      onClick={toggleMobileMenu}
+      className="fixed top-24 left-4 z-[9999999] text-3xl text-white md:hidden"
+    >
+      ☰
+    </button>
+  );
+
   return (
     <>
-      <div className="absolute top-[1em] z-[1000] w-full left-0 md:w-auto md:left-auto">
+      {/* ✅ BUTTON ONLY SHOWN WHEN ALLOWED */}
+      {showMobileNav && ReactDOM.createPortal(mobileHamburger, document.body)}
 
-        {/* MOBILE HEADER */}
-        <div className="md:hidden px-4 flex flex-col items-start">
-          <Link
-            to={items[0].href}
-            onMouseEnter={handleLogoEnter}
-            className="rounded-full p-2 overflow-hidden"
-            style={{ width: '72px', height: '72px' }}
-          >
-            <img
-              src={logo}
-              alt={logoAlt}
-              ref={logoImgRef}
-              className="w-full h-full object-cover"
-            />
-          </Link>
+      {/* PHONE LOGO */}
+      <div className="absolute top-[1em] left-0 w-full md:hidden px-4">
+        <Link
+          to={items[0].href}
+          onMouseEnter={handleLogoEnter}
+          className="rounded-full p-2 overflow-hidden inline-block"
+          style={{ width: '72px', height: '72px' }}
+        >
+          <img
+            src={logo}
+            alt={logoAlt}
+            ref={logoImgRef}
+            className="w-full h-full object-cover"
+          />
+        </Link>
+      </div>
 
-          <button
-            onClick={toggleMobileMenu}
-            className="text-3xl mt-1 text-white"
-          >
-            ☰
-          </button>
-        </div>
-
-        {/* DESKTOP NAV — UNCHANGED */}
+      {/* DESKTOP NAVBAR — UNCHANGED */}
+      <div className="absolute top-[1em] z-[1000] w-full left-0 md:w-auto md:left-auto hidden md:block">
         <nav
-          className={`hidden md:flex w-full md:w-max items-center justify-between md:justify-start box-border px-4 md:px-0 ${className}`}
+          className={`md:flex w-full md:w-max items-center justify-between md:justify-start box-border px-4 md:px-0 ${className}`}
           aria-label="Primary"
           style={{ background: 'transparent' }}
         >
@@ -203,7 +191,7 @@ const PillNav: React.FC<PillNavProps> = ({
             </ul>
           </div>
 
-          <div className="hidden md:block ml-auto">
+          <div className="ml-auto">
             <img
               src={somaiyaLogo}
               alt="Somaiya Logo"
@@ -220,7 +208,7 @@ const PillNav: React.FC<PillNavProps> = ({
 
 export default PillNav;
 
-/* ✅ GREEN HOVER EFFECT */
+/* GREEN HOVER EFFECT */
 const style = document.createElement('style');
 style.innerHTML = `
 .nav-link {

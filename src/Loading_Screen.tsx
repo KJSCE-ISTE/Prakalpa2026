@@ -19,6 +19,15 @@ export default function LoadingScreen({
   const [index, setIndex] = useState(0)
   const [dim, setDim] = useState(false)
 
+  /* ✅ Prevent page scrollbar while loader is visible */
+  useEffect(() => {
+    document.body.style.overflow = "hidden"
+
+    return () => {
+      document.body.style.overflow = ""
+    }
+  }, [])
+
   useEffect(() => {
     const interval = setInterval(() => {
       setDim(true)
@@ -54,7 +63,6 @@ export default function LoadingScreen({
     >
       <div className="flex-1 relative overflow-hidden bg-black">
 
-        {/* ✅ RESPONSIVE IMAGE POSITION FIX */}
         <div
           className="
             absolute inset-0
