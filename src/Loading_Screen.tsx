@@ -54,11 +54,17 @@ export default function LoadingScreen({
     >
       {/* Image section */}
       <div className="flex-1 relative overflow-hidden bg-black">
+
+        {/* ✅ RESPONSIVE BACKGROUND FIX */}
         <div
-          className="absolute inset-0 bg-cover"
+          className="
+            absolute inset-0 bg-cover
+            bg-center
+            sm:bg-[center_-40px]
+            md:bg-[center_-120px]
+          "
           style={{
             backgroundImage: `url(${images[index]})`,
-            backgroundPosition: "center -120px",
           }}
         />
 
@@ -70,21 +76,49 @@ export default function LoadingScreen({
 
         <div className="absolute inset-0 bg-black/30 pointer-events-none" />
 
-        <div className="absolute top-32 left-10 text-white text-6xl leading-tight">
+        {/* LEFT TEXT */}
+        <div className="
+          absolute
+          top-16 left-4
+          sm:top-28 sm:left-10
+          text-white
+          text-3xl
+          sm:text-5xl
+          md:text-6xl
+          leading-tight
+        ">
           <span className="block">ISTE</span>
-          <span className="block ml-10">KJSSE</span>
+          <span className="block sm:ml-10">KJSSE</span>
           <span className="block">presents</span>
         </div>
 
-        <div className="absolute top-44 right-10 text-right text-white">
-          <span className="block text-7xl">Prakalpa</span>
-          <span className="block text-7xl">26</span>
+        {/* RIGHT TEXT */}
+        <div className="
+          absolute
+          top-20 right-4
+          sm:top-40 sm:right-10
+          text-right text-white
+          text-4xl
+          sm:text-6xl
+          md:text-7xl
+          leading-none
+        ">
+          <span className="block">Prakalpa</span>
+          <span className="block">26</span>
         </div>
       </div>
 
       {/* Bottom bar */}
-      <div className="h-24 bg-black flex items-center px-10">
-        <span className="text-white text-4xl tracking-wide">
+      <div className="
+        h-20 sm:h-24
+        bg-black flex items-center
+        px-4 sm:px-10
+      ">
+        <span className="
+          text-white
+          text-lg sm:text-3xl md:text-4xl
+          tracking-wide
+        ">
           TIP: Click anywhere to enable sound.
         </span>
 
@@ -101,7 +135,12 @@ export default function LoadingScreen({
               audioRef.current.pause()
             }
           }}
-          className="ml-auto bg-black/70 text-white px-4 py-2 rounded-md"
+          className="
+            ml-auto bg-black/70 text-white
+            px-3 py-1 sm:px-4 sm:py-2
+            rounded-md
+            text-sm sm:text-base
+          "
         >
           {muted ? "🔇 Music Off" : "🔊 Music On"}
         </button>
