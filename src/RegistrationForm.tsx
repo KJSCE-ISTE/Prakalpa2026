@@ -428,20 +428,34 @@ export default function RegistrationForm() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8 }}
             transition={{ type: "spring", stiffness: 100, damping: 15 }}
-            className="fixed top-[80vh] left-0 right-0 flex justify-center z-50"
+            className="fixed bottom-40 md:bottom-10 left-0 right-0 flex justify-center z-50 pointer-events-none"
           >
             <motion.button
               onClick={() => setIsOpen(true)}
-              whileHover={{ scale: 1.1, boxShadow: "0 0 30px rgba(236, 72, 153, 0.8)" }}
-              whileTap={{ scale: 0.95 }}
-              animate={{ boxShadow: ["0 0 20px rgba(168, 85, 247, 0.5)", "0 0 40px rgba(236, 72, 153, 0.7)", "0 0 20px rgba(168, 85, 247, 0.5)"] }}
-              transition={{ boxShadow: { duration: 2, repeat: Infinity, ease: "easeInOut" } }}
-              className="px-12 py-5 bg-gradient-to-r from-pink-500 to-purple-500 text-white text-2xl font-black rounded-xl shadow-2xl backdrop-blur-sm"
-              style={{ fontFamily: 'Pricedown, sans-serif', textShadow: '3px 3px 6px rgba(0,0,0,0.9)' }}
+              whileHover={{ scale: 1.06 }}
+              whileTap={{ scale: 0.96 }}
+              className="group pointer-events-auto relative overflow-hidden px-8 py-3 bg-transparent border border-white/25 rounded-3xl text-pink-500 font-black tracking-widest uppercase transition-all duration-300 hover:bg-white/5 hover:scale-105 flex items-center justify-center"
+              style={{ fontFamily: 'Pricedown, sans-serif' }}
+              aria-label="Open registration form"
             >
-              <motion.span animate={{ scale: [1, 1.05, 1] }} transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}>
-                REGISTER NOW
-              </motion.span>
+              {/* Subtle border glow layer */}
+              <span className="absolute inset-0 rounded-2xl border border-transparent group-hover:border-white/20 transition-colors duration-300 pointer-events-none" />
+
+              {/* Content: Sponsors-header-inspired title, centered; pink foreground with purple shadow */}
+              <span className="relative z-10 flex items-center justify-center gap-4 text-lg md:text-2xl w-full">
+
+                <span
+                  className="text-pink-500 text-2xl md:text-4xl font-black tracking-wider transform -skew-x-12"
+                  style={{
+                    fontFamily: 'Pricedown, sans-serif',
+                    textShadow: '3px 3px 0px #7c3aed'
+                  }}
+                >
+                  REGISTER NOW
+                </span>
+              </span>
+
+              {/* Accent shine removed to avoid visible side line */}
             </motion.button>
           </motion.div>
         )}
@@ -476,165 +490,165 @@ export default function RegistrationForm() {
             </div>
 
             <form autoComplete="off" onSubmit={(e) => e.preventDefault()}>
-            <div className="relative z-10 max-w-5xl mx-auto px-4 pt-24 pb-20">
-              {/* Header */}
-              <motion.div initial={{ opacity: 0, y: -50 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, type: "spring" }} className="text-center mb-8">
-                <motion.h1
-                  initial={{ scale: 0.8 }} animate={{ scale: 1 }} transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
-                  className="text-5xl md:text-7xl font-black mb-4 text-pink-500 transform -skew-x-6"
-                  style={{ fontFamily: 'Pricedown, sans-serif', textShadow: '4px 4px 0px rgba(168,85,247,0.7), -2px -2px 0px rgba(236,72,153,0.4), 5px 5px 15px rgba(0,0,0,0.9)' }}
-                >
-                  PRAKALPA'26 REGISTRATION
-                </motion.h1>
-                <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }} className="text-purple-300 text-lg">
-                  Complete all fields to register for the event
-                </motion.p>
-              </motion.div>
+              <div className="relative z-10 max-w-5xl mx-auto px-4 pt-24 pb-20">
+                {/* Header */}
+                <motion.div initial={{ opacity: 0, y: -50 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, type: "spring" }} className="text-center mb-8">
+                  <motion.h1
+                    initial={{ scale: 0.8 }} animate={{ scale: 1 }} transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
+                    className="text-5xl md:text-7xl font-black mb-4 text-pink-500 transform -skew-x-6"
+                    style={{ fontFamily: 'Pricedown, sans-serif', textShadow: '4px 4px 0px rgba(168,85,247,0.7), -2px -2px 0px rgba(236,72,153,0.4), 5px 5px 15px rgba(0,0,0,0.9)' }}
+                  >
+                    PRAKALPA'26 REGISTRATION
+                  </motion.h1>
+                  <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }} className="text-purple-300 text-lg">
+                    Complete all fields to register for the event
+                  </motion.p>
+                </motion.div>
 
-              {/* Tab Navigation */}
-              <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="flex justify-center mb-8">
-                <div className="bg-black/40 backdrop-blur-sm border-2 border-purple-500/30 rounded-lg p-2 inline-flex gap-2">
-                  {[{ n: 1, label: '1. Participants' }, { n: 2, label: '2. Project' }, { n: 3, label: '3. Payment' }].map(({ n, label }) => (
-                    <button key={n} onClick={() => setCurrentTab(n)}
-                      className={`px-6 py-3 rounded-lg font-bold transition-all ${currentTab === n ? 'bg-pink-500 text-white' : 'text-purple-300 hover:text-white hover:bg-purple-500/20'}`}
-                    >
-                      {label}
-                    </button>
-                  ))}
-                </div>
-              </motion.div>
+                {/* Tab Navigation */}
+                <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="flex justify-center mb-8">
+                  <div className="bg-black/40 backdrop-blur-sm border-2 border-purple-500/30 rounded-lg p-2 inline-flex gap-2">
+                    {[{ n: 1, label: '1. Participants' }, { n: 2, label: '2. Project' }, { n: 3, label: '3. Payment' }].map(({ n, label }) => (
+                      <button key={n} onClick={() => setCurrentTab(n)}
+                        className={`px-6 py-3 rounded-lg font-bold transition-all ${currentTab === n ? 'bg-pink-500 text-white' : 'text-purple-300 hover:text-white hover:bg-purple-500/20'}`}
+                      >
+                        {label}
+                      </button>
+                    ))}
+                  </div>
+                </motion.div>
 
-              {/* Progress Bar */}
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} className="mb-8">
-                <div className="bg-black/40 h-2 rounded-full overflow-hidden">
-                  <motion.div className="h-full bg-gradient-to-r from-pink-500 to-purple-500" initial={{ width: '0%' }} animate={{ width: `${(currentTab / 3) * 100}%` }} transition={{ duration: 0.5 }} />
-                </div>
-              </motion.div>
+                {/* Progress Bar */}
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} className="mb-8">
+                  <div className="bg-black/40 h-2 rounded-full overflow-hidden">
+                    <motion.div className="h-full bg-gradient-to-r from-pink-500 to-purple-500" initial={{ width: '0%' }} animate={{ width: `${(currentTab / 3) * 100}%` }} transition={{ duration: 0.5 }} />
+                  </div>
+                </motion.div>
 
-              {/* Tab Content */}
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={currentTab}
-                  initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}
-                  transition={{ duration: 0.3 }} className="space-y-6"
-                >
-                  {/* TAB 1 */}
-                  {currentTab === 1 && (
-                    <div className="space-y-6">
-                      <h2 className="text-3xl md:text-4xl font-black text-pink-500 text-center mb-6" style={{ fontFamily: 'Pricedown, sans-serif' }}>PARTICIPANT INFORMATION</h2>
-                      <div className="bg-black/40 backdrop-blur-sm border-2 border-purple-500/30 rounded-lg p-6">
-                        <Select label="Number of Participants" required name="numberOfParticipants" value={formData.numberOfParticipants}
-                          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange('numberOfParticipants', e.target.value)}
-                          options={[{ value: '1', label: '1 Participant' }, { value: '2', label: '2 Participants' }, { value: '3', label: '3 Participants' }, { value: '4', label: '4 Participants' }]}
-                          error={errors.numberOfParticipants}
-                        />
-                      </div>
-                      {formData.numberOfParticipants && (
-                        <div className="space-y-6">
-                          {Array.from({ length: parseInt(formData.numberOfParticipants) }, (_, i) => i).map(renderParticipant)}
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                  {/* TAB 2 */}
-                  {currentTab === 2 && (
-                    <div className="space-y-6">
-                      <h2 className="text-3xl md:text-4xl font-black text-pink-500 text-center mb-6" style={{ fontFamily: 'Pricedown, sans-serif' }}>PROJECT DETAILS</h2>
-                      <div className="bg-black/40 backdrop-blur-sm border-2 border-pink-500/30 rounded-lg p-6 space-y-6">
-                        <Select label="Project Category" required name="projectCategory" value={formData.projectCategory} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange('projectCategory', e.target.value)} options={[{ value: 'working-model', label: 'Working Model' }, { value: 'software-competition', label: 'Software Competition' }, { value: 'paper-presentation', label: 'Paper Presentation' }]} error={errors.projectCategory} />
-                        <Select label="Domain" required name="domain" value={formData.domain} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange('domain', e.target.value)} options={domains} error={errors.domain} />
-                        {formData.domain === 'other' && <Input label="Specify Domain" required name="domainOther" value={formData.domainOther} onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('domainOther', e.target.value)} placeholder="Enter your domain" error={errors.domainOther} />}
-                        <Input label="Project Title" required name="title" value={formData.title} onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('title', e.target.value)} placeholder="Enter project title" error={errors.title} />
-                      </div>
-                      <div className="bg-black/40 backdrop-blur-sm border-2 border-purple-500/30 rounded-lg p-6">
-                        <h3 className="text-2xl font-black text-purple-400 mb-4" style={{ fontFamily: 'Pricedown, sans-serif' }}>DOCUMENT UPLOAD</h3>
-                        <div className="space-y-2" data-error={errors.projectFile ? 'projectFile' : undefined}>
-                          <label className="text-purple-300 font-semibold block">Project Presentation/Paper <span className="text-pink-500">*</span></label>
-                          <input type="file" accept=".pdf" onChange={(e) => setProjectFile(e.target.files?.[0] || null)} className="w-full px-4 py-3 bg-black/60 border-2 border-purple-500/40 rounded text-white file:bg-pink-500 file:text-white file:border-0 file:px-4 file:py-2 file:mr-4 file:rounded cursor-pointer" />
-                          <p className="text-sm text-gray-400">PDF format only</p>
-                          {projectFile && <p className="text-sm text-purple-300">✓ Selected: {projectFile.name}</p>}
-                          {errors.projectFile && <span className="text-red-400 text-sm">{errors.projectFile}</span>}
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* TAB 3: Payment */}
-                  {currentTab === 3 && (
-                    <div className="space-y-6">
-                      <h2 className="text-3xl md:text-4xl font-black text-pink-500 text-center mb-6" style={{ fontFamily: 'Pricedown, sans-serif' }}>PAYMENT</h2>
-
-                      {/* Screenshot Upload */}
-                      <div className="bg-black/40 backdrop-blur-sm border-2 border-purple-500/30 rounded-lg p-6 space-y-6">
-                        <h3 className="text-2xl font-black text-purple-400" style={{ fontFamily: 'Pricedown, sans-serif' }}>PAYMENT CONFIRMATION</h3>
-
-                        {/* Screenshot Upload with base64 */}
-                        <div className="space-y-2" data-error={errors.paymentScreenshot ? 'paymentScreenshot' : undefined}>
-                          <label className="text-purple-300 font-semibold block" style={{ fontFamily: 'Rajdhani, sans-serif' }}>
-                            Payment Screenshot <span className="text-pink-500">*</span>
-                          </label>
-                          <input
-                            type="file" accept="image/*"
-                            onChange={handleScreenshotChange}
-                            className="w-full px-4 py-3 bg-black/60 border-2 border-purple-500/40 rounded text-white file:bg-pink-500 file:text-white file:border-0 file:px-4 file:py-2 file:mr-4 file:rounded cursor-pointer"
+                {/* Tab Content */}
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={currentTab}
+                    initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}
+                    transition={{ duration: 0.3 }} className="space-y-6"
+                  >
+                    {/* TAB 1 */}
+                    {currentTab === 1 && (
+                      <div className="space-y-6">
+                        <h2 className="text-3xl md:text-4xl font-black text-pink-500 text-center mb-6" style={{ fontFamily: 'Pricedown, sans-serif' }}>PARTICIPANT INFORMATION</h2>
+                        <div className="bg-black/40 backdrop-blur-sm border-2 border-purple-500/30 rounded-lg p-6">
+                          <Select label="Number of Participants" required name="numberOfParticipants" value={formData.numberOfParticipants}
+                            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange('numberOfParticipants', e.target.value)}
+                            options={[{ value: '1', label: '1 Participant' }, { value: '2', label: '2 Participants' }, { value: '3', label: '3 Participants' }, { value: '4', label: '4 Participants' }]}
+                            error={errors.numberOfParticipants}
                           />
-                          <p className="text-xs text-gray-400">Upload screenshot from your UPI app (JPG, PNG)</p>
+                        </div>
+                        {formData.numberOfParticipants && (
+                          <div className="space-y-6">
+                            {Array.from({ length: parseInt(formData.numberOfParticipants) }, (_, i) => i).map(renderParticipant)}
+                          </div>
+                        )}
+                      </div>
+                    )}
 
-                          {/* Preview + encode status */}
-                          {paymentScreenshot && (
-                            <div className="mt-3 space-y-2">
-                              <p className="text-sm text-purple-300">✓ Selected: {paymentScreenshot.name}</p>
-                              {paymentScreenshotBase64 ? (
-                                <div className="flex items-center gap-2">
-                                  <span className="w-2 h-2 rounded-full bg-green-400 inline-block"></span>
-                                  <p className="text-xs text-green-400">Encoded successfully ({Math.round(paymentScreenshotBase64.length / 1024)} KB)</p>
-                                </div>
-                              ) : (
-                                <div className="flex items-center gap-2">
-                                  <span className="w-2 h-2 rounded-full bg-yellow-400 inline-block animate-pulse"></span>
-                                  <p className="text-xs text-yellow-400">Encoding...</p>
-                                </div>
-                              )}
-                              {/* Image Preview */}
-                              <img
-                                src={paymentScreenshotBase64 || ''}
-                                alt="Payment screenshot preview"
-                                className="mt-2 max-h-48 rounded-lg border-2 border-purple-500/40 object-contain"
-                              />
-                            </div>
-                          )}
-                          {errors.paymentScreenshot && <span className="text-red-400 text-sm">{errors.paymentScreenshot}</span>}
+                    {/* TAB 2 */}
+                    {currentTab === 2 && (
+                      <div className="space-y-6">
+                        <h2 className="text-3xl md:text-4xl font-black text-pink-500 text-center mb-6" style={{ fontFamily: 'Pricedown, sans-serif' }}>PROJECT/PAPER DETAILS</h2>
+                        <div className="bg-black/40 backdrop-blur-sm border-2 border-pink-500/30 rounded-lg p-6 space-y-6">
+                          <Select label="Project Category" required name="projectCategory" value={formData.projectCategory} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange('projectCategory', e.target.value)} options={[{ value: 'working-model', label: 'Working Model' }, { value: 'software-competition', label: 'Software Competition' }, { value: 'paper-presentation', label: 'Paper Presentation' }]} error={errors.projectCategory} />
+                          <Select label="Domain" required name="domain" value={formData.domain} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange('domain', e.target.value)} options={domains} error={errors.domain} />
+                          {formData.domain === 'other' && <Input label="Specify Domain" required name="domainOther" value={formData.domainOther} onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('domainOther', e.target.value)} placeholder="Enter your domain" error={errors.domainOther} />}
+                          <Input label="Project/Paper Title" required name="title" value={formData.title} onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('title', e.target.value)} placeholder="Enter project/paper title" error={errors.title} />
+                        </div>
+                        <div className="bg-black/40 backdrop-blur-sm border-2 border-purple-500/30 rounded-lg p-6">
+                          <h3 className="text-2xl font-black text-purple-400 mb-4" style={{ fontFamily: 'Pricedown, sans-serif' }}>DOCUMENT UPLOAD</h3>
+                          <div className="space-y-2" data-error={errors.projectFile ? 'projectFile' : undefined}>
+                            <label className="text-purple-300 font-semibold block">Project Presentation/Paper <span className="text-pink-500">*</span></label>
+                            <input type="file" accept=".pdf" onChange={(e) => setProjectFile(e.target.files?.[0] || null)} className="w-full px-4 py-3 bg-black/60 border-2 border-purple-500/40 rounded text-white file:bg-pink-500 file:text-white file:border-0 file:px-4 file:py-2 file:mr-4 file:rounded cursor-pointer" />
+                            <p className="text-sm text-gray-400">PDF format only</p>
+                            {projectFile && <p className="text-sm text-purple-300">✓ Selected: {projectFile.name}</p>}
+                            {errors.projectFile && <span className="text-red-400 text-sm">{errors.projectFile}</span>}
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    )}
+
+                    {/* TAB 3: Payment */}
+                    {currentTab === 3 && (
+                      <div className="space-y-6">
+                        <h2 className="text-3xl md:text-4xl font-black text-pink-500 text-center mb-6" style={{ fontFamily: 'Pricedown, sans-serif' }}>PAYMENT</h2>
+
+                        {/* Screenshot Upload */}
+                        <div className="bg-black/40 backdrop-blur-sm border-2 border-purple-500/30 rounded-lg p-6 space-y-6">
+                          <h3 className="text-2xl font-black text-purple-400" style={{ fontFamily: 'Pricedown, sans-serif' }}>PAYMENT CONFIRMATION</h3>
+
+                          {/* Screenshot Upload with base64 */}
+                          <div className="space-y-2" data-error={errors.paymentScreenshot ? 'paymentScreenshot' : undefined}>
+                            <label className="text-purple-300 font-semibold block" style={{ fontFamily: 'Rajdhani, sans-serif' }}>
+                              Payment Screenshot <span className="text-pink-500">*</span>
+                            </label>
+                            <input
+                              type="file" accept="image/*"
+                              onChange={handleScreenshotChange}
+                              className="w-full px-4 py-3 bg-black/60 border-2 border-purple-500/40 rounded text-white file:bg-pink-500 file:text-white file:border-0 file:px-4 file:py-2 file:mr-4 file:rounded cursor-pointer"
+                            />
+                            <p className="text-xs text-gray-400">Upload screenshot from your UPI app (JPG, PNG)</p>
+
+                            {/* Preview + encode status */}
+                            {paymentScreenshot && (
+                              <div className="mt-3 space-y-2">
+                                <p className="text-sm text-purple-300">✓ Selected: {paymentScreenshot.name}</p>
+                                {paymentScreenshotBase64 ? (
+                                  <div className="flex items-center gap-2">
+                                    <span className="w-2 h-2 rounded-full bg-green-400 inline-block"></span>
+                                    <p className="text-xs text-green-400">Encoded successfully ({Math.round(paymentScreenshotBase64.length / 1024)} KB)</p>
+                                  </div>
+                                ) : (
+                                  <div className="flex items-center gap-2">
+                                    <span className="w-2 h-2 rounded-full bg-yellow-400 inline-block animate-pulse"></span>
+                                    <p className="text-xs text-yellow-400">Encoding...</p>
+                                  </div>
+                                )}
+                                {/* Image Preview */}
+                                <img
+                                  src={paymentScreenshotBase64 || ''}
+                                  alt="Payment screenshot preview"
+                                  className="mt-2 max-h-48 rounded-lg border-2 border-purple-500/40 object-contain"
+                                />
+                              </div>
+                            )}
+                            {errors.paymentScreenshot && <span className="text-red-400 text-sm">{errors.paymentScreenshot}</span>}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </motion.div>
+                </AnimatePresence>
+
+                {/* Navigation Buttons */}
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }} className="flex justify-between items-center mt-8 gap-4">
+                  <button
+                    onClick={handlePrevious} disabled={currentTab === 1}
+                    className={`px-8 py-3 rounded-lg font-bold transition-all ${currentTab === 1 ? 'bg-gray-600 text-gray-400 cursor-not-allowed' : 'bg-purple-600 hover:bg-purple-700 text-white'}`}
+                  >
+                    Previous
+                  </button>
+                  {currentTab < 3 ? (
+                    <button onClick={handleNext} className="px-8 py-3 bg-pink-500 hover:bg-pink-600 text-white rounded-lg font-bold transition-all">
+                      Next
+                    </button>
+                  ) : (
+                    <button
+                      onClick={handleSubmit} disabled={isSubmitting}
+                      className="px-12 py-3 bg-pink-500 hover:bg-pink-600 text-white rounded-lg font-black text-lg transition-all shadow-xl disabled:opacity-60 disabled:cursor-not-allowed"
+                      style={{ fontFamily: 'Pricedown, sans-serif' }}
+                    >
+                      {isSubmitting ? 'SUBMITTING...' : 'SUBMIT REGISTRATION'}
+                    </button>
                   )}
                 </motion.div>
-              </AnimatePresence>
-
-              {/* Navigation Buttons */}
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }} className="flex justify-between items-center mt-8 gap-4">
-                <button
-                  onClick={handlePrevious} disabled={currentTab === 1}
-                  className={`px-8 py-3 rounded-lg font-bold transition-all ${currentTab === 1 ? 'bg-gray-600 text-gray-400 cursor-not-allowed' : 'bg-purple-600 hover:bg-purple-700 text-white'}`}
-                >
-                   Previous
-                </button>
-                {currentTab < 3 ? (
-                  <button onClick={handleNext} className="px-8 py-3 bg-pink-500 hover:bg-pink-600 text-white rounded-lg font-bold transition-all">
-                    Next 
-                  </button>
-                ) : (
-                  <button
-                    onClick={handleSubmit} disabled={isSubmitting}
-                    className="px-12 py-3 bg-pink-500 hover:bg-pink-600 text-white rounded-lg font-black text-lg transition-all shadow-xl disabled:opacity-60 disabled:cursor-not-allowed"
-                    style={{ fontFamily: 'Pricedown, sans-serif' }}
-                  >
-                    {isSubmitting ? 'SUBMITTING...' : 'SUBMIT REGISTRATION'}
-                  </button>
-                )}
-              </motion.div>
-            </div>
+              </div>
             </form>
 
             {/* Registration Completed Stamp Screen */}
@@ -645,7 +659,7 @@ export default function RegistrationForm() {
                   className="fixed inset-0 z-[10001] flex items-center justify-center bg-black/90 backdrop-blur-sm px-4"
                 >
                   <motion.div
-                    initial={{ scale: 0.8, opacity: 0 }} 
+                    initial={{ scale: 0.8, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ type: 'spring', stiffness: 150, damping: 20 }}
                     className="relative"
@@ -671,7 +685,7 @@ export default function RegistrationForm() {
                           className="text-center px-8"
                         >
                           <div className="text-7xl font-black leading-tight tracking-wider mb-2"
-                            style={{ 
+                            style={{
                               fontFamily: 'Pricedown, sans-serif',
                               textShadow: '3px 3px 6px rgba(0,0,0,0.5), -1px -1px 2px rgba(255,255,255,0.3)',
                               letterSpacing: '0.15em'
@@ -680,7 +694,7 @@ export default function RegistrationForm() {
                             REGISTRATION
                           </div>
                           <div className="text-7xl font-black leading-tight tracking-wider"
-                            style={{ 
+                            style={{
                               fontFamily: 'Pricedown, sans-serif',
                               textShadow: '3px 3px 6px rgba(0,0,0,0.5), -1px -1px 2px rgba(255,255,255,0.3)',
                               letterSpacing: '0.15em'

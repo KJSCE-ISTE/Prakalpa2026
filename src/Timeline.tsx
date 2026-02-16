@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import NewT from './assets/gallery_images/NewT.png';
-import MT from './assets/gallery_images/MT.png';
 
 interface TimelineItem {
   id: number;
@@ -82,6 +81,12 @@ const Timeline: React.FC = () => {
           @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;700&display=swap');
           @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
           
+          @font-face {
+            font-family: 'Pricedown';
+            src: url('/fonts/pricedown.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+          }
 
           .gta-title {
             font-family: 'Inter', sans-serif;
@@ -92,11 +97,34 @@ const Timeline: React.FC = () => {
             font-family: 'Inter', sans-serif;
           }
 
+          .mission-timeline-text {
+            font-family: 'Pricedown', sans-serif;
+            font-size: 3rem;
+            line-height: 1;
+            font-weight: 900;
+            letter-spacing: 0.05em;
+            color: rgb(255 255 255);
+            text-transform: uppercase;
+            display: block;
+            width: 100%;
+            transform: skewX(-12deg);
+            text-shadow: 
+              rgb(236, 72, 153) 4px 4px 0px, 
+              rgba(0, 0, 0, 0.5) -1px -1px 0px, 
+              rgba(0, 0, 0, 0.8) 5px 5px 15px;
+          }
+
+          @media (min-width: 768px) {
+            .mission-timeline-text {
+              font-size: 5rem;
+            }
+          }
+
 
         `}
       </style>
       <div
-  className="min-h-screen py-16 px-4 relative overflow-hidden"
+  className="min-h-screen py-8 md:py-16 px-4 relative overflow-hidden"
   style={{
     backgroundImage: `url(${NewT})`,
     backgroundSize: 'cover',
@@ -111,55 +139,50 @@ const Timeline: React.FC = () => {
         }}></div>
 
         <div className="max-w-5xl mx-auto relative z-10">
-  <div className="flex justify-center mb-2">
-    <img 
-      src={MT} 
-      alt="MISSION TIMELINE" 
-      className="h-20 object-contain"
-    />
+  <div className="flex justify-center mb-8 md:mb-12 w-full">
+    <h1 className="mission-timeline-text w-full text-center">MISSION TIMELINE</h1>
   </div>
-  <p className="text-center text-purple-800/100 mb-16 text-lg gta-text tracking-widest">★ HEIST OPERATION LOG ★</p>
+  
           <div className="relative">
-            {/* Neon Center Line */}
-            <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full" style={{
-              background: 'black',
-              boxShadow: '0 0 8px yellow, 0 0 16px rgba(255, 255, 0, 0.6)'
+            {/* Neon Center Line - Desktop centered, Mobile left-aligned */}
+            <div className="absolute left-6 md:left-1/2 md:transform md:-translate-x-1/2 w-1 h-full" style={{
+              background: '#ff006e',
+              boxShadow: '0 0 12px rgba(255, 0, 110, 0.6), 0 0 24px rgba(255, 0, 110, 0.3)'
             }}></div>
             {items.map((item, index) => (
               <div
                 key={item.id}
                 ref={(el) => { itemRefs.current[item.id] = el; }}
                 data-id={item.id}
-                className={`relative flex items-center mb-20 ${
-                  index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'
-                }`}
+                className={`relative flex items-center mb-12 md:mb-20 ${
+                  index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
+                } flex-row`}
               >
-                <div className="w-1/2 flex justify-center">
+                {/* Mobile: Full width with left alignment, Desktop: Half width alternating */}
+                <div className="w-full md:w-1/2 flex justify-center">
                   <div
-                    className={`w-11/12 ${index % 2 === 0 ? 'pr-12' : 'pl-12'} transition-all duration-700 ${
+                    className={`w-full md:w-11/12 pl-12 md:pl-0 ${index % 2 === 0 ? 'md:pr-12' : 'md:pl-12'} transition-all duration-700 ${
                       visibleItems.has(item.id)
                         ? 'opacity-100 translate-x-0 rotate-0'
-                        : index % 2 === 0
-                        ? 'opacity-0 -translate-x-20 -rotate-12'
-                        : 'opacity-0 translate-x-20 rotate-12'
+                        : 'opacity-0 -translate-x-10 md:-translate-x-20'
                     }`}
                   >
-                    <div className="bg-black/80 backdrop-blur-sm rounded-lg shadow-2xl p-6 transition-all duration-500 hover:-translate-y-2 hover:shadow-lg relative overflow-hidden">
+                    <div className="bg-black/80 backdrop-blur-sm rounded-lg shadow-2xl p-4 md:p-6 transition-all duration-500 hover:-translate-y-2 hover:shadow-lg relative overflow-hidden">
                       
 
                       
                       <div className="text-xs font-bold text-cyan-400 mb-2 gta-text tracking-widest bg-purple-900/50 px-3 py-1 inline-block rounded">
                         {item.date}
                       </div>
-                      <h3 className="text-2xl font-bold text-pink-500 mb-3 gta-title tracking-wider">
+                      <h3 className="text-xl md:text-2xl font-bold text-pink-500 mb-2 md:mb-3 gta-title tracking-wider">
                         {item.title}
                       </h3>
-                      <p className="text-gray-300 leading-relaxed gta-text">{item.description}</p>
+                      <p className="text-sm md:text-base text-gray-300 leading-relaxed gta-text">{item.description}</p>
                       
                       {/* Wanted stars indicator */}
                       <div className="flex gap-1 mt-3">
                         {[...Array(5)].map((_, i) => (
-                          <div key={i} className={`w-3 h-3 ${i < item.id ? 'bg-yellow-400' : 'bg-gray-700'}`} style={{
+                          <div key={i} className={`w-2.5 h-2.5 md:w-3 md:h-3 ${i < item.id ? 'bg-yellow-400' : 'bg-gray-700'}`} style={{
                             clipPath: 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)'
                           }}></div>
                         ))}
@@ -168,7 +191,8 @@ const Timeline: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="w-1/2"></div>
+                {/* Empty spacer for desktop alternating layout */}
+                <div className="hidden md:block md:w-1/2"></div>
               </div>
             ))}
           </div>

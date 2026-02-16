@@ -123,7 +123,7 @@ const Prizes: React.FC = () => {
             className="space-y-4 w-full flex flex-col items-center lg:items-start"
           >
             <motion.div initial={{ x: -20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} className="mb-12 lg:mb-10 text-center lg:text-left">
-              <p className="text-purple-600 text-xs lg:text-xxxs tracking-[0.2em] font-bold">PRAKALPA'26</p>
+              <p className="text-purple-600 text-xxs lg:text-xxxs tracking-[0.2em] font-bold">PRAKALPA'26</p>
               <h1 className="text-7xl lg:text-6xl leading-[0.85] mt-2 italic transform -skew-x-6">PROJECT CATEGORY<br />PRIZES</h1>
             </motion.div>
 
@@ -132,7 +132,7 @@ const Prizes: React.FC = () => {
                 <button
                   key={key}
                   onClick={() => handleNavigation(key)}
-                  className={`text-3xl lg:text-3xl italic transition-all duration-300 transform hover:scale-110 lg:hover:translate-x-3 w-full lg:w-auto text-center lg:text-left ${activeTab === key ? 'text-white' : 'text-white lg:text-zinc-500 hover:text-center'}`}
+                  className={`text-3xl lg:text-3xl italic transition-all duration-300 transform hover:scale-110 lg:hover:translate-x-3 w-full lg:w-auto text-center lg:text-left ${activeTab === key ? 'text-white' : 'text-white lg:text-zinc-500 hover:text-center hover:text-white'}`}
                 >
                   {PRIZE_DATA[key].id.replace('-', ' ')}
                 </button>
