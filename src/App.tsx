@@ -14,7 +14,7 @@ import RegistrationForm from "./RegistrationForm"
 import Timeline from "./Timeline"
 import Prizes from "./Prizes"
 import FAQ from "./FAQ"
-import Sponsors from "./Sponsors"
+//import Sponsors from "./Sponsors"
 import Footer from "./footer"
 
 
@@ -78,31 +78,6 @@ function App() {
       {/* 🎵 MUSIC — NEVER UNMOUNTS */}
       <BackgroundMusic ref={audioRef} muted={muted} />
 
-      {/* Music Toggle Button */}
-   {!loading && (
-  <button
-    onClick={() => {
-      if (!audioRef.current) return;
-
-      const nextMuted = !muted;
-
-      audioRef.current.muted = nextMuted;
-
-      if (!nextMuted) {
-        audioRef.current.play().catch(() => {});
-      } else {
-        audioRef.current.pause();
-      }
-
-      setMuted(nextMuted);
-    }}
-    className="fixed bottom-4 right-4 bg-black text-white px-4 py-2 rounded-md shadow-lg z-50 hover:bg-black"
-  >
-    {muted ? "🔇" : "🔊"}
-  </button>
-)}
-
-
 
       {/* ================= HUD LAYER (FIXED, NO TRANSFORMS) ================= */}
       {!loading && (
@@ -125,8 +100,7 @@ function App() {
 
         <div className="min-h-screen flex items-center justify-center relative z-40">
           <PillNav
-          showMobileNav={!loading}
-          logoHref="https://iste-web-bkgm.vercel.app/"
+            showMobileNav={!loading}
             logo={logo}
             items={[
               { label: "Home", href: "#home" },
@@ -134,7 +108,7 @@ function App() {
               { label: "Prizes", href: "#prizes" },
               { label: "Timeline", href: "#timeline" },
               { label: "Memories", href: "#gallery" },
-              { label: "Sponsors", href: "#sponsors" },
+              //{ label: "Sponsors", href: "#sponsors" },
               { label: "FAQs", href: "#faqs" },
             ]}
           />
@@ -157,16 +131,40 @@ function App() {
       {!loading && <RegistrationForm />}
 
       {/* ================= SCROLL CONTENT ================= */}
-       {!loading && <div id="home"><Background/></div>}
+      {!loading && <div id="home"><Background /></div>}
       {!loading && <div id="themes"><Themes /></div>}
       {!loading && <div id="prizes"><Prizes /></div>}
       {!loading && <div id="timeline"><Timeline /></div>}
       {!loading && <div id="gallery"><Gallery /></div>}
-      {!loading && <div id="sponsors"><Sponsors /></div>}
+      {/*{!loading && <div id="sponsors"><Sponsors /></div>}*/}
       {!loading && <div id="faqs"><FAQ /></div>}
 
       {/* ================= FOOTER ================= */}
       <Footer />
+
+      {/* Music Toggle Button - Hidden during loading, stays on top otherwise */}
+      {!loading && (
+        <button
+          onClick={() => {
+            if (!audioRef.current) return;
+
+            const nextMuted = !muted;
+
+            audioRef.current.muted = nextMuted;
+
+            if (!nextMuted) {
+              audioRef.current.play().catch(() => { });
+            } else {
+              audioRef.current.pause();
+            }
+
+            setMuted(nextMuted);
+          }}
+          className="fixed bottom-4 right-4 bg-black text-white px-4 py-2 rounded-md shadow-lg z-[2000000] hover:bg-zinc-800 transition-colors"
+        >
+          {muted ? "🔇" : "🔊"}
+        </button>
+      )}
     </div>
   )
 }

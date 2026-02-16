@@ -434,7 +434,7 @@ export default function RegistrationForm() {
               onClick={() => setIsOpen(true)}
               whileHover={{ scale: 1.06 }}
               whileTap={{ scale: 0.96 }}
-              className="group pointer-events-auto relative overflow-hidden px-8 py-3 bg-transparent border border-white/25 rounded-3xl text-pink-500 font-black tracking-widest uppercase transition-all duration-300 hover:bg-white/5 hover:scale-105 flex items-center justify-center"
+              className="group pointer-events-auto relative overflow-hidden px-8 py-3 bg-transparent border border-white/35 rounded-3xl text-pink-500 font-black tracking-widest uppercase transition-all duration-300 hover:bg-white/5 hover:scale-105 flex items-center justify-center"
               style={{ fontFamily: 'Pricedown, sans-serif' }}
               aria-label="Open registration form"
             >
@@ -508,7 +508,7 @@ export default function RegistrationForm() {
                 {/* Tab Navigation */}
                 <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="flex justify-center mb-8">
                   <div className="bg-black/40 backdrop-blur-sm border-2 border-purple-500/30 rounded-lg p-2 inline-flex gap-2">
-                    {[{ n: 1, label: '1. Participants' }, { n: 2, label: '2. Project' }, { n: 3, label: '3. Payment' }].map(({ n, label }) => (
+                    {[{ n: 1, label: '1. Participants' }, { n: 2, label: '2. Project/Paper' }, { n: 3, label: '3. Payment' }].map(({ n, label }) => (
                       <button key={n} onClick={() => setCurrentTab(n)}
                         className={`px-6 py-3 rounded-lg font-bold transition-all ${currentTab === n ? 'bg-pink-500 text-white' : 'text-purple-300 hover:text-white hover:bg-purple-500/20'}`}
                       >
