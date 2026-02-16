@@ -17,7 +17,8 @@ export interface PillNavProps {
   activeHref?: string;
   className?: string;
   ease?: string;
-  showMobileNav?: boolean;   // ✅ ADDED
+  showMobileNav?: boolean;
+  logoHref?: string;
 }
 
 const PillNav: React.FC<PillNavProps> = ({
@@ -27,7 +28,8 @@ const PillNav: React.FC<PillNavProps> = ({
   activeHref,
   className = '',
   ease = 'power3.easeOut',
-  showMobileNav = true,      // ✅ DEFAULT
+  showMobileNav = true,
+  logoHref,
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -46,8 +48,13 @@ const PillNav: React.FC<PillNavProps> = ({
 
   const openMenu = () => {
     setIsMobileMenuOpen(true);
+
     requestAnimationFrame(() => {
-      gsap.fromTo(drawerRef.current, { x: "-100%" }, { x: "0%", duration: 0.35, ease });
+      gsap.fromTo(
+        drawerRef.current,
+        { x: "-100%" },
+        { x: "0%", duration: 0.35, ease }
+      );
     });
   };
 
@@ -74,16 +81,55 @@ const PillNav: React.FC<PillNavProps> = ({
 
   const isRouterLink = (href?: string) => href && !isExternalLink(href);
 
+  const LogoComponent = (
+    logoHref ? (
+      <a
+        href={logoHref}
+        target="_blank"
+        rel="noopener noreferrer"
+        onMouseEnter={handleLogoEnter}
+        className="rounded-full p-2 overflow-hidden inline-block"
+        style={{ width: '72px', height: '72px' }}
+      >
+        <img
+          src={logo}
+          alt={logoAlt}
+          ref={logoImgRef}
+          className="w-full h-full object-cover"
+        />
+      </a>
+    ) : (
+      <Link
+        to={items[0].href}
+        onMouseEnter={handleLogoEnter}
+        className="rounded-full p-2 overflow-hidden inline-block"
+        style={{ width: '72px', height: '72px' }}
+      >
+        <img
+          src={logo}
+          alt={logoAlt}
+          ref={logoImgRef}
+          className="w-full h-full object-cover"
+        />
+      </Link>
+    )
+  );
+
   const drawer = (
     <div className="fixed inset-0 z-[999999] md:hidden">
-      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={closeMenu} />
+      <div
+        className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+        onClick={closeMenu}
+      />
 
       <div
         ref={drawerRef}
         className="absolute left-0 top-0 h-full w-[70%] bg-black shadow-2xl p-6"
       >
         <div className="flex justify-end mb-6">
-          <button onClick={closeMenu} className="text-3xl text-white">✕</button>
+          <button onClick={closeMenu} className="text-3xl text-white">
+            ✕
+          </button>
         </div>
 
         <ul className="flex flex-col gap-5 list-none p-0 m-0">
@@ -124,46 +170,23 @@ const PillNav: React.FC<PillNavProps> = ({
 
   return (
     <>
-      {/* ✅ BUTTON ONLY SHOWN WHEN ALLOWED */}
-      {showMobileNav && ReactDOM.createPortal(mobileHamburger, document.body)}
+      {/* ✅ HIDE BUTTON WHEN MENU OPEN */}
+      {showMobileNav && !isMobileMenuOpen &&
+        ReactDOM.createPortal(mobileHamburger, document.body)}
 
       {/* PHONE LOGO */}
       <div className="absolute top-[1em] left-0 w-full md:hidden px-4">
-        <Link
-          to={items[0].href}
-          onMouseEnter={handleLogoEnter}
-          className="rounded-full p-2 overflow-hidden inline-block"
-          style={{ width: '72px', height: '72px' }}
-        >
-          <img
-            src={logo}
-            alt={logoAlt}
-            ref={logoImgRef}
-            className="w-full h-full object-cover"
-          />
-        </Link>
+        {LogoComponent}
       </div>
 
-      {/* DESKTOP NAVBAR — UNCHANGED */}
+      {/* DESKTOP NAVBAR */}
       <div className="absolute top-[1em] z-[1000] w-full left-0 md:w-auto md:left-auto hidden md:block">
         <nav
           className={`md:flex w-full md:w-max items-center justify-between md:justify-start box-border px-4 md:px-0 ${className}`}
           aria-label="Primary"
           style={{ background: 'transparent' }}
         >
-          <Link
-            to={items[0].href}
-            onMouseEnter={handleLogoEnter}
-            className="rounded-full p-2 inline-flex items-center justify-center overflow-hidden"
-            style={{ width: '72px', height: '72px' }}
-          >
-            <img
-              src={logo}
-              alt={logoAlt}
-              ref={logoImgRef}
-              className="w-full h-full object-cover"
-            />
-          </Link>
+          {LogoComponent}
 
           <div className="ml-2">
             <ul className="flex items-center gap-4 m-0 p-0 list-none">

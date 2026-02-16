@@ -126,6 +126,7 @@ function App() {
         <div className="min-h-screen flex items-center justify-center relative z-40">
           <PillNav
           showMobileNav={!loading}
+          logoHref="https://iste-web-bkgm.vercel.app/"
             logo={logo}
             items={[
               { label: "Home", href: "#home" },
