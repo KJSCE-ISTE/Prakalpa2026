@@ -159,24 +159,20 @@ const PillNav: React.FC<PillNavProps> = ({
     </div>
   );
 
-  const mobileHamburger = (
-    <button
-      onClick={toggleMobileMenu}
-      className="fixed top-24 left-4 z-[9999999] text-3xl text-white md:hidden"
-    >
-      ☰
-    </button>
-  );
-
   return (
     <>
-      {/* ✅ HIDE BUTTON WHEN MENU OPEN */}
-      {showMobileNav && !isMobileMenuOpen &&
-        ReactDOM.createPortal(mobileHamburger, document.body)}
-
-      {/* PHONE LOGO */}
-      <div className="absolute top-[1em] left-0 w-full md:hidden px-4">
+      {/* ✅ PHONE LOGO + BUTTON BELOW */}
+      <div className="absolute top-[1em] left-4 md:hidden flex flex-col items-start">
         {LogoComponent}
+
+        {showMobileNav && !isMobileMenuOpen && (
+          <button
+            onClick={toggleMobileMenu}
+            className="mt-2 ml-5 text-3xl text-white"
+          >
+            ☰
+          </button>
+        )}
       </div>
 
       {/* DESKTOP NAVBAR */}
@@ -193,6 +189,7 @@ const PillNav: React.FC<PillNavProps> = ({
               className="h-12 w-auto object-contain"
             />
           </div>
+
           {LogoComponent}
 
           <div className="ml-2">
@@ -200,8 +197,9 @@ const PillNav: React.FC<PillNavProps> = ({
               {items.map((item, i) => {
                 const isActive = activeHref === item.href;
 
-                const cls = `nav-link px-4 py-2 text-xl font-semibold uppercase tracking-wide hover:text-pink-500 transition-colors duration-200 font-pricedown ${isActive && i !== 0 ? 'text-pink-500' : 'text-black'
-                  }`;
+                const cls = `nav-link px-4 py-2 text-xl font-semibold uppercase tracking-wide hover:text-pink-500 transition-colors duration-200 font-pricedown ${
+                  isActive && i !== 0 ? 'text-pink-500' : 'text-black'
+                }`;
 
                 return (
                   <li key={item.href}>
@@ -228,35 +226,3 @@ const PillNav: React.FC<PillNavProps> = ({
 };
 
 export default PillNav;
-
-/* GREEN HOVER EFFECT */
-const style = document.createElement('style');
-style.innerHTML = `
-.nav-link {
-  position: relative;
-  z-index: 1;
-}
-.nav-link::before {
-  content: '';
-  position: absolute;
-  left: -5%;
-  top: 50%;
-  transform: translateY(-50%) skew(20deg) scaleX(0.85);
-  width: 120%;
-  height: 85%;
-  background: #02753E;
-  opacity: 0;
-  z-index: -1;
-  transition: opacity 0.2s;
-  border-radius: 0.6em;
-}
-.nav-link:hover::before {
-  opacity: 1;
-}
-`;
-
-if (typeof window !== 'undefined' &&
-  !document.getElementById('nav-link-parallelogram-style')) {
-  style.id = 'nav-link-parallelogram-style';
-  document.head.appendChild(style);
-}
