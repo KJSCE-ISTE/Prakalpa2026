@@ -132,7 +132,7 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-white/10">
           <p className="text-zinc-500 text-sm">
-            © {new Date().getFullYear()} Designed by ISTE KJSSE Council. All rights reserved.
+            © {new Date().getFullYear()} Designed by ISTE KJSSE. All rights reserved.
           </p>
           <div className="flex items-center gap-1 text-sm text-zinc-500 mt-4 md:mt-0">
             <span>Made with</span>

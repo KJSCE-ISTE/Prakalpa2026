@@ -151,6 +151,18 @@ const GTAStats: React.FC = () => {
         >
           ₹{money.toLocaleString("en-IN")}
         </div>
+        <div
+  className="text-sm sm:text-base md:text-lg"
+  style={{
+    fontFamily: "pricedown",
+    color: "#fff",
+    textShadow:
+      "2px 2px 0px #000, -1px -1px 0px #000, 1px -1px 0px #000, -1px 1px 0px #000",
+  }}
+>
+  ENTRY FEES ₹600
+</div>
+
       </div>
     </div>
   )
