@@ -152,7 +152,7 @@ function App() {
               style={{ paddingLeft: '0.75rem', marginLeft: '1.5rem' }}
             >
               <motion.a
-                href="src/assets/Prakalpa'26Brochure.pdf"
+                href="/Prakalpa26Brochure.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.06 }}
