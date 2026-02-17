@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react"
+import { motion, AnimatePresence } from "framer-motion"
 
 import Background from "./Background"
 import PillNav from "./PillNav"
@@ -21,6 +22,7 @@ import Footer from "./footer"
 function App() {
   const [loading, setLoading] = useState(true)
   const [exiting, setExiting] = useState(false)
+  const [showButton, setShowButton] = useState(true)
 
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const [muted, setMuted] = useState(true)
@@ -33,6 +35,13 @@ function App() {
 
     return () => clearTimeout(timer)
   }, [])
+
+  useEffect(() => {
+    const handleScroll = () => { setShowButton(window.scrollY < 25); };
+    handleScroll();
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Smooth scroll for in-page anchors (e.g., #themes)
   const handleNavClick: React.MouseEventHandler<HTMLDivElement> = (e) => {
@@ -129,6 +138,46 @@ function App() {
 
       {/* ================= REGISTRATION BUTTON & MODAL (SELF-CONTAINED) ================= */}
       {!loading && <RegistrationForm />}
+
+      {/* ================= BROCHURE BUTTON ================= */}
+      {!loading && (
+        <AnimatePresence>
+          {showButton && (
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              transition={{ type: "spring", stiffness: 100, damping: 15, delay: 0.1 }}
+              className="fixed bottom-40 md:bottom-10 left-1/2 right-0 flex justify-start z-40 pointer-events-none pl-3"
+              style={{ paddingLeft: '0.75rem', marginLeft: '1.5rem' }}
+            >
+              <motion.a
+                href="src/assets/Prakalpa'26Brochure.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.06 }}
+                whileTap={{ scale: 0.96 }}
+                className="group pointer-events-auto relative overflow-hidden px-8 py-3 bg-transparent border border-white/35 rounded-3xl text-pink-500 font-black tracking-widest uppercase transition-all duration-300 hover:bg-white/5 hover:scale-105 flex items-center justify-center"
+                style={{ fontFamily: 'Pricedown, sans-serif' }}
+                aria-label="View brochure"
+              >
+                <span className="absolute inset-0 rounded-2xl border border-transparent group-hover:border-white/20 transition-colors duration-300 pointer-events-none" />
+                <span className="relative z-10 flex items-center justify-center gap-4 text-lg md:text-2xl w-full">
+                  <span
+                    className="text-pink-500 text-2xl md:text-4xl font-black tracking-wider transform -skew-x-12"
+                    style={{
+                      fontFamily: 'Pricedown, sans-serif',
+                      textShadow: '3px 3px 0px #7c3aed'
+                    }}
+                  >
+                    BROCHURE
+                  </span>
+                </span>
+              </motion.a>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      )}
 
       {/* ================= SCROLL CONTENT ================= */}
       {!loading && <div id="home"><Background /></div>}
