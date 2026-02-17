@@ -155,7 +155,7 @@ const GTAStats: React.FC = () => {
   className="text-sm sm:text-base md:text-lg"
   style={{
     fontFamily: "pricedown",
-    color: "#fff",
+    color: "#4ade80",
     textShadow:
       "2px 2px 0px #000, -1px -1px 0px #000, 1px -1px 0px #000, -1px 1px 0px #000",
   }}
