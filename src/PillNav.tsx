@@ -186,6 +186,13 @@ const PillNav: React.FC<PillNavProps> = ({
           aria-label="Primary"
           style={{ background: 'transparent' }}
         >
+          <div className="ml-auto">
+            <img
+              src={somaiyaLogo}
+              alt="Somaiya Logo"
+              className="h-12 w-auto object-contain"
+            />
+          </div>
           {LogoComponent}
 
           <div className="ml-2">
@@ -193,9 +200,8 @@ const PillNav: React.FC<PillNavProps> = ({
               {items.map((item, i) => {
                 const isActive = activeHref === item.href;
 
-                const cls = `nav-link px-4 py-2 text-xl font-semibold uppercase tracking-wide hover:text-pink-500 transition-colors duration-200 font-pricedown ${
-                  isActive && i !== 0 ? 'text-pink-500' : 'text-black'
-                }`;
+                const cls = `nav-link px-4 py-2 text-xl font-semibold uppercase tracking-wide hover:text-pink-500 transition-colors duration-200 font-pricedown ${isActive && i !== 0 ? 'text-pink-500' : 'text-black'
+                  }`;
 
                 return (
                   <li key={item.href}>
@@ -212,14 +218,6 @@ const PillNav: React.FC<PillNavProps> = ({
                 );
               })}
             </ul>
-          </div>
-
-          <div className="ml-auto">
-            <img
-              src={somaiyaLogo}
-              alt="Somaiya Logo"
-              className="h-12 w-auto object-contain"
-            />
           </div>
         </nav>
       </div>
@@ -258,7 +256,7 @@ style.innerHTML = `
 `;
 
 if (typeof window !== 'undefined' &&
-    !document.getElementById('nav-link-parallelogram-style')) {
+  !document.getElementById('nav-link-parallelogram-style')) {
   style.id = 'nav-link-parallelogram-style';
   document.head.appendChild(style);
 }

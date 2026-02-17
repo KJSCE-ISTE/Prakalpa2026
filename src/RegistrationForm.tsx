@@ -390,7 +390,7 @@ export default function RegistrationForm() {
               { value: 'Data Science', label: 'Data Science' },
               { value: 'Cyber Security', label: 'Cyber Security' },
               { value: 'Robotics and Automation', label: 'Robotics and Automation' },
-              { value: 'Other', label: 'Other' }
+              { value: 'Other', label: 'Others' }
             ]}
             error={errors[`branch${index + 1}`]}
           />
