@@ -98,6 +98,10 @@ export default function Footer() {
                 <Phone className="w-4 h-4 text-pink-300 shrink-0" />
                 <span>Aditi Kanagala: <a href="tel:+919820493896" className="hover:text-pink-300 transition-colors">+91 98204 93896</a></span>
               </li>
+              <li className="flex items-center gap-3">
+                <Phone className="w-4 h-4 text-pink-300 shrink-0" />
+                <span>Manav Parekh: <a href="tel:+919987646965" className="hover:text-pink-300 transition-colors">+91 98204 93896</a></span>
+              </li>
             </ul>
           </div>
 
@@ -116,7 +120,7 @@ export default function Footer() {
               </SocialLink>
             </div>
 
-            <div className="mt-8 pt-8 border-t border-white/5">
+            <div className="mt-8 pt-2 border-t border-white/5">
               <a href="https://mail.google.com/mail/u/0/?fs=1&tf=cm&source=mailto&to=iste.engg@somaiya.edu" target="_blank" rel="noreferrer" className="group flex items-center gap-2 text-zinc-400 hover:text-pink-300 transition-colors text-sm">
                 <span>Send us a message</span>
                 <ExternalLink className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
@@ -128,7 +132,7 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-white/10">
           <p className="text-zinc-500 text-sm">
-            © {new Date().getFullYear()} Designed by ISTE KJSSE Council. All rights reserved.
+            © {new Date().getFullYear()} Designed by ISTE KJSSE. All rights reserved.
           </p>
           <div className="flex items-center gap-1 text-sm text-zinc-500 mt-4 md:mt-0">
             <span>Made with</span>

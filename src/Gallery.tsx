@@ -31,7 +31,7 @@ const galleryStyles = `
   @media (min-width: 1800px) {
     .gallery-parent {
       max-width: 2400px;
-      height: 90vh;
+      height: 100vh;
     }
   }
 

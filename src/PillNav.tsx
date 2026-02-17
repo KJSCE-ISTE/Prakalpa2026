@@ -159,24 +159,20 @@ const PillNav: React.FC<PillNavProps> = ({
     </div>
   );
 
-  const mobileHamburger = (
-    <button
-      onClick={toggleMobileMenu}
-      className="fixed top-24 left-4 z-[9999999] text-3xl text-white md:hidden"
-    >
-      ☰
-    </button>
-  );
-
   return (
     <>
-      {/* ✅ HIDE BUTTON WHEN MENU OPEN */}
-      {showMobileNav && !isMobileMenuOpen &&
-        ReactDOM.createPortal(mobileHamburger, document.body)}
-
-      {/* PHONE LOGO */}
-      <div className="absolute top-[1em] left-0 w-full md:hidden px-4">
+      {/* PHONE LOGO + BUTTON BELOW */}
+      <div className="absolute top-[1em] left-4 md:hidden flex flex-col items-start">
         {LogoComponent}
+
+        {showMobileNav && !isMobileMenuOpen && (
+          <button
+            onClick={toggleMobileMenu}
+            className="mt-2 ml-5 text-3xl text-white"
+          >
+            ☰
+          </button>
+        )}
       </div>
 
       {/* DESKTOP NAVBAR */}
@@ -186,6 +182,14 @@ const PillNav: React.FC<PillNavProps> = ({
           aria-label="Primary"
           style={{ background: 'transparent' }}
         >
+          <div className="ml-auto">
+            <img
+              src={somaiyaLogo}
+              alt="Somaiya Logo"
+              className="h-12 w-auto object-contain"
+            />
+          </div>
+
           {LogoComponent}
 
           <div className="ml-2">
@@ -213,14 +217,6 @@ const PillNav: React.FC<PillNavProps> = ({
               })}
             </ul>
           </div>
-
-          <div className="ml-auto">
-            <img
-              src={somaiyaLogo}
-              alt="Somaiya Logo"
-              className="h-12 w-auto object-contain"
-            />
-          </div>
         </nav>
       </div>
 
@@ -230,6 +226,7 @@ const PillNav: React.FC<PillNavProps> = ({
 };
 
 export default PillNav;
+
 
 /* GREEN HOVER EFFECT */
 const style = document.createElement('style');
@@ -258,7 +255,7 @@ style.innerHTML = `
 `;
 
 if (typeof window !== 'undefined' &&
-    !document.getElementById('nav-link-parallelogram-style')) {
+  !document.getElementById('nav-link-parallelogram-style')) {
   style.id = 'nav-link-parallelogram-style';
   document.head.appendChild(style);
 }
