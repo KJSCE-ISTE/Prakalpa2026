@@ -407,7 +407,7 @@ export default function RegistrationForm() {
 
   return (
     <>
-      {/* REGISTER BUTTON */}
+      {/* REGISTER BUTTON - CENTERED */}
       <AnimatePresence>
         {showButton && (
           <motion.div
@@ -415,7 +415,7 @@ export default function RegistrationForm() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8 }}
             transition={{ type: "spring", stiffness: 100, damping: 15 }}
-            className="fixed bottom-40 md:bottom-10 left-0 right-1/2 flex justify-end z-50 pointer-events-none pr-3"
+            className="fixed bottom-40 md:bottom-10 left-0 right-0 flex justify-center z-50 pointer-events-none"
           >
             <motion.button
               onClick={() => setIsOpen(true)}
