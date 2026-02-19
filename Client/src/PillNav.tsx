@@ -186,7 +186,7 @@ const PillNav: React.FC<PillNavProps> = ({
             <img
               src={somaiyaLogo}
               alt="Somaiya Logo"
-              className="h-12 w-auto object-contain"
+              className="h-14 w-auto object-contain"
             />
           </div>
 
