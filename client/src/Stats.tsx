@@ -160,7 +160,7 @@ const GTAStats: React.FC = () => {
       "2px 2px 0px #000, -1px -1px 0px #000, 1px -1px 0px #000, -1px 1px 0px #000",
   }}
 >
-  ENTRY FEES ₹600
+  Funding upto ₹2,00,000
 </div>
  <div
   className="text-sm sm:text-base md:text-lg px-4 py-2"
@@ -171,7 +171,7 @@ const GTAStats: React.FC = () => {
       "2px 2px 0px #000, -1px -1px 0px #000, 1px -1px 0px #000, -1px 1px 0px #000",
   }}
 >
-  Funding upto ₹2,00,000
+ ENTRY FEES ₹600
 </div>
 
       </div>
