@@ -5,7 +5,7 @@ import Web3Logo from "./assets/sponsor_images/web3_aligarh_community.png";
 import XTCYlogo from "./assets/sponsor_images/XTCY_energy_drink.jpg";
 import HODlogo from "./assets/sponsor_images/house_of_delicious_food_partner.jpg";
 import Cloud9 from "./assets/sponsor_images/cloud9_beverage_partner.jpg";
-import OHig from "./assets/sponsor_images/Oh!g_snack_partner.png";
+import OHig from "./assets/sponsor_images/Ohig_snack_partner.png";
 import gic from "./assets/sponsor_images/give_my_certificate_certificate_partner.png";
 import xyz from "./assets/sponsor_images/xyz_domain_partner.png";
 import riidl from "./assets/sponsor_images/riidl_title_partner.png";
@@ -18,7 +18,7 @@ const SPONSORS = [
   { id: 3, name: "XTCY_energy_drink", logo: XTCYlogo },
   { id: 4, name: "house_of_delicious_food_partner", logo: HODlogo },
   { id: 5, name: "cloud9_beverage_partner", logo: Cloud9 },
-  { id: 6, name: "Oh!g_snack_partner", logo: OHig },
+  { id: 6, name: "Ohig_snack_partner", logo: OHig },
   { id: 7, name: "give_my_certificate_certificate_partner", logo: gic },
   { id: 8, name: "xyz_domain_partner", logo: xyz },
   { id: 10, name: "raps_gaming_partner", logo: raps },
