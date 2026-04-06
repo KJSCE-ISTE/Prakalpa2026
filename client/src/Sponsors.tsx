@@ -5,7 +5,7 @@ import Web3Logo from "./assets/sponsor_images/web3_aligarh_community.png";
 import XTCYlogo from "./assets/sponsor_images/XTCY_energy_drink.jpg";
 import HODlogo from "./assets/sponsor_images/house_of_delicious_food_partner.jpg";
 import Cloud9 from "./assets/sponsor_images/cloud9_beverage_partner.jpg";
-import Ohig from "./assets/sponsor_images/ohig_snack_partner.png";
+import Ohig from "./assets/sponsor_images/Ohig_snack_partner.png";
 import gic from "./assets/sponsor_images/give_my_certificate_certificate_partner.png";
 import xyz from "./assets/sponsor_images/xyz_domain_partner.png";
 import riidl from "./assets/sponsor_images/riidl_title_partner.png";
