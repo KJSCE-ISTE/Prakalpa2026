@@ -106,6 +106,7 @@ const submitRegistration = async (payload: Record<string, any>) => {
 export default function RegistrationForm() {
   const [isOpen, setIsOpen] = useState(false);
   const [showButton, setShowButton] = useState(true);
+  const [showClosed, setShowClosed] = useState(false); // ← ADDED
   const [currentTab, setCurrentTab] = useState(1);
   const [showQR, setShowQR] = useState(false);
   const [formData, setFormData] = useState({
@@ -458,7 +459,7 @@ export default function RegistrationForm() {
             className="fixed bottom-40 md:bottom-10 left-0 right-0 flex justify-center z-50 pointer-events-none"
           >
             <motion.button
-              onClick={() => setIsOpen(true)}
+              onClick={() => { setShowClosed(true); setTimeout(() => setShowClosed(false), 3000); }}
               whileHover={{ scale: 1.06 }}
               whileTap={{ scale: 0.96 }}
               className="group pointer-events-auto relative overflow-hidden px-8 py-3 bg-transparent border border-white/35 rounded-3xl text-pink-500 font-black tracking-widest uppercase transition-all duration-300 hover:bg-white/5 hover:scale-105 flex items-center justify-center"
@@ -478,6 +479,25 @@ export default function RegistrationForm() {
                 </span>
               </span>
             </motion.button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* REGISTRATION CLOSED TOAST */}
+      <AnimatePresence>
+        {showClosed && (
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 30 }}
+            className="fixed bottom-56 md:bottom-24 left-0 right-0 flex justify-center z-[99999] pointer-events-none"
+          >
+            <div
+              className="bg-black/80 border border-pink-500/50 text-pink-400 px-8 py-4 rounded-xl font-black text-xl tracking-widest uppercase backdrop-blur-sm"
+              style={{ fontFamily: 'Pricedown, sans-serif', textShadow: '2px 2px 0px #7c3aed' }}
+            >
+              Registration Closed
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
